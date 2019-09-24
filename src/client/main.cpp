@@ -16,7 +16,7 @@ using namespace std;
 using namespace state;
 
 int main(int argc,char* argv[])
-{   
+{
     Exemple exemple;
     exemple.setX(53);
     if( std::strcmp( argv[1], "hello") == 0 ){
