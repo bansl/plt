@@ -5,8 +5,13 @@
 1. Download latest release
 2. cd into the project
 2. Run `./bin/dia2code` to get header files
-3. cd into build folder `cd build`
-4. Compile the code `cmake .. && make -j3`
+3. cd into build folder
+4. Compile the code: `cmake .. && make -j3`
+
+## Generate PDF Documentation of the projet
+1. install texlive: `apt-get install texlive`
+2. install intall some texlive packages: `apt-get install texlive-math-extra texlive-science textlive-latex-extra texlive-lang-french`
+3. compile the code: `make` in build/rapport
 
 ## Usage
 TODO
