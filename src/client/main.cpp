@@ -19,11 +19,17 @@ int main(int argc,char* argv[])
 {
     Exemple exemple;
     exemple.setX(53);
-    if( std::strcmp( argv[1], "hello") == 0 ){
-        cout << "Bonjour le monde!" << endl;    
+    
+    if (argc>1){
+        if( std::strcmp( argv[1], "hello") == 0 ){
+            cout << "Bonjour le monde!" << endl;    
+        }
+        else{
+            cout << "Type hello to get welcome message." << endl;
+        }
     }
     else{
-        cout << "Type hello to get welcome message." << endl;
-    }
+            cout << "Type hello to get welcome message." << endl;
+        }
     return 0;
 }

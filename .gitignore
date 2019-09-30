@@ -6,3 +6,7 @@ src/*/*.h
 src/*/*/*.h
 .idea
 .vscode
+CMakeFiles/CMakeOutput.log
+CMakeFiles/CMakeTmp
+CMakeFiles/cmake.check_cache
+src/*/CMakeFiles
