@@ -11,6 +11,7 @@
 ## Generate PDF Documentation of the projet
 1. install texlive: `apt-get install texlive`
 2. install intall texlive-math-extra: `apt-get install texlive-math-extra`
+3. compile the code: `make` in build/rapport
 
 ## Usage
 TODO
