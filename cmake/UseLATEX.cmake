@@ -540,7 +540,7 @@ FUNCTION(ADD_LATEX_TARGETS_INTERNAL)
         ${output_dir}/${LATEX_TARGET}.xdy
         ${output_dir}/${LATEX_TARGET}.dvi
         ${output_dir}/${LATEX_TARGET}.ps
-        ${output_dir}/${LATEX_TARGET}.pdf
+        ../${LATEX_TARGET}.pdf
         )
 
     SET(image_list ${LATEX_IMAGES})
@@ -733,3 +733,4 @@ ELSE (LATEX_BUILD_COMMAND)
     # Must be part of the actual configure (included from CMakeLists.txt).
     LATEX_SETUP_VARIABLES()
 ENDIF (LATEX_BUILD_COMMAND)
+

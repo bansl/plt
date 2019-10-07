@@ -1,8 +1,9 @@
 PROJECT(master_project NONE)
 cmake_minimum_required(VERSION 2.8)
-SET(LATEX_OUTPUT_PATH build)
+SET(LATEX_OUTPUT_PATH "")
 set(CMAKE_MODULE_PATH "../cmake" ${CMAKE_MODULE_PATH})
 INCLUDE(../cmake/UseLATEX.cmake)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 file(GLOB_RECURSE contents_files RELATIVE ${CMAKE_SOURCE_DIR} rapport/*.tex)
 
@@ -12,3 +13,4 @@ ADD_LATEX_DOCUMENT(
     IMAGE_DIRS images
 
     )
+
