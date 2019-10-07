@@ -10,3 +10,5 @@ CMakeFiles/CMakeOutput.log
 CMakeFiles/CMakeTmp
 CMakeFiles/cmake.check_cache
 src/*/CMakeFiles
+bin/*/*.h
+bin/*.h
