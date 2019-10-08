@@ -6,7 +6,7 @@
 2. cd into the project
 2. Run `./bin/dia2code` to get header files
 3. cd into build folder
-4. Compile the code: `cmake .. && make -j3`
+4. Compile the code: `cmake -DBUILD_CODE_COVERAGE=OFF .. && make -j3`
 
 ## Generate PDF Documentation of the projet
 1. install texlive: `apt-get install texlive`
