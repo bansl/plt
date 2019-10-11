@@ -1,11 +1,9 @@
-#include <iostream>
-#include <cstring>
-using namespace std;
+#include "Exemple.h"
 
-int main(int argc,char* argv[])
-{ 
-            cout << "This is example." << endl;
-    return 0;
+namespace state {
 
+void Exemple::setX (int x) {
+    this->x = x;
 }
 
+}
