@@ -3,18 +3,18 @@
 ## Installation
 
 1. Download latest release
-2. cd into the project
-2. Run `./bin/dia2code` to get header files
+2. install texlive and some dependencies: `apt-get install texlive texlive-math-extra texlive-science texlive-latex-extra texlive-lang-french`
 3. cd into build folder
 4. Compile the code: `cmake -DBUILD_CODE_COVERAGE=OFF .. && make -j3`
 
 ## Generate PDF Documentation of the projet
 1. install texlive: `apt-get install texlive`
 2. install intall some texlive packages: `apt-get install texlive-math-extra texlive-science texlive-latex-extra texlive-lang-french`
-3. compile the code: `make` in build/rapport
+3. The output document is generated in the build folder to prevent from overwriting the one in the project root path
 
 ## Usage
-TODO
+1. Unit test are available to test further implementations (you can find it in test/shared/test_shared_dummy).
+
 
 ## Contributing
 1. Fork it!
@@ -24,7 +24,8 @@ TODO
 5. Submit a pull request :D
 
 ## History
-TODO
+* Release 1.1 : Initial Rapport and first test code.
+
 
 ## Credits
 * bansl 
