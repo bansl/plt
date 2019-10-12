@@ -13,7 +13,7 @@
 3. The output document is generated in the build folder to prevent from overwriting the one in the project root path
 
 ## Usage
-1. Unit test are available to test further implementations (you can find it in test/shared/test_shared_dummy).
+1. Unit test are available to test `make code-coverage`.
 
 
 ## Contributing
