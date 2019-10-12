@@ -1,21 +1,23 @@
 #include "../state.h"
 
-using namespace state; 
 using namespace std;
+using namespace state; 
+
 
 int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
     int maxHP=0;
+    
     if (race.race == Monster){
-        maxHP=30 + 5*level.getLevel();
+        maxHP=30 + 5*1;
     }
     else if (race.race == Beastman){
-        maxHP=30 + 5*level.getLevel();
+        maxHP=30 + 5*1;
     }
     else if (race.race == Demon){
-        maxHP=30 + 5*level.getLevel();
+        maxHP=30 + 5*1;
     }
     else if (race.race == Human){
-        maxHP=30 + 5*level.getLevel();
+        maxHP=30 + 5*1;
     }
 
     if(job.job == Pugilist){
@@ -36,16 +38,16 @@ int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
 int Character::getMaxMP(state::Race race, state::Job job, state::Level level){
     int maxMP=0;
     if (race.race == Monster){
-        maxMP=20 + 5*level.getLevel();
+        maxMP=20 + 5*1;
     }
     else if (race.race == Beastman){
-        maxMP=10 + 5*level.getLevel();
+        maxMP=10 + 5*1;
     }
     else if (race.race == Demon){
-        maxMP=30 + 5*level.getLevel();
+        maxMP=30 + 5*1;
     }
     else if (race.race == Human){
-        maxMP=0 + 5*level.getLevel();
+        maxMP=0 + 5*1;
     }
 
     if(job.job == Pugilist){
@@ -67,16 +69,16 @@ int Character::getMaxMP(state::Race race, state::Job job, state::Level level){
 int getEvade (state::Race race, state::Job job, state::Level level){
     int evade=0;
     if (race.race == Monster){
-        evade=10 + 5*level.getLevel();
+        evade=10 + 5*1;
     }
     else if (race.race == Beastman){
-        evade=15 + 5*level.getLevel();
+        evade=15 + 5*1;
     }
     else if (race.race == Demon){
-        evade=20 + 5*level.getLevel();
+        evade=20 + 5*1;
     }
     else if (race.race == Human){
-        evade=10 + 5*level.getLevel();
+        evade=10 + 5*1;
     }
 
     if(job.job == Pugilist){
@@ -97,16 +99,16 @@ int getEvade (state::Race race, state::Job job, state::Level level){
 int getAttackPower (state::Race race, state::Job job, state::Level level){
     int attack=0;
     if (race.race == Monster){
-        attack=10 + 5*level.getLevel();
+        attack=10 + 5*1;
     }
     else if (race.race == Beastman){
-        attack=15 + 5*level.getLevel();
+        attack=15 + 5*1;
     }
     else if (race.race == Demon){
-        attack=20 + 5*level.getLevel();
+        attack=20 + 5*1;
     }
     else if (race.race == Human){
-        attack=10 + 5*level.getLevel();
+        attack=10 + 5*1;
     }
 
     if(job.job == Pugilist){
@@ -127,16 +129,16 @@ int getAttackPower (state::Race race, state::Job job, state::Level level){
 int getMagicPower (state::Race race, state::Job job, state::Level level){
     int magic=0;
     if (race.race == Monster){
-        magic=10 + 5*level.getLevel();
+        magic=10 + 5*1;
     }
     else if (race.race == Beastman){
-        magic=15 + 5*level.getLevel();
+        magic=15 + 5*1;
     }
     else if (race.race == Demon){
-        magic=20 + 5*level.getLevel();
+        magic=20 + 5*1;
     }
     else if (race.race == Human){
-        magic=10 + 5*level.getLevel();
+        magic=10 + 5*1;
     }
 
     if(job.job == Pugilist){
@@ -158,16 +160,16 @@ int getMagicPower (state::Race race, state::Job job, state::Level level){
 int getDefense (state::Race race, state::Job job, state::Level level){
     int defense=0;
     if (race.race == Monster){
-        defense=10 + 5*level.getLevel();
+        defense=10 + 5*1;
     }
     else if (race.race == Beastman){
-        defense=15 + 5*level.getLevel();
+        defense=15 + 5*1;
     }
     else if (race.race == Demon){
-        defense=20 + 5*level.getLevel();
+        defense=20 + 5*1;
     }
     else if (race.race == Human){
-        defense=10 + 5*level.getLevel();
+        defense=10 + 5*1;
     }
 
     if(job.job == Pugilist){
