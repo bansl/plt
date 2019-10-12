@@ -3,7 +3,15 @@
 using namespace state; 
 using namespace std;
 
-//TODO for test purpose, need to be implemented
-int getLevel (){
-    return 1;
+int Level::getLevel (){
+    return level;
+}
+void Level::levelUp (int experience){
+    this->experience+=experience;
+    while (experience >= (this->level)*(this->level))
+    {
+        this->level+=1;
+    }
+    
+    
 }
