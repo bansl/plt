@@ -3,6 +3,11 @@
 using namespace state; 
 using namespace std;
 
+void Entity::initEntity(){
+    this->name="";
+    this->position.setPos(0,0);
+}
+
 std::string Entity::getName(){
     return name;
 }

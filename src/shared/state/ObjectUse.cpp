@@ -5,8 +5,8 @@ using namespace std;
 using namespace state; 
 
 void ObjectUse::objectUse (state::Team team, state::Item item, state::Entity target){
-    std::vector currentItemlist = team.getItems();
-    for (size_t i = 0; i < currentItemlist.size; i++)
+    std::vector<Item> currentItemlist = team.getItems();
+    for (size_t i = 0; i < currentItemlist.size(); i++)
     {
         if(currentItemlist[i].name == item.name){
             if (currentItemlist[i].quantity>0){
