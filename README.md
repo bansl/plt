@@ -5,7 +5,7 @@
 1. Download latest release
 2. install texlive and some dependencies: `apt-get install texlive texlive-math-extra texlive-science texlive-latex-extra texlive-lang-french`
 3. cd into build folder
-4. Compile the code: `cmake -DBUILD_CODE_COVERAGE=OFF .. && make -j3`
+4. Compile the code: `cmake -DBUILD_CODE_COVERAGE=ON .. && make -j3`
 
 ## Generate PDF Documentation of the projet
 1. install texlive: `apt-get install texlive`
