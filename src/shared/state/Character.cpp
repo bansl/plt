@@ -201,3 +201,7 @@ std::vector<state::Skill> Character::getSkillList (state::Job job, state::Level 
     
     return skills;
 }
+
+state::Position Character::getPosition (){
+    return position;
+}

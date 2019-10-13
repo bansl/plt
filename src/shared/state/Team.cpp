@@ -13,3 +13,7 @@ void Team::assignPartyStats(){
 
     
 }
+
+std::vector<Item> Team::getItems (){
+    return listItems;
+}
