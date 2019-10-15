@@ -29,10 +29,12 @@ bool Entity::isFree (){
 }
 
 bool Entity::isCrossable (){
-    if(getTile().tile==Water){
-        return false;
-    }
-    else{
-        return true;
-    }
+    // TODO
+    // if(getTile().tile==Water){
+    //     return false;
+    // }
+    // else{
+    //     return true;
+    // }
+    return true;
 }

@@ -218,9 +218,11 @@ int Character::setCurrentMP (int mpModifier){
 state::Level Character::getLevel (){
     return level;
 }
+
 state::Race Character::getRace (){
     return race;
 }
+
 state::Job Character::getJob (){
     return job;
 }
@@ -230,4 +232,17 @@ void Character::setRace(state::Race race){
 
 void Character::setJob(state::Job job){
   this->job=job;
+}
+
+int Character::getCurrentHP (){
+    return currentHP;
+}
+
+int Character::getCurrentMP (){
+    return currentMP;
+}
+
+void Character::initHPMP (){
+    this->currentHP=getMaxHP(this->race,this->job,this->level);
+    this->currentMP=getMaxMP(this->race,this->job,this->level);
 }
