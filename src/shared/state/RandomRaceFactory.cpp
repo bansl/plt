@@ -1,27 +1,25 @@
 #include "../state.h"
-#include <cstdlib>
+#include <random>
+#include <iostream>
 using namespace std;
 using namespace state;
 
-Race RandomRaceFactory::getRace (){
-  int i=std::rand()%3+1;
-  i=1;//For test purpose
-  Race randomrace {};
+state::RaceType RandomRaceFactory::getRandomRace(){
+  std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> distribution(1,4);
+  int i=distribution(rng);
   if (i==1) {
-    randomrace.race=Monster;
-    return randomrace;
+    return Monster;
   }
   else if (i==2) {
-    randomrace.race=Beastman;
-    return randomrace;
+    return Beastman;
   }
   else if (i==3) {
-    randomrace.race=Demon;
-    return randomrace;
+    return Demon;
   }
   else if (i==4) {
-    randomrace.race=Human;
-    return randomrace;
+    return Human;
   }
   exit(EXIT_FAILURE);
 }

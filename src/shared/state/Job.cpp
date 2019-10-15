@@ -3,7 +3,7 @@
 using namespace state;
 using namespace std;
 
-void Job::setJob(state::JobType){
+void Job::setJob(state::JobType job){
   this->job=job;
 }
 

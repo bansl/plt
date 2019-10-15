@@ -3,7 +3,7 @@
 using namespace state;
 using namespace std;
 
-void Race::setRace(state::RaceType){
+void Race::setRace(state::RaceType race){
   this->race=race;
 }
 

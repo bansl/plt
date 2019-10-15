@@ -224,4 +224,10 @@ state::Race Character::getRace (){
 state::Job Character::getJob (){
     return job;
 }
+void Character::setRace(state::Race race){
+  this->race=race;
+}
 
+void Character::setJob(state::Job job){
+  this->job=job;
+}

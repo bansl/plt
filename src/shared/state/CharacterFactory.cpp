@@ -3,9 +3,11 @@
 using namespace std;
 using namespace state;
 
-Character CharacterFactory::getCharacter(){
+state::Character CharacterFactory::createCharacter(){
   Character newCharacter {};
-  newCharacter.job=getJob();
-  newCharacter.race=getRace();
+  RandomJobFactory rjf {};
+  RandomRaceFactory rrf {};
+  newCharacter.getJob().setJob(rjf.getRandomJob());
+  newCharacter.getRace().setRace(rrf.getRandomRace());
   return newCharacter;
 }

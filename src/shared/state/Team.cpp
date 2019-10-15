@@ -19,7 +19,9 @@ std::vector<Item> Team::getItems (){
 }
 
 void Team::addCharacter(){
-  
-  // this->listCharacter.push_back(character);
-  // this->characterNumber+=1;
+  Character character {};
+  CharacterFactory cf {};
+  character=cf.createCharacter();
+  this->listCharacter.push_back(character);
+  this->characterNumber+=1;
 }
