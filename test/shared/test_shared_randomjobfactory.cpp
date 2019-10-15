@@ -7,9 +7,10 @@ using namespace state;
 BOOST_AUTO_TEST_CASE(TestJobFactory)
 {
 	Character test {};
-	Job jobtest {};
 	RandomJobFactory rjf {};
-	jobtest=rjf.getJob();
-	test.job.job=jobtest.job;
-	BOOST_CHECK_EQUAL(test.job.job,Pugilist);
+	Job testJob;
+	testJob.setJob(rjf.getRandomJob());
+	test.setJob(testJob);
+	bool value=((test.getJob().getJob()==Archer)||(test.getJob().getJob()==Pugilist)||(test.getJob().getJob()==Swordman)||(test.getJob().getJob()==Magician));
+	BOOST_CHECK(value);
 }
