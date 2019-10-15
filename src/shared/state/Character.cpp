@@ -242,7 +242,7 @@ int Character::getCurrentMP (){
     return currentMP;
 }
 
-void Character::initHPMP (){
-    this->currentHP=getMaxHP(this->race,this->job,this->level);
-    this->currentMP=getMaxMP(this->race,this->job,this->level);
+void Character::initHPMP (state::Race race, state::Job job, state::Level level){
+    this->currentHP=getMaxHP(race,job,level);
+    this->currentMP=getMaxMP(race,job,level);
 }

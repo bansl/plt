@@ -3,3 +3,9 @@
 using namespace state; 
 using namespace std;
 
+int Tile::getHeight (){
+    return height;
+}
+void Tile::setHeight (int height){
+    this->height=height;
+}

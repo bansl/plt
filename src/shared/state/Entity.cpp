@@ -25,6 +25,7 @@ state::Character Entity::getCharacter(){
 
 bool Entity::isFree (){
     // TODO
+    //
     return true;
 }
 

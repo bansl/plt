@@ -21,11 +21,6 @@ state::Cursor* Turn::getCursor (){
     return ptrCursor;
 }
 
-bool Turn::initTeams(){
-    // TODO
-    return true;
-}
-
 std::vector<state::Team> Turn::getTeams (){
     return teams;
 }
