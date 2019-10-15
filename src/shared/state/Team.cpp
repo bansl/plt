@@ -18,7 +18,8 @@ std::vector<Item> Team::getItems (){
     return listItems;
 }
 
-void Team::addCharacter(state::Character character){
-  this->listCharacter.push_back(character);
-  this->characterNumber+=1;
+void Team::addCharacter(){
+  
+  // this->listCharacter.push_back(character);
+  // this->characterNumber+=1;
 }
