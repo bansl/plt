@@ -7,7 +7,11 @@ state::Character CharacterFactory::createCharacter(){
   Character newCharacter {};
   RandomJobFactory rjf {};
   RandomRaceFactory rrf {};
-  newCharacter.getJob().setJob(rjf.getRandomJob());
-  newCharacter.getRace().setRace(rrf.getRandomRace());
+  Race newRace {};
+  Job newJob {};
+  newRace.setRace(rrf.getRandomRace());
+  newJob.setJob(rjf.getRandomJob());
+  newCharacter.setJob(newJob);
+  newCharacter.setRace(newRace);
   return newCharacter;
 }

@@ -8,7 +8,7 @@ using namespace state;
 int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
     int maxHP=0;
 
-    if (race.race == Monster){
+    if (race.race== Monster){
         maxHP=30 + 5*level.getLevel();
     }
     else if (race.race == Beastman){
