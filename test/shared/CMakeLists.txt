@@ -6,6 +6,9 @@ add_custom_test(shared_level)
 add_custom_test(shared_cursor)
 add_custom_test(shared_turn)
 add_custom_test(shared_entity)
-
+add_custom_test(shared_team)
+add_custom_test(shared_randomjobfactory)
+add_custom_test(shared_randomracefactory)
+add_custom_test(shared_characterfactory)
+add_custom_test(shared_addcharacter)
 # vim: set sw=2 sts=2 et:
-

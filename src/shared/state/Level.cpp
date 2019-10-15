@@ -1,6 +1,6 @@
 #include "../state.h"
 
-using namespace state; 
+using namespace state;
 using namespace std;
 
 int Level::getLevel (){
@@ -12,6 +12,6 @@ void Level::levelUp (int experience){
     {
         this->level+=1;
     }
-    
-    
+
+
 }

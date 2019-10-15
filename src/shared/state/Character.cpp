@@ -2,12 +2,12 @@
 #include <iostream>
 
 using namespace std;
-using namespace state; 
+using namespace state;
 
 
 int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
     int maxHP=0;
-    
+
     if (race.race == Monster){
         maxHP=30 + 5*level.getLevel();
     }
@@ -198,7 +198,7 @@ std::vector<state::Skill> Character::getSkillList (state::Job job, state::Level 
         fire.hpRecovery=0;
         skills.push_back(fire);
     }
-    
+
     return skills;
 }
 
