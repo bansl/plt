@@ -1,7 +1,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "../../src/shared/state/Exemple.h"
+// #include "../../src/shared/state/Exemple.h"
 #include "../../src/shared/state/Item.h"
 #include "../../src/shared/state/Team.h"
 
