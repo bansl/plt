@@ -8,6 +8,8 @@ BOOST_AUTO_TEST_CASE(TestTile)
 {
   	for(int i=0;i<50;i++){
       TileFactory testTF {};
-      BOOST_CHECK_EQUAL(testTF.getRandomTile().getHeight(),1);
+      int height=testTF.getRandomTile().getHeight();
+      bool test= ((height==1) || (height==2) || (height==3));
+      BOOST_CHECK( test );
     }
 }
