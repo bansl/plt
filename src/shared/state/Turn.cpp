@@ -24,3 +24,17 @@ state::Cursor* Turn::getCursor (){
 std::vector<state::Team> Turn::getTeams (){
     return teams;
 }
+
+void Turn::initMap (){
+    TileFactory tf {};
+    vector< vector<state::Tile> > generatedmap;
+
+    for (int i = 0; i < 50; i++) {
+        vector<state::Tile> generatedmaprow; 
+        for (int j = 0; j < 50; j++) {
+            generatedmaprow.push_back(tf.getRandomTile());
+        }
+        generatedmap.push_back(generatedmaprow);
+    }
+    this->map=generatedmap;
+}

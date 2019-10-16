@@ -16,5 +16,7 @@ BOOST_AUTO_TEST_CASE(TestTurn)
   CursorPos.setPos(7,4);
   BOOST_CHECK_EQUAL( CursorPos.getX(),7);
   BOOST_CHECK_EQUAL( CursorPos.getY(),4);
-  // TODO
+
+  testTurn.initMap();
+  BOOST_CHECK_EQUAL(testTurn.map.size(),50);
 }
