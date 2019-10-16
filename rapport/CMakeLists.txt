@@ -9,7 +9,7 @@ file(GLOB_RECURSE contents_files RELATIVE ${CMAKE_SOURCE_DIR} rapport/*.tex)
 
 ADD_LATEX_DOCUMENT(
     Rapport.tex
-    INPUTS structure.tex title.tex abstract.tex presentation_generale.tex
+    INPUTS structure.tex title.tex abstract.tex presentation_generale.tex description_et_conception_des_etats.tex
     IMAGE_DIRS images
 
     )
