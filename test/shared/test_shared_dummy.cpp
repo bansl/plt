@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(TestHealItem)
   Team player1 {};
   player1.listItems.push_back(exheal);
 
-  BOOST_CHECK_EQUAL(player1.listItems[0].quantity,2);
+  BOOST_CHECK_EQUAL((player1.getItems())[0].quantity,2);
 }
 
  BOOST_AUTO_TEST_CASE(TestExemple)
