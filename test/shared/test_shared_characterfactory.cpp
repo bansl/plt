@@ -16,9 +16,6 @@ BOOST_AUTO_TEST_CASE(TestCharacterFactory)
 		raceget=test.getRace().getRace();
 		BOOST_CHECK((raceget==Monster)||(raceget==Demon)||(raceget==Human)||(raceget==Beastman));
 		//tests for characters fonctions with random character
-		state::Level testLevel {};
-		testLevel.level=2;
-		test.level=testLevel;
 		BOOST_CHECK_GT(test.getMaxHP(test.getRace(),test.getJob(),test.getLevel()),0);
 	  BOOST_CHECK_GT(test.getMaxMP(test.getRace(),test.getJob(),test.getLevel()),0);
 	  BOOST_CHECK_GT(test.getEvade(test.getRace(),test.getJob(),test.getLevel()),0);
