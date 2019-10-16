@@ -6,7 +6,7 @@ using namespace state;
 
 BOOST_AUTO_TEST_CASE(TestTile)
 {
-  	for(int i=0;i<20;i++){
+  	for(int i=0;i<50;i++){
       TileFactory testTF {};
       BOOST_CHECK_EQUAL(testTF.getRandomTile().getHeight(),1);
     }

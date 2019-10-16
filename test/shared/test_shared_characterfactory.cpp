@@ -19,11 +19,11 @@ BOOST_AUTO_TEST_CASE(TestCharacterFactory)
 		state::Level testLevel {};
 		testLevel.level=2;
 		test.level=testLevel;
-		BOOST_CHECK_GT(test.getMaxHP(test.getRace(),test.getJob(),testLevel),0);
-	  BOOST_CHECK_GT(test.getMaxMP(test.getRace(),test.getJob(),testLevel),0);
-	  BOOST_CHECK_GT(test.getEvade(test.getRace(),test.getJob(),testLevel),0);
-	  BOOST_CHECK_GT(test.getAttackPower(test.getRace(),test.getJob(),testLevel),0);
-	  BOOST_CHECK_GT(test.getMagicPower(test.getRace(),test.getJob(),testLevel),0);
-	  BOOST_CHECK_GT(test.getDefense(test.getRace(),test.getJob(),testLevel),0);
+		BOOST_CHECK_GT(test.getMaxHP(test.getRace(),test.getJob(),test.getLevel()),0);
+	  BOOST_CHECK_GT(test.getMaxMP(test.getRace(),test.getJob(),test.getLevel()),0);
+	  BOOST_CHECK_GT(test.getEvade(test.getRace(),test.getJob(),test.getLevel()),0);
+	  BOOST_CHECK_GT(test.getAttackPower(test.getRace(),test.getJob(),test.getLevel()),0);
+	  BOOST_CHECK_GT(test.getMagicPower(test.getRace(),test.getJob(),test.getLevel()),0);
+	  BOOST_CHECK_GT(test.getDefense(test.getRace(),test.getJob(),test.getLevel()),0);
 	}
 }

@@ -8,29 +8,29 @@ using namespace state;
 int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
     int maxHP=0;
 
-    if (race.race== Monster){
+    if (race.getRace()== Monster){
         maxHP=30 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         maxHP=30 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         maxHP=30 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         maxHP=30 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         maxHP+=20;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         maxHP+=20;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         maxHP+=20;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         maxHP+=20;
     }
     return maxHP;
@@ -38,29 +38,29 @@ int Character::getMaxHP(state::Race race, state::Job job, state::Level level){
 
 int Character::getMaxMP(state::Race race, state::Job job, state::Level level){
     int maxMP=0;
-    if (race.race == Monster){
+    if (race.getRace() == Monster){
         maxMP=20 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         maxMP=10 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         maxMP=30 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         maxMP=0 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         return maxMP;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         return maxMP;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         return maxMP;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         return maxMP+20;
     }
 
@@ -69,59 +69,59 @@ int Character::getMaxMP(state::Race race, state::Job job, state::Level level){
 
 int Character::getEvade (state::Race race, state::Job job, state::Level level){
     int evade=0;
-    if (race.race == Monster){
+    if (race.getRace() == Monster){
         evade=10 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         evade=15 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         evade=20 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         evade=10 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         return evade+10;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         return evade;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         return evade;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         return evade;
     }
-    return evade;
+    return -1;
 }
 
 int Character::getAttackPower (state::Race race, state::Job job, state::Level level){
     int attack=0;
-    if (race.race == Monster){
+    if (race.getRace() == Monster){
         attack=10 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         attack=15 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         attack=20 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         attack=10 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         return attack+10;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         return attack;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         return attack;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         return attack;
     }
     return -1;
@@ -129,29 +129,29 @@ int Character::getAttackPower (state::Race race, state::Job job, state::Level le
 
 int Character::getMagicPower (state::Race race, state::Job job, state::Level level){
     int magic=0;
-    if (race.race == Monster){
+    if (race.getRace() == Monster){
         magic=10 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         magic=15 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         magic=20 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         magic=10 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         return magic;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         return magic;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         return magic;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         return magic+10;
     }
     return -1;
@@ -160,29 +160,29 @@ int Character::getMagicPower (state::Race race, state::Job job, state::Level lev
 
 int Character::getDefense (state::Race race, state::Job job, state::Level level){
     int defense=0;
-    if (race.race == Monster){
+    if (race.getRace() == Monster){
         defense=10 + 5*level.getLevel();
     }
-    else if (race.race == Beastman){
+    else if (race.getRace() == Beastman){
         defense=15 + 5*level.getLevel();
     }
-    else if (race.race == Demon){
+    else if (race.getRace() == Demon){
         defense=20 + 5*level.getLevel();
     }
-    else if (race.race == Human){
+    else if (race.getRace() == Human){
         defense=10 + 5*level.getLevel();
     }
 
-    if(job.job == Pugilist){
+    if(job.getJob() == Pugilist){
         return defense;
     }
-    if(job.job == Swordman){
+    if(job.getJob() == Swordman){
         return defense+10;
     }
-    if(job.job == Archer){
+    if(job.getJob() == Archer){
         return defense;
     }
-    if(job.job == Magician){
+    if(job.getJob() == Magician){
         return defense;
     }
     return -1;
@@ -191,7 +191,7 @@ int Character::getDefense (state::Race race, state::Job job, state::Level level)
 
 std::vector<state::Skill> Character::getSkillList (state::Job job, state::Level level){
     std::vector<Skill> skills(0);
-    if (job.job == Magician){
+    if (job.getJob() == Magician){
         Skill fire {};
         fire.skillName="fire ball";
         fire.damage=10;
