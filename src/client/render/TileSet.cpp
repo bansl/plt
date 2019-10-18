@@ -4,19 +4,19 @@
 using namespace std;
 using namespace render;
 
-TileSet::TileSet(TileSetID newId){
-	id=newId;
+TileSet::TileSet(TileSetType id){
+	type=id;
 
-	if (id == Maptile){
+	if (type == Maptile){
 		sizeX=197;
 		sizeY=280;
-		imagePath="res/maptiles.png";	
+		imagePath="../res/maptiles.png";	
 	}
 	
-	else if (id==PERSONNAGETILESET){
+	else if (type==CharaSpritesheet){
 		sizeX=16; //TBD
 		sizeY=16; //TBD
-		imagePath="res/char1.png";
+		imagePath="../res/char1.png";
 	}
 }
 
