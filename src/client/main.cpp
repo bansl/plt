@@ -25,8 +25,13 @@ int main(int argc,char* argv[])
             cout << "Bonjour le monde!" << endl;    
         }
         if( std::strcmp( argv[1], "sftest") == 0 ){
-            sf::Window window(sf::VideoMode(800, 600), "My window");
+            sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 
+              // Load a sprite to display
+            sf::Texture texture;
+            if (!texture.loadFromFile("../res/maptiles.png"))
+                return EXIT_FAILURE;
+            sf::Sprite sprite(texture);
             // run the program as long as the window is open
             while (window.isOpen())
             {
@@ -38,6 +43,9 @@ int main(int argc,char* argv[])
                     if (event.type == sf::Event::Closed)
                         window.close();
                 }
+                window.clear();
+                window.draw(sprite);
+                window.display();
             }
 
             return 0;
