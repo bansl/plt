@@ -12,3 +12,4 @@ CMakeFiles/cmake.check_cache
 src/*/CMakeFiles
 bin/*/*.h
 bin/*.h
+src/*.autosave
