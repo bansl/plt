@@ -23,4 +23,3 @@ TileSet::TileSet(TileSetID newId){
 std::string  TileSet::getImageFile (){
 	return imagePath;
 }
-
