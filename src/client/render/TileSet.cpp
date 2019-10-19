@@ -8,15 +8,17 @@ TileSet::TileSet(TileSetType id){
 	type=id;
 
 	if (type == Maptile){
-		sizeX=32;
-		sizeY=32;
-		imagePath="../res/maptiletest.png";	
+		sizeX=50;
+		sizeY=70;
+		margin=17;
+		imagePath="res/maptiles25.png";	
 	}
 	
 	else if (type==CharaSpritesheet){
 		sizeX=16; //TBD
 		sizeY=16; //TBD
-		imagePath="../res/char1.png";
+		margin=0; //TBD
+		imagePath="res/char1.png";
 	}
 }
 
@@ -30,4 +32,8 @@ int TileSet::getXsize(){
 
 int TileSet::getYsize(){
         return sizeY;
+}
+
+int TileSet::getMargin(){
+        return margin;
 }

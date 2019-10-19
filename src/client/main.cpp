@@ -67,7 +67,8 @@ int main(int argc,char* argv[])
             cout << "check map : " << testTurn.getMap().size() << endl;
             cout << "check map : " << testTurn.getMap()[0].size() << endl;
             sf::RenderWindow window(sf::VideoMode(  testTurn.getMap().size()*layer.getTilesets()[0]->getXsize(),
-                                                    testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize()),
+                                                    // testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize()),
+                                                    testTurn.getMap().size()*layer.getTilesets()[0]->getXsize()),
                                                     "Map");
             layer.initRender();
 
@@ -78,7 +79,6 @@ int main(int argc,char* argv[])
                         window.close();
                     }
                 }
-                cout << "check drawobjs : " << layer.getDrawobjects().size()<< endl;
                 window.clear();
                 window.draw(*layer.getDrawobjects()[0]);
             
