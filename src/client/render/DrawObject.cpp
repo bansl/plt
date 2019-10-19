@@ -51,8 +51,8 @@ bool DrawObject::renderMap (state::Turn turn, render::TileSet tileset, int mapHe
 
                                 // vextex pos
                                 int xpos,ypos;
-                                xpos=(j-i+mapWidth)*(tileXsize/2);
-                                ypos=(j+i+mapHeight)*(tileXsize/4);
+                                xpos=(j-i+mapWidth-1)*(tileXsize/2);
+                                ypos=(j+i-2)*(tileXsize/4);
                                 quad[0].position = sf::Vector2f(xpos + tileXsize/2   , ypos + tileXsize/2);
                                 quad[1].position = sf::Vector2f(xpos + tileXsize     , ypos + 3*(tileXsize/4));
                                 quad[2].position = sf::Vector2f(xpos + tileXsize/2   , ypos + tileXsize);

@@ -68,7 +68,7 @@ int main(int argc,char* argv[])
             cout << "check map : " << testTurn.getMap()[0].size() << endl;
             sf::RenderWindow window(sf::VideoMode(  testTurn.getMap().size()*layer.getTilesets()[0]->getXsize(),
                                                     // testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize()),
-                                                    testTurn.getMap().size()*layer.getTilesets()[0]->getXsize()),
+                                                    testTurn.getMap().size()*layer.getTilesets()[0]->getXsize()/2),
                                                     "Map");
             layer.initRender();
 
