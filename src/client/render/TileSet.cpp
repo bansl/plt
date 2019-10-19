@@ -8,9 +8,9 @@ TileSet::TileSet(TileSetType id){
 	type=id;
 
 	if (type == Maptile){
-		sizeX=197;
-		sizeY=280;
-		imagePath="../res/maptiles.png";	
+		sizeX=32;
+		sizeY=32;
+		imagePath="../res/maptiletest.png";	
 	}
 	
 	else if (type==CharaSpritesheet){
@@ -20,6 +20,14 @@ TileSet::TileSet(TileSetType id){
 	}
 }
 
-std::string  TileSet::getImageFile (){
+const std::string TileSet::getImagePath (){
 	return imagePath;
+}
+
+int TileSet::getXsize(){
+        return sizeX;
+}
+
+int TileSet::getYsize(){
+        return sizeY;
 }

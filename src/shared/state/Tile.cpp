@@ -9,3 +9,6 @@ int Tile::getHeight (){
 void Tile::setHeight (int height){
     this->height=height;
 }
+state::TileType Tile::getTile (){
+    return tile;
+}
