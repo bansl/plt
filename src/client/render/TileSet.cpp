@@ -8,10 +8,10 @@ TileSet::TileSet(TileSetType id){
 	type=id;
 
 	if (type == Maptile){
-		sizeX=50;
-		sizeY=70;
-		margin=17;
-		imagePath="res/maptiles25.png";	
+		sizeX=32;
+		sizeY=32;
+		margin=0;
+		imagePath="res/maptile2.png";	
 	}
 	
 	else if (type==CharaSpritesheet){

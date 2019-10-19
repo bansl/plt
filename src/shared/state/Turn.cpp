@@ -25,16 +25,26 @@ std::vector<state::Team> Turn::getTeams (){
     return teams;
 }
 
-void Turn::initMap (){
+void Turn::initMap (int row, int column){
     TileFactory tf {};
     vector< vector<state::Tile> > generatedmap;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < column/2; i++) {
         vector<state::Tile> generatedmaprow; 
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < row; j++) {
             generatedmaprow.push_back(tf.getRandomTile());
         }
         generatedmap.push_back(generatedmaprow);
+    }
+    if(column%2!=0){
+        vector<state::Tile> generatedmaprow2; 
+        for (int j = 0; j < row; j++) {
+            generatedmaprow2.push_back(tf.getRandomTile());
+        }
+        generatedmap.push_back(generatedmaprow2);
+    }
+    for (int i = 0; i < column/2; i++) {
+        generatedmap.push_back(generatedmap[column/2-i-1]);
     }
     this->map=generatedmap;
 }

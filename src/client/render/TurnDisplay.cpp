@@ -16,9 +16,13 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
 
 void TurnDisplay::initRender(){
         DrawObject DrawMap;
-        if(DrawMap.renderMap(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin())){
-        std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
-        drawobjects.push_back(move(ptr_drawMap));
+        if(DrawMap.renderMapBase(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin())){
+                std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
+                drawobjects.push_back(move(ptr_drawMap));
+                if(DrawMap.renderMapWalls(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin())){
+                        std::unique_ptr<DrawObject> ptr_drawMapWalls (new DrawObject(DrawMap));
+                        drawobjects.push_back(move(ptr_drawMapWalls));
+                }
         }
 
 }

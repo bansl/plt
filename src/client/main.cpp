@@ -60,15 +60,15 @@ int main(int argc,char* argv[])
 
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap();
+            testTurn.initMap(16,16);
 
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "check map : " << testTurn.getMap().size() << endl;
             cout << "check map : " << testTurn.getMap()[0].size() << endl;
-            sf::RenderWindow window(sf::VideoMode(  testTurn.getMap().size()*layer.getTilesets()[0]->getXsize(),
-                                                    // testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize()),
-                                                    testTurn.getMap().size()*layer.getTilesets()[0]->getXsize()/2),
+            int screensize=max((testTurn.getMap().size()+2)*layer.getTilesets()[0]->getXsize() , (testTurn.getMap()[0].size()+2)*layer.getTilesets()[0]->getXsize());
+            sf::RenderWindow window(sf::VideoMode(  screensize,
+                                                    (screensize)/2),
                                                     "Map");
             layer.initRender();
 
@@ -81,7 +81,7 @@ int main(int argc,char* argv[])
                 }
                 window.clear();
                 window.draw(*layer.getDrawobjects()[0]);
-            
+                window.draw(*layer.getDrawobjects()[1]);
                 window.display();
             }
         }
