@@ -11,8 +11,21 @@ state::Tile TileFactory::getRandomTile (){
   uniform_int_distribution<std::mt19937::result_type> distribution(1,65);
   int i=distribution(rng);
   mt19937 rng2(dev());
-  uniform_int_distribution<std::mt19937::result_type> distributionHeight(1,2);
-  int randomHeight=distributionHeight(rng2);
+  uniform_int_distribution<std::mt19937::result_type> distributionHeight(1,20);
+  
+  int randomHeight;
+  if (distributionHeight(rng2)<10)
+  {
+    randomHeight=1;
+  }
+  else if (distributionHeight(rng2)<16)
+  {
+    randomHeight=1; //2
+  }
+  else{
+    randomHeight=1;//3
+  }
+  
   Tile randomtile{};
   if (i<10) {
     randomtile.tile=Dirt;

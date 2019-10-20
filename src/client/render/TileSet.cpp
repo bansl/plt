@@ -8,16 +8,16 @@ TileSet::TileSet(TileSetType id){
 	type=id;
 
 	if (type == Maptile){
-		sizeX=32;
-		sizeY=32;
+		sizeX=129;
+		sizeY=129;
 		margin=0;
-		imagePath="res/maptile2.png";	
+		imagePath="res/maptile2x129.png";	
 	}
 	
 	else if (type==CharaSpritesheet){
-		sizeX=16; //TBD
-		sizeY=16; //TBD
-		margin=0; //TBD
+		sizeX=129; //TBD
+		sizeY=155; //TBD
+		margin=12; //TBD
 		imagePath="res/char1.png";
 	}
 }

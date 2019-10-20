@@ -52,3 +52,9 @@ void Turn::initMap (int row, int column){
 std::vector<std::vector<state::Tile>> Turn::getMap (){
     return map;
 }
+
+void Turn::initTeams (){
+    Team team {};
+    team.idPlayer=0;
+    teams.push_back(team);
+}

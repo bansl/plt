@@ -25,3 +25,7 @@ void Team::addCharacter(){
   this->listCharacter.push_back(character);
   this->characterNumber+=1;
 }
+
+std::vector<Character> Team::getCharacters (){
+  return listCharacter;
+}
