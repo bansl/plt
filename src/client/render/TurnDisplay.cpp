@@ -33,9 +33,9 @@ void TurnDisplay::initRender(){
         }
         DrawObject DrawChar;
         std::vector<std::unique_ptr<render::DrawObject>> charframe;
-        for (size_t i = 0; i < 4; i++)
+        for (size_t i = 0; i < 5; i++)
         {
-                DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[1]->getXsize(), tilesets[1]->getYsize(),tilesets[1]->getMargin());
+                DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[1]->getXsize(), tilesets[1]->getYsize(),tilesets[1]->getMargin(),i);
                 std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
                 charframe.push_back(move(ptr_drawChar));
         }
