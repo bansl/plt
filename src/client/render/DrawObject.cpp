@@ -25,12 +25,12 @@ bool DrawObject::renderMapBase (state::Turn turn, render::TileSet tileset, int m
                         int tileheight=k;
                         // cout << "check map : " << turn.getMap().size() << endl;
                         int tu,tv;
-                        if(tiletype==Dirt){tu=1,tv=1;}
+                        if(tiletype==Dirt){tu=3,tv=0;}
                         else if(tiletype==Grass){tu=0,tv=1;}
-                        else if(tiletype==Water){tu=1,tv=2;}
-                        else if(tiletype==Sand){tu=2,tv=1;}
-                        else if(tiletype==Pound){tu=1,tv=0;}
-                        else if(tiletype==Rock){tu=2,tv=2;}     
+                        else if(tiletype==Water){tu=1,tv=0;}
+                        else if(tiletype==Sand){tu=2,tv=0;}
+                        else if(tiletype==Pound){tu=3,tv=1;}
+                        else if(tiletype==Rock){tu=2,tv=1;}     
 
                         // cursor for current vextex
                         sf::Vertex* quad = &vertexarray[(i + j * mapWidth) * 4];
@@ -88,12 +88,12 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
                 state::TileType tiletype=turn.getMap()[i][j].getTile();
                 // cout << "check map : " << turn.getMap().size() << endl;
                 int tu,tv;
-                if(tiletype==Dirt){tu=1,tv=1;}
+                if(tiletype==Dirt){tu=3,tv=0;}
                 else if(tiletype==Grass){tu=0,tv=1;}
-                else if(tiletype==Water){tu=1,tv=2;}
-                else if(tiletype==Sand){tu=2,tv=1;}
+                else if(tiletype==Water){tu=1,tv=0;}
+                else if(tiletype==Sand){tu=2,tv=0;}
                 else if(tiletype==Pound){tu=0,tv=1;}
-                else if(tiletype==Rock){tu=2,tv=2;}
+                else if(tiletype==Rock){tu=2,tv=1;}
                    
                 if(direction==0){   
                         // if((j==mapHeight-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i][j+1].getHeight())){
