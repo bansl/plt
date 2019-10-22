@@ -16,7 +16,7 @@ bool DrawObject::renderMapBase (state::Turn turn, render::TileSet tileset, int m
 	}
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(mapWidth * mapHeight * 4);
-        
+
         for (int i = 0; i < mapWidth; i++){
                 for (int j = 0; j < mapHeight; j++){
                 if(turn.getMap()[i][j].getHeight()==layer){
@@ -52,7 +52,7 @@ bool DrawObject::renderMapBase (state::Turn turn, render::TileSet tileset, int m
 
                 }
         }
-        
+
         return true;
 
 }
@@ -66,7 +66,7 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
         int l=0, tileheight,xpos,ypos;
         sf::Vertex* quad;
         for (int i = 0; i < mapWidth; i++){
-            for (int j = 0; j < mapHeight; j++){   
+            for (int j = 0; j < mapHeight; j++){
                 if(turn.getMap()[i][j].getHeight()==layer){
                 state::TileType tiletype=turn.getMap()[i][j].getTile();
                 // cout << "check map : " << turn.getMap().size() << endl;
@@ -78,15 +78,15 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
                 else if(tiletype==Pound){tu=0,tv=1;}
                 else if(tiletype==Rock){tu=2,tv=1;}
 
-                
+
                 if((j==mapHeight-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i][j+1].getHeight())){
-                // if((j==mapHeight-1)){              
-                        tileheight= turn.getMap()[i][j].getHeight()-1;  
-                        
+                // if((j==mapHeight-1)){
+                        tileheight= turn.getMap()[i][j].getHeight()-1;
+
                         // cursor for current vextex
                         quad = &vertexarray[l * 4];
                         // vextex pos
-                        
+
                         xpos=(j-i+mapWidth-1)*(tileXsize/2);
                         ypos=(j+i+4-tileheight)*(tileYsize/4);
                         quad[0].position = sf::Vector2f(xpos + tileXsize/2   , ypos + tileYsize   );
@@ -98,17 +98,17 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
                         quad[1].texCoords = sf::Vector2f((tu + 1) * tileXsize +tu*margin   , tv * tileYsize +tv*margin);
                         quad[2].texCoords = sf::Vector2f((tu + 1) * tileXsize +tu*margin   , (tv + 1) * tileYsize +tv*margin);
                         quad[3].texCoords = sf::Vector2f(tu * tileXsize +tu*margin         , (tv + 1) * tileYsize +tv*margin);
-                        
+
                         l++;
                 }
-                
-                
+
+
                 if((i==mapWidth-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i+1][j].getHeight())){
                 // if((i==mapWidth-1)){
-                                tileheight= turn.getMap()[i][j].getHeight()-1;  
-                                        
+                                tileheight= turn.getMap()[i][j].getHeight()-1;
+
                         quad = &vertexarray[l * 4];
-                        
+
                         // vextex pos
                         xpos=(j-i+mapWidth-1)*(tileXsize/2);
                         ypos=(j+i+4-tileheight)*(tileYsize/4);
@@ -122,14 +122,14 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
                         quad[1].texCoords = sf::Vector2f((tu + 1) * tileXsize +tu*margin   , tv * tileYsize +tv*margin);
                         quad[2].texCoords = sf::Vector2f((tu + 1) * tileXsize +tu*margin   , (tv + 1) * tileYsize +tv*margin);
                         quad[3].texCoords = sf::Vector2f(tu * tileXsize +tu*margin         , (tv + 1) * tileYsize +tv*margin);
-                        
+
                         l++;
                 }
-                
+
                 }
             }
         }
-        
+
         return true;
 
 }
@@ -137,7 +137,7 @@ bool DrawObject::renderMapWalls (state::Turn turn, render::TileSet tileset, int 
 
 
 bool DrawObject::renderCharacter(state::Turn turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb){
-        
+
         sf::Image image;
         image.loadFromFile(tileset.getImagePath());
         sf::Color color(147, 187, 236);
@@ -155,13 +155,15 @@ bool DrawObject::renderCharacter(state::Turn turn, render::TileSet tileset, int 
                 // float charPosX= (float) turn.getTeams()[0].getCharacters()[0].getPosition().getX();
                 // float charPosY= (float) turn.getTeams()[0].getCharacters()[0].getPosition().getY();
 
-                float charPosX= 0;
+                float charPosX= 5;
                 float charPosY= 0;
+                float tileheight= (float) (turn.getMap()[(int)charPosX][(int)charPosY].getHeight());
+                tileheight +=-1;
                 int tu = 0;
                 int tv = 0;
 
                 float isoPosX=((-charPosX+charPosY)*8+mapWidth*8)/16;//mapWidth/2-(charPosY-charPosX/2);
-                float isoPosY=((charPosX+charPosY)*27+mapWidth*64)/128-2;//1+(charPosY+charPosX)/2;
+                float isoPosY=((charPosX+charPosY-tileheight)*27+mapWidth*64)/128-2;//1+(charPosY+charPosX)/2;
                 // cursor for current vertex
                 sf::Vertex* quad = &vertexarray[i * 4];
 
