@@ -3,11 +3,12 @@
 #include <state.h>
 #include "render.h"
 #include <unistd.h>
-#include <ctime>
+#include <chrono>
 
 using namespace std;
 using namespace state;
 using namespace render;
+using namespace std::chrono;
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
 #include <SFML/Graphics.hpp>
@@ -65,6 +66,7 @@ int main(int argc,char* argv[])
             testTurn.initMap(6,6);
             testTurn.initTeams();
             testTurn.getTeams()[0].addCharacter();
+            
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "check map : " << testTurn.getMap().size() << endl;
@@ -79,10 +81,11 @@ int main(int argc,char* argv[])
             cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
             cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
             cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
-            time_t t_now = time(0);
-            tm* now = localtime(&t_now);
-            int k=0, last;
-            last=now->tm_sec;
+            
+            int k=0;
+            milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+            last_ms+=(milliseconds) 60;
+            
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
@@ -91,24 +94,21 @@ int main(int argc,char* argv[])
                     }
                 }
                 window.clear();
-                //Draw map(roofs and walls)
+                // Draw map(roofs and walls)
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
                 }
-                cout << "check time last: " << last << endl;
-                cout << "check time now: " << now->tm_sec << endl;
-                t_now = time(0);
-                now = localtime(&t_now);
+                
                 for (size_t i = 0; i < layer.getDrawchars().size(); i++)
                 {
                     window.draw(*layer.getDrawchars()[i][k]);
                     
                 }
                 
-                if((now->tm_sec)>=(1+last)){    
-                    k=(k+1)%3;
-                    last=now->tm_sec;
+                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){    
+                    k=(k+1)%5;
+                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                 }    
                 window.display();
             }

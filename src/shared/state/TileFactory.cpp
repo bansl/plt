@@ -20,7 +20,7 @@ state::Tile TileFactory::getRandomTile (){
   }
   else if (distributionHeight(rng2)<16)
   {
-    randomHeight=1; //2
+    randomHeight=2; //2
   }
   else{
     randomHeight=1;//3
