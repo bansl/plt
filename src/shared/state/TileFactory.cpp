@@ -39,7 +39,7 @@ state::Tile TileFactory::getRandomTile (){
   }
   else if (i<35) {
     randomtile.tile=Water;
-    randomtile.setHeight(randomHeight);
+    randomtile.setHeight(1);
     return randomtile;
   }
   else if (i<45) {

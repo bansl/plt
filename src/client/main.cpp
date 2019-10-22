@@ -66,7 +66,9 @@ int main(int argc,char* argv[])
             testTurn.initMap(6,6);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,4);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(0,2);
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,4);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "check map : " << testTurn.getMap().size() << endl;
@@ -76,14 +78,13 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  screensizeWidth,
                                                     (screensizeHeight)),
                                                     "Render");
-            window.setFramerateLimit(30);
             layer.initRender();
             cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
             cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
             cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
             cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
             
-            int k=0;
+            int k=0,characterheight;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             
@@ -99,13 +100,13 @@ int main(int argc,char* argv[])
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
+                    for (size_t j = 0; j < layer.getDrawchars().size(); j++){
+                        characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
+                        if(characterheight*2== (int) i){ window.draw(*layer.getDrawchars()[j][k]);}
+                    }
                 }
                 
-                for (size_t i = 0; i < layer.getDrawchars().size(); i++)
-                {
-                    window.draw(*layer.getDrawchars()[i][k]);
-                    
-                }
+                
                 
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){    
                     k=(k+1)%6;

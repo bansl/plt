@@ -202,8 +202,9 @@ std::vector<state::Skill> Character::getSkillList (state::Job job, state::Level 
     return skills;
 }
 
-state::Position Character::getPosition (){
-    return position;
+state::Position& Character::getPosition(){
+	Position & addrPosition = position;
+	return addrPosition ;
 }
 
 int Character::setCurrentHP (int hpModifier){

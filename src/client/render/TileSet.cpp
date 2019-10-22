@@ -11,18 +11,19 @@ TileSet::TileSet(TileSetType id){
 		sizeX=129;
 		sizeY=129;
 		margin=0;
-		imagePath="res/maptile2x129.png";	
+		imagePath.push_back("res/maptile2x129.png");	
 	}
 	
 	else if (type==CharaSpritesheet){
 		sizeX=129; //TBD
 		sizeY=155; //TBD
 		margin=12; //TBD
-		imagePath="res/char1.png";
+		imagePath.push_back("res/char1.png");
+		
 	}
 }
 
-const std::string TileSet::getImagePath (){
+const vector<std::string> TileSet::getImagePath (){
 	return imagePath;
 }
 
