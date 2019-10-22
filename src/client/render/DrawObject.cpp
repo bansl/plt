@@ -155,8 +155,8 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
                 float charPosX= (float) turn.getTeams()[0]->getListCharacter()[0]->getPosition().getX();
                 float charPosY= (float) turn.getTeams()[0]->getListCharacter()[0]->getPosition().getY();
 
-                float charPosX= 5;
-                float charPosY= 0;
+                // float charPosX= 5;
+                // float charPosY= 0;
                 float tileheight= (float) (turn.getMap()[(int)charPosX][(int)charPosY].getHeight());
                 tileheight +=-1;
                 int tu = 0;
