@@ -14,6 +14,7 @@
 
 ## Usage
 1. Unit test are available to test `make code-coverage`.
+2. To test render : `./bin/client render`.
 
 
 ## Contributing
@@ -25,7 +26,7 @@
 
 ## History
 * Release 1.1 : Initial Rapport and first test code.
-
+* Release 1.final : States implemented and unit tests.
 
 ## Credits
 * bansl 
