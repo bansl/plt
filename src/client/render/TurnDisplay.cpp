@@ -31,7 +31,7 @@ void TurnDisplay::initRender(){
                         }
                 }
         }
-        for (int k=0; k<turnDisplay.getTeams()[0]->getListCharacter().size(); k++){
+        for (int k=0; k< (int) turnDisplay.getTeams()[0]->getListCharacter().size(); k++){
                 DrawObject DrawChar;
                 std::vector<std::unique_ptr<render::DrawObject>> charframe;
                 for (size_t i = 0; i < 6; i++)

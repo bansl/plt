@@ -87,7 +87,7 @@ int main(int argc,char* argv[])
             int k=0,characterheight;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
-            
+            window.setFramerateLimit(60);
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
