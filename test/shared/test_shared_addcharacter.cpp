@@ -6,8 +6,6 @@ using namespace state;
 BOOST_AUTO_TEST_CASE(TestAdd)
 {
   Team testTeam {};
-	testTeam.characterNumber=0;
-	testTeam.listCharacter={};
   testTeam.addCharacter();
-  BOOST_CHECK_EQUAL(testTeam.characterNumber,1);
+  BOOST_CHECK_EQUAL(testTeam.getListCharacter().size(),1);
 }

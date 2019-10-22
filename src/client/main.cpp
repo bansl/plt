@@ -65,8 +65,8 @@ int main(int argc,char* argv[])
             Turn testTurn;
             testTurn.initMap(6,6);
             testTurn.initTeams();
-            testTurn.getTeams()[0].addCharacter();
-            
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,4);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "check map : " << testTurn.getMap().size() << endl;
@@ -78,6 +78,7 @@ int main(int argc,char* argv[])
                                                     "Render");
             window.setFramerateLimit(30);
             layer.initRender();
+            cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
             cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
             cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
             cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
@@ -107,8 +108,9 @@ int main(int argc,char* argv[])
                 }
                 
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){    
-                    k=(k+1)%5;
+                    k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+                    
                 }    
                 window.display();
             }

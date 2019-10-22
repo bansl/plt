@@ -1,4 +1,5 @@
 #include "../state.h"
+#include <iostream>
 
 using namespace state;
 using namespace std;
@@ -22,10 +23,12 @@ void Team::addCharacter(){
   Character character {};
   CharacterFactory cf {};
   character=cf.createCharacter();
-  this->listCharacter.push_back(character);
+  std::unique_ptr<Character> ptr_char (new Character(character));
+  listCharacter.push_back(move( ptr_char));
   this->characterNumber+=1;
 }
 
-std::vector<Character> Team::getCharacters (){
-  return listCharacter;
+std::vector<std::unique_ptr<Character>>& Team::getListCharacter (){
+  std::vector<std::unique_ptr<Character>>& mylistCharacter = listCharacter;
+  return mylistCharacter;
 }

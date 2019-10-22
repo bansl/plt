@@ -21,8 +21,9 @@ state::Cursor* Turn::getCursor (){
     return ptrCursor;
 }
 
-std::vector<state::Team> Turn::getTeams (){
-    return teams;
+std::vector<std::unique_ptr<Team>>& Turn::getTeams (){
+  std::vector<std::unique_ptr<Team>>& myteams = teams;
+  return myteams;
 }
 
 void Turn::initMap (int row, int column){
@@ -54,7 +55,6 @@ std::vector<std::vector<state::Tile>> Turn::getMap (){
 }
 
 void Turn::initTeams (){
-    Team team {};
-    team.idPlayer=0;
-    teams.push_back(team);
+    std::unique_ptr<state::Team> ptr_team (new Team);
+    teams.push_back(move( ptr_team));
 }
