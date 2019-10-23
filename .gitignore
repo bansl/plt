@@ -13,3 +13,4 @@ src/*/CMakeFiles
 bin/*/*.h
 bin/*.h
 src/*.autosave
+tstex_modules
