@@ -17,15 +17,20 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
 	tilesets.push_back(move(ptr_tilesetPersonnages));
 }
 
-void TurnDisplay::initRender(){
-        
+void TurnDisplay::initRender(int rotation){
+  while (!drawchars.empty()){
+    drawchars.pop_back();
+  }
+  while (!drawmaps.empty()){
+    drawmaps.pop_back();
+  }
         for (int k=1; k<4; k++){
                 DrawObject DrawMap;
-                if(DrawMap.renderMapWalls(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin(),k)){
+                if(DrawMap.renderMapWalls(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin(),k,rotation)){
                         std::unique_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
                         drawmaps.push_back(move(ptr_drawMapWallsbis));
                         DrawObject DrawMap;
-                        if(DrawMap.renderMapBase(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin(),k)){
+                        if(DrawMap.renderMapBase(turnDisplay,*tilesets[0], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[0]->getXsize(), tilesets[0]->getYsize(),tilesets[0]->getMargin(),k,rotation)){
                                 std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
                                 drawmaps.push_back(move(ptr_drawMap));
                         }
@@ -36,12 +41,12 @@ void TurnDisplay::initRender(){
                 std::vector<std::unique_ptr<render::DrawObject>> charframe;
                 for (size_t i = 0; i < 6; i++)
                 {
-                        DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[1]->getXsize(), tilesets[1]->getYsize(),tilesets[1]->getMargin(),i,k);
+                        DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(), turnDisplay.getMap()[0].size(), tilesets[1]->getXsize(), tilesets[1]->getYsize(),tilesets[1]->getMargin(),i,k,rotation);
                         std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
                         charframe.push_back(move(ptr_drawChar));
                 }
                 drawchars.push_back(move(charframe));
-        }        
+        }
 }
 
 std::vector<std::unique_ptr<render::TileSet>>& TurnDisplay::getTilesets (){

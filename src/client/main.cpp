@@ -23,10 +23,10 @@ int main(int argc,char* argv[])
 {
     // Exemple exemple;
     // exemple.setX(53);
-    
+
     if (argc>1){
         if( std::strcmp( argv[1], "hello") == 0 ){
-            cout << "Bonjour le monde!" << endl;    
+            cout << "Bonjour le monde!" << endl;
         }
 
         else if( std::strcmp( argv[1], "sftest") == 0 ){
@@ -58,7 +58,7 @@ int main(int argc,char* argv[])
         }
 
         else if(strcmp(argv[1],"render") == 0){
-
+            int rotation=1;
             cout<<"Affichage d'un Etat"<<endl;
 
             // === Init turn ===
@@ -78,12 +78,12 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  screensizeWidth,
                                                     (screensizeHeight)),
                                                     "Render");
-            layer.initRender();
+            layer.initRender(0);
             cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
             cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
             cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
             cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
-            
+
             int k=0,characterheight;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
@@ -96,6 +96,14 @@ int main(int argc,char* argv[])
                     }
                 }
                 window.clear();
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                    // left mouse button is pressed: rotate map
+                    rotation=(rotation+1)%4;
+                    layer.initRender(rotation);// this line is bugged
+                    cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                    cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                    cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                }
                 // Draw map(roofs and walls)
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
@@ -105,18 +113,18 @@ int main(int argc,char* argv[])
                         if(characterheight*2== (int) i){ window.draw(*layer.getDrawchars()[j][k]);}
                     }
                 }
-                
-                
-                
-                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){    
+
+
+
+                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-                    
-                }    
+
+                }
                 window.display();
             }
         }
-        
+
         else{
             cout << "Type hello to get welcome message." << endl;
         }

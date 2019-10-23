@@ -9,8 +9,12 @@
 using namespace std;
 using namespace render;
 using namespace state;
-bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer){
-
+bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
+  if (rotation!=0){
+    for (int i=0; i<rotation; i++){
+      turn.rotateMap(turn.getMap().size());
+    }
+  }
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -57,7 +61,12 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
 
 }
 
-bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer){
+bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
+  if (rotation!=0){
+    for (int i=0; i<rotation; i++){
+      turn.rotateMap(turn.getMap().size());
+    }
+  }
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -79,9 +88,9 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
                         else if(tiletype==Rock){tu=2,tv=1;}
 
                         if((i==mapWidth-1)||(j==mapHeight-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i][j+1].getHeight())){
-                        // if((j==mapHeight-1)){              
-                                tileheight= layer-1;  
-                                
+                        // if((j==mapHeight-1)){
+                                tileheight= layer-1;
+
                                 // cursor for current vextex
                                 quad = &vertexarray[l * 4];
                                 // vextex pos
@@ -100,12 +109,12 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
 
                                 l++;
                         }
-                        
-                        
+
+
                         if((j==mapHeight-1)||(i==mapWidth-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i+1][j].getHeight())){
                         // if((i==mapWidth-1)){
-                                tileheight= layer-1;  
-                                                
+                                tileheight= layer-1;
+
                                 quad = &vertexarray[l * 4];
 
                                 // vextex pos
@@ -135,8 +144,8 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
 
 
 
-bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb){
-        
+bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation){
+
         sf::Image image;
         image.loadFromFile(tileset.getImagePath()[0]);
         sf::Color color(147, 187, 236);
@@ -149,11 +158,11 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(mapWidth * mapHeight * 4);
-        
-        int i=0;
-        
 
-                
+        int i=0;
+
+
+
         float charPosX= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
         float charPosY= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
 
@@ -180,7 +189,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
         i++;
 
-        
+
 
 		return true;
 }
