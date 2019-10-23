@@ -1,5 +1,4 @@
 #include "../render.h"
-#include <state.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -12,11 +11,10 @@ using namespace render;
 using namespace state;
 bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
   std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
-  if (rotation!=0){
-    for (int i=0; i<rotation; i++){
-      rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.size());
-    }
-  }
+        
+        for (int i=0; i<rotation; i++){
+                rotateMapVector = rotateMap(rotateMapVector,rotateMapVector.size());
+        }
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -65,11 +63,11 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
 
 bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
   std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
-  if (rotation!=0){
+  
     for (int i=0; i<rotation; i++){
       rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.size());
     }
-  }
+  
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -79,8 +77,8 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
         sf::Vertex* quad;
         for (int i = 0; i < mapWidth; i++){
             for (int j = 0; j < mapHeight; j++){
-                if(turn.getMap()[i][j].getHeight()>=layer){
-                        state::TileType tiletype=turn.getMap()[i][j].getTile();
+                if(rotateMapVector[i][j].getHeight()>=layer){
+                        state::TileType tiletype=rotateMapVector[i][j].getTile();
                         // cout << "check map : " << turn.getMap().size() << endl;
                         int tu,tv;
                         if(tiletype==Dirt){tu=3,tv=0;}
@@ -90,7 +88,7 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
                         else if(tiletype==Pound){tu=0,tv=1;}
                         else if(tiletype==Rock){tu=2,tv=1;}
 
-                        if((i==mapWidth-1)||(j==mapHeight-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i][j+1].getHeight())){
+                        if((i==mapWidth-1)||(j==mapHeight-1)||(rotateMapVector[i][j].getHeight()>rotateMapVector[i][j+1].getHeight())){
                         // if((j==mapHeight-1)){
                                 tileheight= layer-1;
 
@@ -114,7 +112,7 @@ bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int
                         }
 
 
-                        if((j==mapHeight-1)||(i==mapWidth-1)||(turn.getMap()[i][j].getHeight()>turn.getMap()[i+1][j].getHeight())){
+                        if((j==mapHeight-1)||(i==mapWidth-1)||(rotateMapVector[i][j].getHeight()>rotateMapVector[i+1][j].getHeight())){
                         // if((i==mapWidth-1)){
                                 tileheight= layer-1;
 
@@ -210,19 +208,19 @@ void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  
 }
 
 std::vector<std::vector<state::Tile>> DrawObject::rotateMap(std::vector<std::vector<state::Tile>> map, int N){
-  std::vector<std::vector<state::Tile>> rotateMap;
+  std::vector<std::vector<state::Tile>> rotateMapVector(map);
   for (int x = 0; x < N / 2; x++)
     {   // Consider elements in group of 4 in current square
         for (int y = x; y < N-x-1; y++)
         {   // store current cell in temp variable
-            rotateMap[N-1-y][x] = map[x][y];
+            rotateMapVector[N-1-y][x] = map[x][y];
             // move values from right to top
-            rotateMap[x][y] = map[y][N-1-x];
+            rotateMapVector[x][y] = map[y][N-1-x];
             // move values from bottom to right
-            rotateMap[y][N-1-x] = map[N-1-x][N-1-y];
+            rotateMapVector[y][N-1-x] = map[N-1-x][N-1-y];
             // move values from left to bottom
-            rotateMap[N-1-x][N-1-y] = map[N-1-y][x];
+            rotateMapVector[N-1-x][N-1-y] = map[N-1-y][x];
         }
     }
-    return rotateMap;
+    return rotateMapVector;
 }
