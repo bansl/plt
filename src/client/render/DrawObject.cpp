@@ -11,7 +11,7 @@ using namespace render;
 using namespace state;
 bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
   std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
-        
+
         for (int i=0; i<rotation; i++){
                 rotateMapVector = rotateMap(rotateMapVector,rotateMapVector.size());
         }
@@ -63,11 +63,11 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
 
 bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
   std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
-  
+
     for (int i=0; i<rotation; i++){
       rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.size());
     }
-  
+
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -161,15 +161,22 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         vertexarray.resize(mapWidth * mapHeight * 4);
 
         int i=0;
+        int tempPosX=turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
+        int tempPosY=turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
+        int temp=0;
+        for (int q=0; q<rotation; q++){
+          temp=tempPosX;
+          tempPosX=turn.getMap().size()-tempPosY-1;
+          tempPosY=temp;
+        }
 
-
-
-        float charPosX= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
-        float charPosY= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
-
+        //float charPosX= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
+        //float charPosY= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
+        float charPosX= (float) tempPosX;
+        float charPosY= (float) tempPosY;
         // float charPosX= 5;
         // float charPosY= 0;
-        float tileheight= (float) (turn.getMap()[(int)charPosX][(int)charPosY].getHeight());
+        float tileheight= (float) (turn.getMap()[turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX()][turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY()].getHeight());
         tileheight +=-1;
         int tv=0; //idle anim
         float isoPosX=((-charPosX+charPosY)*8+mapWidth*8)/16;//mapWidth/2-(charPosY-charPosX/2);

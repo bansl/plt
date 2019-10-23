@@ -66,9 +66,9 @@ int main(int argc,char* argv[])
             testTurn.initMap(6,6);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(0,2);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(0,0);
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,4);
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,3);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "left click to rotate map anti-clockwise " << endl;
