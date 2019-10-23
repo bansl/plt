@@ -59,7 +59,7 @@ int main(int argc,char* argv[])
 
         else if(strcmp(argv[1],"render") == 0){
             int rotation=0;
-            cout<<"Affichage d'un Etat"<<endl;
+            cout<<"Affichage d'un Etat"<<endl<<endl;
 
             // === Init turn ===
             Turn testTurn;
@@ -71,18 +71,20 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,4);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
-            cout << "check map : " << testTurn.getMap().size() << endl;
-            cout << "check map : " << testTurn.getMap()[0].size() << endl;
+            cout << "left click to rotate map anti-clockwise " << endl;
+            cout << "right click to rotate map clockwise " << endl<< endl;
+            // cout << "check map : " << testTurn.getMap().size() << endl;
+            // cout << "check map : " << testTurn.getMap()[0].size() << endl;
             int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
             int screensizeHeight=testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize();
             sf::RenderWindow window(sf::VideoMode(  screensizeWidth,
                                                     (screensizeHeight)),
                                                     "Render");
             layer.initRender(0);
-            cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
-            cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-            cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-            cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+            // cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
+            // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+            // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+            // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
 
             int k=0,characterheight;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
@@ -100,17 +102,17 @@ int main(int argc,char* argv[])
                     // left mouse button is pressed: rotate map
                     rotation=(rotation+1)%4;
                     layer.initRender(rotation);
-                    cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-                    cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-                    cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
                     // right mouse button is pressed: rotate map to other side
-                    rotation=(rotation-1)%4;
+                    rotation=(rotation+3)%4;
                     layer.initRender(rotation);
-                    cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-                    cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-                    cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
                 // Draw map(roofs and walls)
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
@@ -118,7 +120,7 @@ int main(int argc,char* argv[])
                     window.draw(*layer.getDrawmaps()[i]);
                     for (size_t j = 0; j < layer.getDrawchars().size(); j++){
                         characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
-                        if(characterheight*2== (int) i){ window.draw(*layer.getDrawchars()[j][k]);}
+                        if(characterheight*2== (int) i+1){ window.draw(*layer.getDrawchars()[j][k]);}
                     }
                 }
 
