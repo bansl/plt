@@ -64,11 +64,12 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
 }
 
 bool DrawObject::renderMapWalls (state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int layer, int rotation){
-  // if (rotation!=0){
-  //   for (int i=0; i<rotation; i++){
-  //     turn.rotateMap(turn.getMap().size());
-  //   }
-  // }
+  std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
+  if (rotation!=0){
+    for (int i=0; i<rotation; i++){
+      rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.size());
+    }
+  }
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
