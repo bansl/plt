@@ -99,7 +99,15 @@ int main(int argc,char* argv[])
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                     // left mouse button is pressed: rotate map
                     rotation=(rotation+1)%4;
-                    layer.initRender(rotation);// this line is bugged
+                    layer.initRender(rotation);
+                    cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                    cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                    cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                }
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+                    // right mouse button is pressed: rotate map to other side
+                    rotation=(rotation-1)%4;
+                    layer.initRender(rotation);/
                     cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
                     cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                     cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;

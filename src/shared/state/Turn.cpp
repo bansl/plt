@@ -58,21 +58,3 @@ void Turn::initTeams (){
     std::unique_ptr<state::Team> ptr_team (new Team);
     teams.push_back(move( ptr_team));
 }
-
-void Turn::rotateMap(int N){
-  for (int x = 0; x < N / 2; x++)
-    {   // Consider elements in group of 4 in current square
-        for (int y = x; y < N-x-1; y++)
-        {   // store current cell in temp variable
-            state::Tile temp = this->map[x][y];
-            // move values from right to top
-            this->map[x][y] = this->map[y][N-1-x];
-            // move values from bottom to right
-            this->map[y][N-1-x] = this->map[N-1-x][N-1-y];
-            // move values from left to bottom
-            this->map[N-1-x][N-1-y] = this->map[N-1-y][x];
-            // assign temp to left
-            this->map[N-1-y][x] = temp;
-        }
-    }
-}
