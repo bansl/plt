@@ -58,7 +58,7 @@ int main(int argc,char* argv[])
         }
 
         else if(strcmp(argv[1],"render") == 0){
-            int rotation=1;
+            int rotation=0;
             cout<<"Affichage d'un Etat"<<endl;
 
             // === Init turn ===
@@ -68,7 +68,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(0,2);
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,4);
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,4);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "check map : " << testTurn.getMap().size() << endl;

@@ -23,7 +23,7 @@ state::Tile TileFactory::getRandomTile (){
     randomHeight=2; //2
   }
   else{
-    randomHeight=1;//3
+    randomHeight=3;//3
   }
   
   Tile randomtile{};
