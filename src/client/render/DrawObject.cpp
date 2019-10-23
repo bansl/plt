@@ -14,7 +14,7 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
   std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
   if (rotation!=0){
     for (int i=0; i<rotation; i++){
-      rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.getMap().size());
+      rotateMapVector=rotateMap(rotateMapVector,rotateMapVector.size());
     }
   }
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
@@ -25,8 +25,8 @@ bool DrawObject::renderMapBase (state::Turn& turn, render::TileSet tileset, int 
 
         for (int i = 0; i < mapWidth; i++){
                 for (int j = 0; j < mapHeight; j++){
-                if(rotateMapVector.getMap()[i][j].getHeight()==layer){
-                state::TileType tiletype=rotateMapVector.getMap()[i][j].getTile();
+                if(rotateMapVector[i][j].getHeight()==layer){
+                state::TileType tiletype=rotateMapVector[i][j].getTile();
                 int tileheight=layer-1;
                 // cout << "check map : " << turn.getMap().size() << endl;
                 int tu,tv;
@@ -208,19 +208,19 @@ void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  
 
 }
 
-std::vector<std::vector<state::Tile>> DrawObject::rotateMap(state::Turn turn&, int N){
+std::vector<std::vector<state::Tile>> DrawObject::rotateMap(std::vector<std::vector<state::Tile>> map, int N){
   std::vector<std::vector<state::Tile>> rotateMap;
   for (int x = 0; x < N / 2; x++)
     {   // Consider elements in group of 4 in current square
         for (int y = x; y < N-x-1; y++)
         {   // store current cell in temp variable
-            rotateMap[N-1-y][x] = turn.getMap()[x][y];
+            rotateMap[N-1-y][x] = map[x][y];
             // move values from right to top
-            rotateMap[x][y] = turn.getMap()[y][N-1-x];
+            rotateMap[x][y] = map[y][N-1-x];
             // move values from bottom to right
-            rotateMap[y][N-1-x] = turn.getMap()[N-1-x][N-1-y];
+            rotateMap[y][N-1-x] = map[N-1-x][N-1-y];
             // move values from left to bottom
-            rotateMap[N-1-x][N-1-y] = turn.getMap()[N-1-y][x];
+            rotateMap[N-1-x][N-1-y] = map[N-1-y][x];
         }
     }
     return rotateMap;
