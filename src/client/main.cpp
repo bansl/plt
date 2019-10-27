@@ -66,7 +66,7 @@ int main(int argc,char* argv[])
             testTurn.initMap(6,6);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(0,0);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(1,4);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,3);
             // === Display Turn ===
@@ -115,16 +115,23 @@ int main(int argc,char* argv[])
                     // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
                 // Draw map(roofs and walls)
+                int temp;
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
-                    for (size_t j = 0; j < layer.getDrawchars().size(); j++){
-                        characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
-                        if(characterheight*2== (int) i+1){ window.draw(*layer.getDrawchars()[j][k]);}
-                    }
+                        int characterposX=testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX();
+                        int characterposY=testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY();
+                        for (int q=0; q<rotation; q++){
+                            temp=characterposX;
+                            characterposX=testTurn.getMap().size()-characterposY-1;
+                            characterposY=temp;
+                        }
+                        characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY()].getHeight();
+                        if((characterposX*testTurn.getMap().size()+characterposY)*6+2*(characterheight+1)== i){ window.draw(*layer.getDrawchars()[0][k]);}
+                    
                 }
 
-
+cout << "check drawmaps: " << layer.getDrawmaps().size() << endl;
 
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){
                     k=(k+1)%6;
