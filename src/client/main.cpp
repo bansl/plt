@@ -131,8 +131,6 @@ int main(int argc,char* argv[])
                     
                 }
 
-cout << "check drawmaps: " << layer.getDrawmaps().size() << endl;
-
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
