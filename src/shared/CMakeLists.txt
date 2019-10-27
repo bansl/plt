@@ -3,7 +3,7 @@ set(lib_shared_target shared_static)
 
 # Generate header files from dia UML files
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../state.dia")
-#generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../engine.dia")
+generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../engine.dia")
 #generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../ai.dia")
 
 # Find all source files to compile into a library
@@ -17,4 +17,3 @@ target_include_directories(${lib_shared_target} INTERFACE
   )
 
 # vim: set sw=2 sts=2 et:
-
