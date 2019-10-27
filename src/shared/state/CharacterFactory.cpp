@@ -13,5 +13,6 @@ state::Character CharacterFactory::createCharacter(){
   newJob.setJob(rjf.getRandomJob());
   newCharacter.setJob(newJob);
   newCharacter.setRace(newRace);
+  newCharacter.setStatus(Available);
   return newCharacter;
 }

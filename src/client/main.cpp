@@ -2,12 +2,15 @@
 #include <cstring>
 #include <state.h>
 #include "render.h"
+#include "../shared/engine.h"
+
 #include <unistd.h>
 #include <chrono>
 
 using namespace std;
 using namespace state;
 using namespace render;
+using namespace engine;
 using namespace std::chrono;
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
@@ -128,21 +131,34 @@ int main(int argc,char* argv[])
                     // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                     // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+                    // press `A` to move char 0 to 1,1
+                    Position dest;
+                    dest.setPos(1,1);
+                    Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
+                    testmove.moveAction(testTurn);
+                    layer.initRender(rotation);
+                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                }
                 // Draw map(roofs and walls)
                 int temp;
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
-                        int characterposX=testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX();
-                        int characterposY=testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY();
-                        for (int q=0; q<rotation; q++){
-                            temp=characterposX;
-                            characterposX=testTurn.getMap().size()-characterposY-1;
-                            characterposY=temp;
+                        
+                        for(size_t j=0 ;j< testTurn.getTeams()[0]->getListCharacter().size();j++){
+                            int characterposX=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX();
+                            int characterposY=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY();
+                            for (int q=0; q<rotation; q++){
+                                temp=characterposX;
+                                characterposX=testTurn.getMap().size()-characterposY-1;
+                                characterposY=temp;
+                            }
+                            characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
+                            if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[j][k]);}
                         }
-                        characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY()].getHeight();
-                        if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[0][k]);}
-                    
                 }
 
                 

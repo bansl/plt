@@ -28,3 +28,6 @@ void Position::setPos(int newX, int newY){
     this->yPos=newY;
 }
 
+// Position::Position(int newX,int newY):xPos(newX),yPos(newY){
+
+// }

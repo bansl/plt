@@ -247,3 +247,10 @@ void Character::initHPMP (state::Race race, state::Job job, state::Level level){
     this->currentHP=getMaxHP(race,job,level);
     this->currentMP=getMaxMP(race,job,level);
 }
+
+state::StatusList Character::getStatus(){
+    return status;
+}
+void Character::setStatus(state::StatusList newstatus){
+    status=newstatus;
+}

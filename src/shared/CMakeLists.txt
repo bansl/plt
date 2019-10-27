@@ -18,6 +18,7 @@ include_directories(
 )
 target_include_directories(${lib_shared_target} INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../client/
   )
 
 # vim: set sw=2 sts=2 et:

@@ -23,6 +23,7 @@ void Team::addCharacter(){
   Character character {};
   CharacterFactory cf {};
   character=cf.createCharacter();
+  
   std::unique_ptr<Character> ptr_char (new Character(character));
   listCharacter.push_back(move( ptr_char));
   this->characterNumber+=1;
