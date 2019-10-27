@@ -60,7 +60,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
             return false;
 	}
         vertexarray.setPrimitiveType(sf::Quads);
-        vertexarray.resize(2*mapDims[0] * mapDims[1] * 4);
+        vertexarray.resize(2* 4);
         int l=0, tileheight,xpos,ypos;
         sf::Vertex* quad;
         

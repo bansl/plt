@@ -71,8 +71,8 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,3);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
-            cout << "left click to rotate map anti-clockwise " << endl;
-            cout << "right click to rotate map clockwise " << endl<< endl;
+            cout << "right key to rotate map anti-clockwise " << endl;
+            cout << "left key to rotate map clockwise " << endl<< endl;
             // cout << "check map : " << testTurn.getMap().size() << endl;
             // cout << "check map : " << testTurn.getMap()[0].size() << endl;
             int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
@@ -81,33 +81,47 @@ int main(int argc,char* argv[])
                                                     (screensizeHeight)),
                                                     "Render");
             layer.initRender(0);
-            // cout << "check chara: " << testTurn.getTeams()[0]->getListCharacter().size() << endl;
-            // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-            // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-            // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+            
+            sf::Text message;
+            sf::Font font;
+            font.loadFromFile("res/COURG___.TTF");
+            message.setFont(font);
+            message.setColor(sf::Color::White);
+            message.setCharacterSize(60);
+            message.setString("Paused.");
 
             int k=0,characterheight;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             window.setFramerateLimit(60);
+            bool resume=true;
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
                     if (event.type == sf::Event::Closed){
                         window.close();
                     }
+                    if (event.type == sf::Event::LostFocus){
+                        resume=false;
+                        window.draw(message);
+                        window.display();
+                    }
+                    if (event.type == sf::Event::GainedFocus){
+                        resume=true;
+                    }
                 }
+                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                 window.clear();
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                    // left mouse button is pressed: rotate map
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                    // right key is pressed: rotate map
                     rotation=(rotation+1)%4;
                     layer.initRender(rotation);
                     // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
                     // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                     // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-                    // right mouse button is pressed: rotate map to other side
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                    // left key is pressed: rotate map to other side
                     rotation=(rotation+3)%4;
                     layer.initRender(rotation);
                     // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
@@ -127,16 +141,16 @@ int main(int argc,char* argv[])
                             characterposY=temp;
                         }
                         characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY()].getHeight();
-                        if((characterposX*testTurn.getMap().size()+characterposY)*6+2*(characterheight+1)== i){ window.draw(*layer.getDrawchars()[0][k]);}
+                        if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[0][k]);}
                     
                 }
 
-                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms)){
+                
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
-                }
-                window.display();
+                
+                window.display();}
             }
         }
 
