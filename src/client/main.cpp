@@ -69,9 +69,9 @@ int main(int argc,char* argv[])
             testTurn.initMap(6,6);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(1,4);
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,3);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,4);
+            // testTurn.getTeams()[0]->addCharacter();
+            // testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,2);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "right key to rotate map anti-clockwise " << endl;
@@ -134,7 +134,7 @@ int main(int argc,char* argv[])
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
                     // press `A` to move char 0 to 1,1
                     Position dest;
-                    dest.setPos(1,1);
+                    dest.setPos(2,2);
                     Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
                     testmove.moveAction(testTurn);
                     layer.initRender(rotation);

@@ -23,19 +23,25 @@ state::Character Entity::getCharacter(){
     return character;
 }
 
-bool Entity::isFree (){
-    // TODO
-    //
+bool Entity::isFree (state::Turn& turn,state::Position tilePos){
+    for (size_t i = 0; i < turn.getTeams().size(); i++)
+    {
+        for (size_t j = 0; j < turn.getTeams()[i]->getListCharacter().size(); j++)
+        {
+            if(tilePos.distanceBetween(turn.getTeams()[i]->getListCharacter()[j]->getPosition(),tilePos)==0){
+                return false;
+            };
+        }
+        
+    }
     return true;
 }
 
-bool Entity::isCrossable (){
-    // TODO
-    // if(getTile().tile==Water){
-    //     return false;
-    // }
-    // else{
-    //     return true;
-    // }
-    return true;
+bool Entity::isCrossable (state::Tile tile){
+    if((tile.getTile()==Water) || (tile.getTile()==Pound)) {
+        return false;
+    }
+    else{
+        return true;
+    }
 }
