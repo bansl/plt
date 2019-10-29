@@ -70,8 +70,8 @@ int main(int argc,char* argv[])
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,4);
-            // testTurn.getTeams()[0]->addCharacter();
-            // testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,2);
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(1,2);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             cout << "right key to rotate map anti-clockwise " << endl;
@@ -84,7 +84,7 @@ int main(int argc,char* argv[])
                                                     (screensizeHeight)),
                                                     "Render");
             layer.initRender(0);
-            
+
             sf::Text message;
             sf::Font font;
             font.loadFromFile("res/COURG___.TTF");
@@ -132,22 +132,25 @@ int main(int argc,char* argv[])
                     // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-                    // press `A` to move char 0 to 1,1
+                    Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
+                    testattack.attackAction();
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
+                    // press `M` to move char 0 to 1,1
                     Position dest;
                     dest.setPos(2,2);
                     Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
-                    testmove.moveAction(testTurn);
+                    if(testmove.moveAction(testTurn)){
+                      testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
+                    }
                     layer.initRender(rotation);
-                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
                 // Draw map(roofs and walls)
                 int temp;
                 for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
-                        
+
                         for(size_t j=0 ;j< testTurn.getTeams()[0]->getListCharacter().size();j++){
                             int characterposX=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX();
                             int characterposY=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY();
@@ -161,11 +164,11 @@ int main(int argc,char* argv[])
                         }
                 }
 
-                
+
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
-                
+
                 window.display();}
             }
         }
