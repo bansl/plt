@@ -6,7 +6,7 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-bool Attack::attackAction(){
+bool Attack::action(state::Turn& turn){
   if(attacker.getJob().getJob()==Pugilist||attacker.getJob().getJob()==Swordman){
     if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())==1){
       cout<<"CAN Attack!"<<attacker.getJob().getJob()<<endl;

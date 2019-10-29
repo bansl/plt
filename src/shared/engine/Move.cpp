@@ -8,7 +8,7 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-bool Move::moveAction(state::Turn& turn){
+bool Move::action(state::Turn& turn){
     if (character.getStatus()==Available){
         Entity tilecheck{};
         cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,newPosition) << endl ;
