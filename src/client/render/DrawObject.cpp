@@ -132,7 +132,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation){
 
         sf::Image image;
-        image.loadFromFile(tileset.getImagePath()[0]);
+        image.loadFromFile(tileset.getImagePath()[charNb]);
         sf::Color color(147, 187, 236);
         image.createMaskFromColor(color);
         sf::Color color2(27, 89, 153);

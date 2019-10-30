@@ -19,6 +19,7 @@ TileSet::TileSet(TileSetType id){
 		sizeY=155; //TBD
 		margin=12; //TBD
 		imagePath.push_back("res/char1.png");
+		imagePath.push_back("res/char2.png");
 		
 	}
 }
