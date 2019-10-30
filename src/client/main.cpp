@@ -136,7 +136,7 @@ int main(int argc,char* argv[])
                     testattack.action(testTurn);
                 }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
-                    // press `M` to move char 0 to 1,1
+                    // press `M` to move char 0 to 2,2
                     Position dest;
                     dest.setPos(2,2);
                     Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
