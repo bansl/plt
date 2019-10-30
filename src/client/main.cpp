@@ -62,8 +62,11 @@ int main(int argc,char* argv[])
 
         else if(strcmp(argv[1],"render") == 0){
             int rotation=0;
-            cout<<"Affichage d'un Etat"<<endl<<endl;
-
+            cout<<"Turn Display Test"<<endl<<endl;
+            cout<<"Controls:"<<endl;
+            cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
+            cout << "-Press R key to rotate map anti-clockwise " << endl;
+            cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
             testTurn.initMap(6,6);
@@ -74,15 +77,17 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,2);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
-            cout << "right key to rotate map anti-clockwise " << endl;
-            cout << "left key to rotate map clockwise " << endl<< endl;
+            
             // cout << "check map : " << testTurn.getMap().size() << endl;
             // cout << "check map : " << testTurn.getMap()[0].size() << endl;
             int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
             int screensizeHeight=testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize();
-            sf::RenderWindow window(sf::VideoMode(  screensizeWidth,
-                                                    (screensizeHeight)),
+            sf::RenderWindow window(sf::VideoMode(  800,
+                                                    (600)),
                                                     "Render");
+            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            view1.zoom(1.25f);
+            window.setView(view1);
             layer.initRender(0);
 
             sf::Text message;
@@ -115,7 +120,27 @@ int main(int argc,char* argv[])
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                 window.clear();
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                    view1.move(40, 40);
+                    window.setView(view1);
+
+                }
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                    view1.move(-40, -40);
+                    window.setView(view1);
+
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                    view1.move(-40, +40);
+                    window.setView(view1);
+
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                    view1.move(+40, -40);
+                    window.setView(view1);
+
+                }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
                     // right key is pressed: rotate map
                     rotation=(rotation+1)%4;
                     layer.initRender(rotation);
@@ -123,7 +148,7 @@ int main(int argc,char* argv[])
                     // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                     // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                 }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
                     // left key is pressed: rotate map to other side
                     rotation=(rotation+3)%4;
                     layer.initRender(rotation);
@@ -160,7 +185,7 @@ int main(int argc,char* argv[])
                                 characterposY=temp;
                             }
                             characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
-                            if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[j][k]);}
+                            if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[j][k]);} // to be fixed
                         }
                 }
 
