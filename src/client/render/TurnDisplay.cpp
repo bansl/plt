@@ -35,6 +35,12 @@ void TurnDisplay::initRender(int rotation){
                 vector<int> coord;
                 coord.push_back(turnDisplay.getTeams()[0]->getListCharacter()[k]->getPosition().getX());
                 coord.push_back(turnDisplay.getTeams()[0]->getListCharacter()[k]->getPosition().getY());
+                int temp=0;
+                for (int q=0; q<rotation; q++){
+                        temp=coord[0];
+                        coord[0]=turnDisplay.getMap().size()-coord[1]-1;
+                        coord[1]=temp;
+                }
                 map_segmentation.push_back(coord);
         }
         vector<int> lastcoord;
@@ -74,6 +80,7 @@ void TurnDisplay::initRender(int rotation){
                         }
                 }
         }
+       
         for (int k=0; k< (int) turnDisplay.getTeams()[0]->getListCharacter().size(); k++){
                 DrawObject DrawChar;
                 std::vector<std::unique_ptr<render::DrawObject>> charframe;

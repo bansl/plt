@@ -186,10 +186,10 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         sf::Vertex* quad = &vertexarray[i * 4];
 
         // vextex pos
-        quad[0].position = sf::Vector2f(isoPosX * tileXsize - tileXsize/2       , isoPosY * tileYsize - tileYsize/2);
-        quad[1].position = sf::Vector2f((isoPosX + 1) * tileXsize - tileXsize/2  , isoPosY * tileYsize - tileYsize/2);
-        quad[2].position = sf::Vector2f((isoPosX + 1) * tileXsize - tileXsize/2  , (isoPosY + 1) * tileYsize - tileYsize/2);
-        quad[3].position = sf::Vector2f(isoPosX * tileXsize - tileXsize/2        , (isoPosY + 1) * tileYsize - tileYsize/2);
+        quad[0].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f       , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
+        quad[1].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
+        quad[2].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
+        quad[3].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f        , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
 
         // texture
         quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);

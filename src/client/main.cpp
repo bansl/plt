@@ -69,12 +69,12 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(100,100);
+            testTurn.initMap(40,40); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(1,5);
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,98);
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -178,6 +178,7 @@ int main(int argc,char* argv[])
                     }
                     // Draw map(roofs and walls)
                     size_t j=0;
+
                     for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                     {
                         window.draw(*layer.getDrawmaps()[i]);
