@@ -181,7 +181,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
                                 // xpos=(j-i)*(tileDims[0]/2);
                                 // ypos=(j+i-tileheight)*(tileDims[1]/4);
         float isoPosX=(charPosY-charPosX+1)/2;
-        float isoPosY=(charPosX+charPosY)/4 - tileheight/8;
+        float isoPosY=(charPosX+charPosY)/4 - tileheight/6;
         // cursor for current vertex
         sf::Vertex* quad = &vertexarray[i * 4];
 

@@ -69,7 +69,7 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(16,16);
+            testTurn.initMap(100,100);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
@@ -86,7 +86,7 @@ int main(int argc,char* argv[])
                                                     (600)),
                                                     "Render");
             sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
-            sf::View view2(sf::Vector2f(100, 0), sf::Vector2f(800, 600));
+            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
             window.setView(view1);
             cout << "Render begin." << endl;
@@ -98,10 +98,11 @@ int main(int argc,char* argv[])
             font.loadFromFile("res/COURG___.TTF");
             message.setFont(font);
             message.setColor(sf::Color::White);
-            message.setCharacterSize(60);
-            message.setString("Paused.");
+            message.setStyle(sf::Text::Bold);
+            message.setCharacterSize(25);
+            message.setString("PAUSED\n\n Controls: \n -Press Up, Down, Right or Left key \n to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
 
-            int k=0,characterheight;
+            int k=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             window.setFramerateLimit(60);
@@ -124,77 +125,78 @@ int main(int argc,char* argv[])
                     }
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
-                window.clear();
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                    view1.move(40, 40);
-                    window.setView(view1);
+                    window.clear();
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                        view1.move(40, 40);
+                        window.setView(view1);
 
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                    view1.move(-40, -40);
-                    window.setView(view1);
-
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                    view1.move(-40, +40);
-                    window.setView(view1);
-
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                    view1.move(+40, -40);
-                    window.setView(view1);
-
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-                    // right key is pressed: rotate map
-                    rotation=(rotation+1)%4;
-                    layer.initRender(rotation);
-                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
-                    // left key is pressed: rotate map to other side
-                    rotation=(rotation+3)%4;
-                    layer.initRender(rotation);
-                    // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
-                    // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
-                    // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-                    Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
-                    testattack.action(testTurn);
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
-                    // press `M` to move char 0 to 2,2
-                    Position dest;
-                    dest.setPos(2,2);
-                    Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
-                    if(testmove.action(testTurn)){
-                      testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
                     }
-                    layer.initRender(rotation);
-                }
-                // Draw map(roofs and walls)
-                int j=0;
-                for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
-                {
-                    window.draw(*layer.getDrawmaps()[i]);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                        view1.move(-40, -40);
+                        window.setView(view1);
 
-                        
-                    if((i+1)%6==0 && j<layer.getDrawchars().size()){ 
-                        window.draw(*layer.getDrawchars()[j][k]);
-                        j++;
                     }
-                        
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                        view1.move(-40, +40);
+                        window.setView(view1);
+
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                        view1.move(+40, -40);
+                        window.setView(view1);
+
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                        // right key is pressed: rotate map
+                        rotation=(rotation+1)%4;
+                        layer.initRender(rotation);
+                        // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                        // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                        // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                        // left key is pressed: rotate map to other side
+                        rotation=(rotation+3)%4;
+                        layer.initRender(rotation);
+                        // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
+                        // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
+                        // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+                        Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
+                        testattack.action(testTurn);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
+                        // press `M` to move char 0 to 2,2
+                        Position dest;
+                        dest.setPos(2,2);
+                        Move testmove(*testTurn.getTeams()[0]->getListCharacter()[0],dest);
+                        if(testmove.action(testTurn)){
+                        testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
+                        }
+                        layer.initRender(rotation);
+                    }
+                    // Draw map(roofs and walls)
+                    size_t j=0;
+                    for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
+                    {
+                        window.draw(*layer.getDrawmaps()[i]);
+
+                            
+                        if((i+1)%6==0 && j<layer.getDrawchars().size()){ 
+                            window.draw(*layer.getDrawchars()[j][k]);
+                            j++;
+                        }
+                            
+                    }
+
+
+                        k=(k+1)%6;
+                        last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+
+
+                    window.display();
                 }
-
-
-                    k=(k+1)%6;
-                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-
-
-                window.display();}
             }
         }
 
