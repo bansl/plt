@@ -69,10 +69,10 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(100,100);
+            testTurn.initMap(16,16);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,1);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,1);
             // === Display Turn ===
@@ -86,6 +86,7 @@ int main(int argc,char* argv[])
                                                     (600)),
                                                     "Render");
             sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view2(sf::Vector2f(100, 0), sf::Vector2f(800, 600));
             view1.zoom(3.f);
             window.setView(view1);
             cout << "Render begin." << endl;
@@ -113,10 +114,12 @@ int main(int argc,char* argv[])
                     }
                     if (event.type == sf::Event::LostFocus){
                         resume=false;
+                        window.setView(view2);
                         window.draw(message);
                         window.display();
                     }
                     if (event.type == sf::Event::GainedFocus){
+                        window.setView(view1);
                         resume=true;
                     }
                 }
@@ -174,12 +177,12 @@ int main(int argc,char* argv[])
                 }
                 // Draw map(roofs and walls)
                 int j=0;
-                for (size_t i = 0; i < 18; i++)
+                for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
 
                         
-                    if(i%6==0 && i!=0){ 
+                    if((i+1)%6==0 && j<layer.getDrawchars().size()){ 
                         window.draw(*layer.getDrawchars()[j][k]);
                         j++;
                     }

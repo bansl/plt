@@ -20,7 +20,8 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
         for (int i = pos[0]; i < mapDims[0]; i++){
                 for (int j = 0; j < mapDims[1]; j++){
                         if(i==pos[0] && j==0){
-                                j=pos[1];
+                                if(i==0) j=pos[1];
+                                else j=pos[1]+1;
                         }
                         if(map[i][j].getHeight()==layer){
                                 state::TileType tiletype=map[i][j].getTile();
@@ -172,19 +173,15 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
           tempPosY=temp;
         }
 
-        //float charPosX= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
-        //float charPosY= (float) turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
         float charPosX= (float) tempPosX;
         float charPosY= (float) tempPosY;
-        // float charPosX= 5;
-        // float charPosY= 0;
         float tileheight= (float) (turn.getMap()[turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX()][turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY()].getHeight());
         tileheight +=-1;
         int tv=0; //idle anim
-        // xpos=(pos[1]-pos[0]+mapDims[0]-1)*(tileDims[0]/2);
-        //         ypos=(pos[1]+pos[0]+4-tileheight)*(tileDims[1]/4);
-        float isoPosX=((-charPosX+charPosY)*8+mapWidth*8)/16;//mapWidth/2-(charPosY-charPosX/2);
-        float isoPosY=((charPosX+charPosY-tileheight)*27+mapWidth*64)/128-2;//1+(charPosY+charPosX)/2;
+                                // xpos=(j-i)*(tileDims[0]/2);
+                                // ypos=(j+i-tileheight)*(tileDims[1]/4);
+        float isoPosX=(charPosY-charPosX+1)/2;
+        float isoPosY=(charPosX+charPosY)/4 - tileheight/8;
         // cursor for current vertex
         sf::Vertex* quad = &vertexarray[i * 4];
 
