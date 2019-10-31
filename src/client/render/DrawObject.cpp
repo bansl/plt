@@ -180,8 +180,8 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tv=0; //idle anim
                                 // xpos=(j-i)*(tileDims[0]/2);
                                 // ypos=(j+i-tileheight)*(tileDims[1]/4);
-        float isoPosX=(charPosY-charPosX+1)/2;
-        float isoPosY=(charPosX+charPosY)*((129.f/155.f)/4.f) - tileheight/6.f +(12.9/155.f);
+        float isoPosX=(charPosY-charPosX+1.f)/2.011;
+        float isoPosY=(charPosX+charPosY)*((129.f/155.f)/4.03) - tileheight/6.f +1.f/6.f;
         // cursor for current vertex
         sf::Vertex* quad = &vertexarray[i * 4];
 

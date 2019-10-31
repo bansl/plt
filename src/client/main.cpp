@@ -74,7 +74,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,1);
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,98);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
