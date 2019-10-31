@@ -69,26 +69,28 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(6,6);
+            testTurn.initMap(100,100);
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,4);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,1);
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,2);
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,1);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
             
             // cout << "check map : " << testTurn.getMap().size() << endl;
             // cout << "check map : " << testTurn.getMap()[0].size() << endl;
-            int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
-            int screensizeHeight=testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize();
+            // int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
+            // int screensizeHeight=testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize();
             sf::RenderWindow window(sf::VideoMode(  800,
                                                     (600)),
                                                     "Render");
             sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
-            view1.zoom(1.25f);
+            view1.zoom(3.f);
             window.setView(view1);
+            cout << "Render begin." << endl;
             layer.initRender(0);
+            cout << "Render done." << endl;
 
             sf::Text message;
             sf::Font font;
@@ -171,22 +173,17 @@ int main(int argc,char* argv[])
                     layer.initRender(rotation);
                 }
                 // Draw map(roofs and walls)
-                int temp;
-                for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
+                int j=0;
+                for (size_t i = 0; i < 18; i++)
                 {
                     window.draw(*layer.getDrawmaps()[i]);
 
-                        for(size_t j=0 ;j< testTurn.getTeams()[0]->getListCharacter().size();j++){
-                            int characterposX=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX();
-                            int characterposY=testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY();
-                            for (int q=0; q<rotation; q++){
-                                temp=characterposX;
-                                characterposX=testTurn.getMap().size()-characterposY-1;
-                                characterposY=temp;
-                            }
-                            characterheight=testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[j]->getPosition().getY()].getHeight();
-                            if((characterposX*testTurn.getMap().size()+characterposY)*6+2*characterheight== i){ window.draw(*layer.getDrawchars()[j][k]);} // to be fixed
-                        }
+                        
+                    if(i%6==0 && i!=0){ 
+                        window.draw(*layer.getDrawchars()[j][k]);
+                        j++;
+                    }
+                        
                 }
 
 
