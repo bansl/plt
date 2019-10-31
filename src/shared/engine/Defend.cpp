@@ -2,6 +2,6 @@
 
 using namespace engine;
 
-bool engine::defendAction(state::character&){
+bool Defend::action(state::Turn& turn){
   return true;
 }

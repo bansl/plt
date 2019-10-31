@@ -10,7 +10,7 @@ using namespace std;
 using namespace render;
 using namespace state;
 bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, int rotation, std::vector<int> pos, std::vector<int> posEnd){
-        
+
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
 	}
@@ -52,7 +52,7 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
                                 quad[1].texCoords = sf::Vector2f((tu + 1) * tileDims[0] +tu*margin   , tv * tileDims[1] +tv*margin);
                                 quad[2].texCoords = sf::Vector2f((tu + 1) * tileDims[0] +tu*margin   , (tv + 1) * tileDims[1] +tv*margin);
                                 quad[3].texCoords = sf::Vector2f(tu * tileDims[0] +tu*margin         , (tv + 1) * tileDims[1] +tv*margin);
-                        
+
                         }
                         if(i==posEnd[0] && j == posEnd[1]){
                                 return true;
@@ -77,7 +77,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
             for (int j = 0; j < mapDims[1]; j++){
                 if(i==pos[0] && j==0){
                         j=pos[1];
-                }    
+                }
                 if(map[i][j].getHeight()>=layer){
                         state::TileType tiletype=map[i][j].getTile();
                         // cout << "check map : " << turn.getMap().size() << endl;
@@ -181,7 +181,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
                                 // xpos=(j-i)*(tileDims[0]/2);
                                 // ypos=(j+i-tileheight)*(tileDims[1]/4);
         float isoPosX=(charPosY-charPosX+1)/2;
-        float isoPosY=(charPosX+charPosY)/4 - tileheight/6;
+        float isoPosY=(charPosX+charPosY)*((129.f/155.f)/4.f) - tileheight/6.f +(12.9/155.f);
         // cursor for current vertex
         sf::Vertex* quad = &vertexarray[i * 4];
 

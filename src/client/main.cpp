@@ -77,7 +77,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,1);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
-            
+
             // cout << "check map : " << testTurn.getMap().size() << endl;
             // cout << "check map : " << testTurn.getMap()[0].size() << endl;
             // int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
@@ -182,12 +182,12 @@ int main(int argc,char* argv[])
                     {
                         window.draw(*layer.getDrawmaps()[i]);
 
-                            
-                        if((i+1)%6==0 && j<layer.getDrawchars().size()){ 
+
+                        if((i+1)%6==0 && j<layer.getDrawchars().size()){
                             window.draw(*layer.getDrawchars()[j][k]);
                             j++;
                         }
-                            
+
                     }
 
 
