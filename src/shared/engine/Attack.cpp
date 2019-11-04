@@ -6,7 +6,7 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-bool Attack::action(state::Turn& turn){
+bool Attack::validate (state::Turn& turn){
   if(attacker.getJob().getJob()==Pugilist||attacker.getJob().getJob()==Swordman){
     if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())==1){
       cout<<"attacker pos"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;
@@ -36,6 +36,10 @@ bool Attack::action(state::Turn& turn){
     }
   }
   return false;
+}
+
+bool Attack::action(state::Turn& turn){
+  
   // defendingCharacter->setCurrentHP(-attackingCharacter->getAttackPower(attackingCharacter->getRace(),attackingCharacter->getJob(),attackingCharacter->getLevel())+defendingCharacter->getDefense(defendingCharacter->getRace(),defendingCharacter->getJob(),defendingCharacter->getLevel()));
 }
 

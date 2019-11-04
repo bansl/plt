@@ -46,6 +46,8 @@ bool Engine::turnCheckIn(){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Available);
 		}
 
-		isTurnFinished=true;
+		isTurnFinished=false;
+		return true;
 	}
+	return false;
 }

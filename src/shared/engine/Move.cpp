@@ -8,7 +8,7 @@ using namespace engine;
 using namespace state;
 using namespace std;
 
-bool Move::action(state::Turn& turn){
+bool Move::validate (state::Turn& turn){
     if (character.getStatus()==Available){
         Entity tilecheck{};
         cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,newPosition) << endl ;
@@ -29,7 +29,7 @@ bool Move::action(state::Turn& turn){
         //Find Path
         Position currentPosition(character.getPosition());
         vector<Position> neighbors;
-        vector<Position> pathToDest={currentPosition};
+        pathToDest={currentPosition};
         bool firstpos=true;
         while(pathToDest.size()<10){
             currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
@@ -78,6 +78,11 @@ bool Move::action(state::Turn& turn){
         return false;
     }
     return false; 
+
+}
+
+bool Move::action(state::Turn& turn){
+    
 }
 
 Move::Move (state::Character& targetCharacter, state::Position& destination):character(targetCharacter),newPosition(destination){
