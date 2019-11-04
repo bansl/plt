@@ -69,10 +69,10 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(40,40); //squares only
+            testTurn.initMap(10,10); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(1,5);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
             // === Display Turn ===

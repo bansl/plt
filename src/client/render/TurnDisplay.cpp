@@ -49,16 +49,16 @@ void TurnDisplay::initRender(int rotation){
         map_segmentation.push_back(lastcoord);
 
         sort(map_segmentation.begin(),map_segmentation.end());
-        for (int k=0; k< (int) map_segmentation.size(); k++) {
-                cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
-                cout <<" y: " << map_segmentation[k][1] << endl;
-        }
+        // for (int k=0; k< (int) map_segmentation.size(); k++) {
+        //         cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
+        //         cout <<" y: " << map_segmentation[k][1] << endl;
+        // }
         vector<int> segStart(2,0),segEnd(2,0);
         for (int l=0; l< (int) map_segmentation.size(); l++){  
                 segStart[0]=segEnd[0],segStart[1]=segEnd[1];
                 segEnd[0]=(map_segmentation[l][0]),segEnd[1]=(map_segmentation[l][1]);
-                cout << "region begin:"<< segStart[0] <<" | " << segStart[1] << endl;
-                cout << "region end:"<< segEnd[0] <<" | " << segEnd[1] << endl;
+                // cout << "region begin:"<< segStart[0] <<" | " << segStart[1] << endl;
+                // cout << "region end:"<< segEnd[0] <<" | " << segEnd[1] << endl;
                 for (int k=1; k<4; k++){
                         DrawObject DrawMap;
                         if(DrawMap.renderMapWalls(rotateMapVector,*tilesets[0], {(int)turnDisplay.getMap().size(),
