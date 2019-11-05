@@ -12,6 +12,4 @@ void Level::levelUp (int experience){
     {
         this->level+=1;
     }
-
-
 }

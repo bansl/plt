@@ -8,9 +8,9 @@ using namespace std;
 
 bool UseSkill::action(state::Turn& turn){
   for(int i=0;i<(int)targetList.size();i++){
-    targetList[i]->setCurrentHP(character.getSkillList(character.getJob(),character.getLevel())[skillNumber].hpRecovery-character.getSkillList(character.getJob(),character.getLevel())[skillNumber].damage);
+    targetList[i]->setCurrentHP(character.getSkillList()[skillNumber].hpRecovery-character.getSkillList()[skillNumber].damage);
   }
-  character.setCurrentMP(-character.getSkillList(character.getJob(),character.getLevel())[skillNumber].mpCost);
+  character.setCurrentMP(-character.getSkillList()[skillNumber].mpCost);
   return true;
 }
 
@@ -19,8 +19,8 @@ UseSkill::UseSkill(state::Character& usedCharacter,std::vector<std::unique_ptr<s
 }
 
 bool UseSkill::validate(state::Turn& turn){
-  if((int)character.getSkillList(character.getJob(),character.getLevel()).size()<skillNumber){
-    if(character.getCurrentMP()>=character.getSkillList(character.getJob(),character.getLevel())[skillNumber].mpCost){
+  if((int)character.getSkillList().size()<skillNumber){
+    if(character.getCurrentMP()>=character.getSkillList()[skillNumber].mpCost){
       return true;
     }
   }
