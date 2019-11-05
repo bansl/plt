@@ -32,9 +32,10 @@ bool Engine::turnCheckOut(sf::RenderWindow& window, int rotation){
 
 		for(size_t i=0; i<commands.size();i++){
 			commands[i]->action(turn);
+			cout << "action #" << i <<" done" <<endl;
 			turn.notifyObservers(turn, rotation, window);
-			sf::Time t1 = sf::seconds(1.0f);
-			sf::sleep(t1);
+			// sf::Time t1 = sf::seconds(1.0f);
+			// sf::sleep(t1);
 		}
 		while (!commands.empty()){
 			commands.pop_back();

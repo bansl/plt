@@ -190,6 +190,7 @@ int main(int argc,char* argv[])
             int rotation=0;
             cout<<"Engine Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
+            cout << "-Press E key to launch a turn" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
             cout << "-Press R key to rotate map anti-clockwise " << endl;
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
@@ -205,6 +206,9 @@ int main(int argc,char* argv[])
             Engine testEngine(testTurn);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
+
+            TurnDisplay* ptr_layer=&layer;
+			testEngine.getTurn().registerObserver(ptr_layer);
 
             sf::RenderWindow window(sf::VideoMode(  800,
                                                     (600)),
@@ -227,7 +231,6 @@ int main(int argc,char* argv[])
             message.setString("PAUSED\n\n Controls: \n -Press Up, Down, Right or Left key \n to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
 
             int k=0;
-            bool first=true;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             window.setFramerateLimit(60);
@@ -245,32 +248,32 @@ int main(int argc,char* argv[])
                         window.display();
                     }
                     if (event.type == sf::Event::GainedFocus){
+                        window.clear();
                         window.setView(view1);
                         resume=true;
                     }
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                     
-                    if(first){
-                        size_t j=0;
+                    window.clear();
+                    size_t j=0;
 
-                        for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
-                        {
-                            window.draw(*layer.getDrawmaps()[i]);
+                    for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
+                    {
+                        window.draw(*layer.getDrawmaps()[i]);
 
 
-                            if((i+1)%6==0 && j<layer.getDrawchars().size()){
-                                window.draw(*layer.getDrawchars()[j][k]);
-                                j++;
-                            }
-
+                        if((i+1)%6==0 && j<layer.getDrawchars().size()){
+                            window.draw(*layer.getDrawchars()[j][k]);
+                            j++;
                         }
-                            k=(k+1)%6;
-                            last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
-                        first=false;
-                        window.display();
                     }
+                    k=(k+1)%6;
+                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+
+                    window.display();
+                    
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
                     }
@@ -300,7 +303,7 @@ int main(int argc,char* argv[])
                         testEngine.turnCheckIn();
                         cout << "engine turnCheckIn done: " << endl;
                         Position dest;
-                        dest.setPos(2,2);
+                        dest.setPos(2,3);
                         Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
                         if(movetest.validate(testEngine.getTurn())){
                             unique_ptr<Command> ptr_movetest (new Move (movetest));
@@ -309,13 +312,14 @@ int main(int argc,char* argv[])
                         }
                         cout << "instructions done: " << endl;
                         testEngine.turnCheckOut(window,rotation);
+                        testEngine.getTurn().notifyObservers(testEngine.getTurn(), rotation, window);
                         cout << "engine turnCheckOut done: " << endl;
                         cout << "char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
                     }
                     
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-                    window.display();
+                    
                 }
             }
         }

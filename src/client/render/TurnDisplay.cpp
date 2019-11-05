@@ -200,7 +200,8 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 
 void TurnDisplay::redraw (state::Turn& turn, int rotation, sf::RenderWindow& window){
 	initRender(turn,rotation);
-	display(window);
+        cout << "====redraw" << endl;
+	// display(window);
 }
 
 void TurnDisplay::display (sf::RenderWindow& window){
@@ -213,6 +214,7 @@ void TurnDisplay::display (sf::RenderWindow& window){
                         j++;
                 }
         }
+        cout << "====display new turn" << endl;
 	window.display();
 }
 
