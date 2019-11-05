@@ -1,9 +1,10 @@
 #include "../engine.h"
+#include <state.h>
 
 using namespace engine;
 using namespace state;
 
-UseObject::UseObject (state::Character& targetCharacter, int usedObject,int numberTeam):character(targetCharacter),object(usedObject),teamNumber(numberTeam){
+UseObject::UseObject (state::Character& targetCharacter, int usedObject,int numberTeam,state::Character& usedChar):character(targetCharacter),object(usedObject),teamNumber(numberTeam),usedCharacter(usedChar){
     commandType=UseObjectcmd;
 }
 
@@ -17,8 +18,11 @@ bool UseObject::action(state::Turn& turn){
 
 
 bool UseObject::validate(state::Turn& turn){
-  if(turn.getTeams()[teamNumber]->getItems()[object]->getQuantity()>0){
-    return true;
+  if(usedCharacter.getStatus()==Available){
+    if(turn.getTeams()[teamNumber]->getItems()[object]->getQuantity()>0){
+      usedCharacter.setStatus(Used);
+      return true;
+    }
   }
   return false;
 }

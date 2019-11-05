@@ -1,5 +1,6 @@
 #include "../engine.h"
 #include <iostream>
+#include <state.h>
 #include <unistd.h>
 
 using namespace engine;
@@ -19,9 +20,12 @@ UseSkill::UseSkill(state::Character& usedCharacter,std::vector<std::unique_ptr<s
 }
 
 bool UseSkill::validate(state::Turn& turn){
-  if((int)character.getSkillList().size()<skillNumber){
-    if(character.getCurrentMP()>=character.getSkillList()[skillNumber]->getMpCost()){
-      return true;
+  if(character.getStatus()==Available){
+    if((int)character.getSkillList().size()<skillNumber){
+      if(character.getCurrentMP()>=character.getSkillList()[skillNumber]->getMpCost()){
+        character.setStatus(Used);
+        return true;
+      }
     }
   }
   return false;

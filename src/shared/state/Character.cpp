@@ -172,6 +172,9 @@ int Character::getDefense (){
     else if (this->race.getRace() == Human){
         defense=10 + 5*this->level.getLevel();
     }
+    if(getStatus()==Defending){
+      defense=defense*1.5;
+    }
 
     if(this->job.getJob() == Pugilist){
         return defense;
