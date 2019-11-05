@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   Character Mage {};
   // Job testJob2 {};
   // testJob2.setJob(Magician);
-  Mage.getJob().setJob(Pugilist);
+  Mage.getJob().setJob(Magician);
     BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
 //   BOOST_CHECK_EQUAL( (int) Gilbert.getSkillList(testJob,testLevel).size()==0,1);
 
