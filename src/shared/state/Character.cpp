@@ -226,18 +226,18 @@ void Character::setCurrentMP (int mpModifier){
 }
 
 state::Level& Character::getLevel (){
-  Level & addrLevel= level;
+    Level & addrLevel= level;
     return addrLevel;
 }
 
 state::Race& Character::getRace (){
     Race & addrRace=race;
-    return race;
+    return addrRace;
 }
 
 state::Job& Character::getJob (){
     Job & addrJob=job;
-    return job;
+    return addrJob;
 }
 
 int Character::getCurrentHP (){
