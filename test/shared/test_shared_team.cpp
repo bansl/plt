@@ -10,5 +10,6 @@ BOOST_AUTO_TEST_CASE(TestTeam)
     BOOST_CHECK_EQUAL(testTeam.getListCharacter().size(),0);
     testTeam.addCharacter();
 	BOOST_CHECK_EQUAL(testTeam.getListCharacter().size(),1);
+	testTeam.getListCharacter()[0]->getJob().setJob(Pugilist);
+	BOOST_CHECK_EQUAL(testTeam.getListCharacter()[0]->getJob().getJob(),Pugilist);
 }
-

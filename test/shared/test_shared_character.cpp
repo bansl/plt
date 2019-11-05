@@ -2,6 +2,7 @@
 #include <boost/test/unit_test.hpp>
 #include "../../src/shared/state.h"
 #include <vector>
+#include <iostream>
 using namespace state;
 
 
@@ -47,6 +48,11 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   // testJob2.setJob(Magician);
   Mage.getJob().setJob(Magician);
     BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
-//   BOOST_CHECK_EQUAL( (int) Gilbert.getSkillList(testJob,testLevel).size()==0,1);
+    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),10);
+    // Mage.getSkillList()[0]->setMpCost(10);
+    // Mage.getSkillList()[0]->setEffect(0,5);
+    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),0);
+    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getMpCost(),10);
+    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getHeal(),5);
 
 }
