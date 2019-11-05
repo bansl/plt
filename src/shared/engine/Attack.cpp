@@ -39,8 +39,10 @@ bool Attack::validate (state::Turn& turn){
 }
 
 bool Attack::action(state::Turn& turn){
-  
-  // defendingCharacter->setCurrentHP(-attackingCharacter->getAttackPower(attackingCharacter->getRace(),attackingCharacter->getJob(),attackingCharacter->getLevel())+defendingCharacter->getDefense(defendingCharacter->getRace(),defendingCharacter->getJob(),defendingCharacter->getLevel()));
+  if(attacker.getAttackPower()>target.getDefense()){
+    target.setCurrentHP(-attacker.getAttackPower()+target.getDefense());
+  }
+  return true;
 }
 
 Attack::Attack (state::Character& attackerCharacter, state::Character& targetCharacter):attacker(attackerCharacter),target(targetCharacter){

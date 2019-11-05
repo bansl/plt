@@ -207,13 +207,22 @@ state::Position& Character::getPosition(){
 	return addrPosition ;
 }
 
-int Character::setCurrentHP (int hpModifier){
+void Character::setCurrentHP (int hpModifier){
+  if(this->currentHP+hpModifier>getMaxHP()){
+    this->currentHP=getMaxHP();
+  }
+  else{
     this->currentHP+=hpModifier;
-    return 1;
+  }
 }
-int Character::setCurrentMP (int mpModifier){
+
+void Character::setCurrentMP (int mpModifier){
+  if(this->currentMP+mpModifier>getMaxMP()){
+    this->currentMP=getMaxMP();
+  }
+  else{
     this->currentMP+=mpModifier;
-    return 1;
+  }
 }
 
 state::Level& Character::getLevel (){
@@ -221,19 +230,14 @@ state::Level& Character::getLevel (){
     return addrLevel;
 }
 
-state::Race Character::getRace (){
+state::Race& Character::getRace (){
+    Race & addrRace=race;
     return race;
 }
 
-state::Job Character::getJob (){
+state::Job& Character::getJob (){
+    Job & addrJob=job;
     return job;
-}
-void Character::setRace(state::Race race){
-  this->race=race;
-}
-
-void Character::setJob(state::Job job){
-  this->job=job;
 }
 
 int Character::getCurrentHP (){

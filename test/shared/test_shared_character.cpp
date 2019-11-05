@@ -8,15 +8,15 @@ using namespace state;
 BOOST_AUTO_TEST_CASE(TestCharacter)
 {
   Character Gilbert {  };
-  Race testRace {};
-  testRace.setRace(Human);
-  Job testJob {};
-  testJob.setJob(Pugilist);
+  // Race testRace {};
+  // testRace.setRace(Human);
+  // Job testJob {};
+  // testJob.setJob(Pugilist);
   state::Level testLevel {};
   testLevel.levelUp(2);
   testLevel.levelUp(2);
-  Gilbert.setRace(testRace);
-  Gilbert.setJob(testJob);
+  Gilbert.getRace().setRace(Human);
+  Gilbert.getJob().setJob(Pugilist);
   Gilbert.getLevel().levelUp(2);
   Gilbert.getLevel().levelUp(2);
 
@@ -43,9 +43,9 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   BOOST_CHECK_EQUAL(Gilbert.getSkillList().size(),0);
 
   Character Mage {};
-  Job testJob2 {};
-  testJob2.setJob(Magician);
-  Mage.setJob(testJob2);
+  // Job testJob2 {};
+  // testJob2.setJob(Magician);
+  Mage.getJob().setJob(Pugilist);
     BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
 //   BOOST_CHECK_EQUAL( (int) Gilbert.getSkillList(testJob,testLevel).size()==0,1);
 
