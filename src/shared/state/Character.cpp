@@ -85,13 +85,13 @@ int Character::getEvade (){
     if(this->job.getJob() == Pugilist){
         return evade+10;
     }
-    if(this->job.getJob() == Swordman){
+    else if(this->job.getJob() == Swordman){
         return evade;
     }
-    if(this->job.getJob() == Archer){
+    else if(this->job.getJob() == Archer){
         return evade;
     }
-    if(this->job.getJob() == Magician){
+    else if(this->job.getJob() == Magician){
         return evade;
     }
     return -1;
@@ -115,13 +115,13 @@ int Character::getAttackPower (){
     if(this->job.getJob() == Pugilist){
         return attack+10;
     }
-    if(this->job.getJob() == Swordman){
+    else if(this->job.getJob() == Swordman){
         return attack;
     }
-    if(this->job.getJob() == Archer){
+    else if(this->job.getJob() == Archer){
         return attack;
     }
-    if(this->job.getJob() == Magician){
+    else if(this->job.getJob() == Magician){
         return attack;
     }
     return -1;
@@ -145,13 +145,13 @@ int Character::getMagicPower (){
     if(this->job.getJob() == Pugilist){
         return magic;
     }
-    if(this->job.getJob() == Swordman){
+    else if(this->job.getJob() == Swordman){
         return magic;
     }
-    if(this->job.getJob() == Archer){
+    else if(this->job.getJob() == Archer){
         return magic;
     }
-    if(this->job.getJob() == Magician){
+    else if(this->job.getJob() == Magician){
         return magic+10;
     }
     return -1;
@@ -179,13 +179,13 @@ int Character::getDefense (){
     if(this->job.getJob() == Pugilist){
         return defense;
     }
-    if(this->job.getJob() == Swordman){
+    else if(this->job.getJob() == Swordman){
         return defense+10;
     }
-    if(this->job.getJob() == Archer){
+    else if(this->job.getJob() == Archer){
         return defense;
     }
-    if(this->job.getJob() == Magician){
+    else if(this->job.getJob() == Magician){
         return defense;
     }
     return -1;

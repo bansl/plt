@@ -5,7 +5,7 @@ using namespace state;
 
 BOOST_AUTO_TEST_CASE(TestCharacterFactory)
 {
-	for(int i=0;i<20;i++){
+	for(int i=0;i<2000;i++){
 		Character test {};
 		CharacterFactory cf {};
 		test=cf.createCharacter();
