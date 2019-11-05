@@ -148,7 +148,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 
 
 
-bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation){
+bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation, int playerId){
 
         sf::Image image;
         image.loadFromFile(tileset.getImagePath()[charNb]);
@@ -164,8 +164,8 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         vertexarray.resize(4);
 
         int i=0;
-        int tempPosX=turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX();
-        int tempPosY=turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY();
+        int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
+        int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
         for (int q=0; q<rotation; q++){
           temp=tempPosX;
@@ -198,18 +198,24 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
 
 
-
-		return true;
+        
+        // shaders.loadFromFile("res/transparency.frag", sf::Shader::Fragment) ;
+        // shaders.setParameter("opacity", 0.4f);
+        // shaders.setParameter("texture", sf::Shader::CurrentTexture) ;
+	return true;
 }
 
 
 
 
 
+// void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states, sf::Shader& shaders) const  {
 void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  {
-
+        
+        // states.blendMode = sf::BlendAlpha ;
         states.transform *= getTransform();
         states.texture = &texture;
+        // states.shader = &shaders;
         target.draw(vertexarray, states);
 
 }

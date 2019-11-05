@@ -28,37 +28,17 @@ int main(int argc,char* argv[])
     // exemple.setX(53);
 
     if (argc>1){
+
         if( std::strcmp( argv[1], "hello") == 0 ){
             cout << "Bonjour le monde!" << endl;
         }
 
-        else if( std::strcmp( argv[1], "sftest") == 0 ){
-            sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 
-              // Load a sprite to display
-            sf::Texture texture;
-            if (!texture.loadFromFile("res/maptile2x129.png"))
-                return EXIT_FAILURE;
-            sf::Sprite sprite(texture);
-            // run the program as long as the window is open
-            while (window.isOpen())
-            {
-                // check all the window's events that were triggered since the last iteration of the loop
-                sf::Event event;
-                while (window.pollEvent(event))
-                {
-                    // "close requested" event: we close the window
-                    if (event.type == sf::Event::Closed)
-                        window.close();
-                }
-                window.clear();
-                window.draw(sprite);
-                window.display();
-            }
-
-            return 0;
-
-        }
+//=====================================================================================================
+//
+//                                              RENDER TEST
+//
+//=====================================================================================================
 
         else if(strcmp(argv[1],"render") == 0){
             int rotation=0;
@@ -201,6 +181,144 @@ int main(int argc,char* argv[])
             }
         }
 
+//=====================================================================================================
+//
+//                                              ENGINE TEST
+//
+//=====================================================================================================
+        else if(strcmp(argv[1],"engine") == 0){
+            int rotation=0;
+            cout<<"Engine Test"<<endl<<endl;
+            cout<<"Controls:"<<endl;
+            cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
+            cout << "-Press R key to rotate map anti-clockwise " << endl;
+            cout << "-Press T key to rotate map clockwise " << endl<< endl;
+            // === Init Turn ===
+            Turn testTurn;
+            testTurn.initMap(10,10); //squares only
+            testTurn.initTeams();
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
+            // === Init Engine ===
+            Engine testEngine(testTurn);
+            // === Display Turn ===
+            TurnDisplay layer(testTurn);
+
+            sf::RenderWindow window(sf::VideoMode(  800,
+                                                    (600)),
+                                                    "Engine");
+            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            view1.zoom(3.f);
+            window.setView(view1);
+            cout << "Render begin." << endl;
+            layer.initRender(0);
+            cout << "Render done." << endl;
+
+            sf::Text message;
+            sf::Font font;
+            font.loadFromFile("res/COURG___.TTF");
+            message.setFont(font);
+            message.setColor(sf::Color::White);
+            message.setStyle(sf::Text::Bold);
+            message.setCharacterSize(25);
+            message.setString("PAUSED\n\n Controls: \n -Press Up, Down, Right or Left key \n to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
+
+            int k=0;
+            bool first=true;
+            milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+            last_ms+=(milliseconds) 60;
+            window.setFramerateLimit(60);
+            bool resume=true;
+            while (window.isOpen()){
+                sf::Event event;
+                while (window.pollEvent(event)){
+                    if (event.type == sf::Event::Closed){
+                        window.close();
+                    }
+                    if (event.type == sf::Event::LostFocus){
+                        resume=false;
+                        window.setView(view2);
+                        window.draw(message);
+                        window.display();
+                    }
+                    if (event.type == sf::Event::GainedFocus){
+                        window.setView(view1);
+                        resume=true;
+                    }
+                }
+                if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
+                    
+                    if(first){
+                        size_t j=0;
+
+                        for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
+                        {
+                            window.draw(*layer.getDrawmaps()[i]);
+
+
+                            if((i+1)%6==0 && j<layer.getDrawchars().size()){
+                                window.draw(*layer.getDrawchars()[j][k]);
+                                j++;
+                            }
+
+                        }
+                            k=(k+1)%6;
+                            last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+
+                        first=false;
+                        window.display();
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                        view1.move(40, 40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                        view1.move(-40, -40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                        view1.move(-40, +40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                        view1.move(+40, -40),window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                        // right key is pressed: rotate map
+                        rotation=(rotation+1)%4;
+                        layer.initRender(rotation);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                        // left key is pressed: rotate map to other side
+                        rotation=(rotation+3)%4;
+                        layer.initRender(rotation);
+                    }
+                    //Commands
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
+                        cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
+                        cout << "begin engine test: " << endl;
+                        testEngine.turnCheckIn();
+                        cout << "engine turnCheckIn done: " << endl;
+                        Position dest;
+                        dest.setPos(2,2);
+                        Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
+                        if(movetest.validate(testEngine.getTurn())){
+                            unique_ptr<Command> ptr_movetest (new Move (movetest));
+                            testEngine.addCommand(move(ptr_movetest));
+                            cout << "move instruction added: " << endl;
+                        }
+                        cout << "instructions done: " << endl;
+                        testEngine.turnCheckOut(window,rotation);
+                        cout << "engine turnCheckOut done: " << endl;
+                        cout << "char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
+                    }
+                    
+                    k=(k+1)%6;
+                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+                    window.display();
+                }
+            }
+        }
         else{
             cout << "Type hello to get welcome message." << endl;
         }

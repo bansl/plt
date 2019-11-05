@@ -1,7 +1,6 @@
 #include <engine.h>
 #include <render.h>
 #include <state.h>
-
 #include <iostream>
 
 using namespace state;
@@ -19,7 +18,7 @@ void Engine::addCommand (std::unique_ptr<Command> ptr_command){
 	commands.push_back(move(ptr_command));
 	
 }
-bool Engine::turnCheckOut(){
+bool Engine::turnCheckOut(sf::RenderWindow& window, int rotation){
 	isTurnFinished=true;
 	isGameFinished=true;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
@@ -29,11 +28,21 @@ bool Engine::turnCheckOut(){
 		}
 		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() != Dead){
 			isGameFinished=false;	
-		} 
+		}
+
+		for(size_t i=0; i<commands.size();i++){
+			commands[i]->action(turn);
+			turn.notifyObservers(turn, rotation, window);
+			sf::Time t1 = sf::seconds(1.0f);
+			sf::sleep(t1);
+		}
+		while (!commands.empty()){
+			commands.pop_back();
+		}
 	}
 
 	if(isGameFinished){
-		cout << "GAME OVER\n" << endl;
+		cout << "GAME OVER" << endl;
 	}
 	return isTurnFinished;
 }	
@@ -50,4 +59,10 @@ bool Engine::turnCheckIn(){
 		return true;
 	}
 	return false;
+}
+
+Engine::Engine(state::Turn& turn):turn(turn){
+	isGameFinished=false;
+	isTurnFinished=false;
+	currentPlayerId=0;
 }

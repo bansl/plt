@@ -11,8 +11,8 @@ using namespace std;
 bool Move::validate (state::Turn& turn){
     if (character.getStatus()==Available){
         Entity tilecheck{};
-        cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,newPosition) << endl ;
-        cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[newPosition.getX()][newPosition.getY()]) << endl ;
+        // cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,newPosition) << endl ;
+        // cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[newPosition.getX()][newPosition.getY()]) << endl ;
         if(tilecheck.isFree(turn,newPosition)==false){
             return false;
         }
@@ -39,37 +39,38 @@ bool Move::validate (state::Turn& turn){
             firstpos=true;
             while(neighbors.empty()==false){
                 currentPosition.setPos(neighbors.back().getX(),neighbors.back().getY());
-                cout << "------" << endl ;
-                cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,currentPosition) << endl ;
-                cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) << endl ;
-                cout << "posX:" << currentPosition.getX() << endl ;
-                cout << "posY:" << currentPosition.getY() << endl ;
+                // cout << "------" << endl ;
+                // cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,currentPosition) << endl ;
+                // cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) << endl ;
+                // cout << "posX:" << currentPosition.getX() << endl ;
+                // cout << "posY:" << currentPosition.getY() << endl ;
                 if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition)){
                     if(firstpos){
                         pathToDest.push_back(currentPosition);
-                        cout << "path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
+                        // cout << "path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
                         firstpos=false;
                     }
                     else if (currentPosition.distanceBetween(currentPosition,newPosition)<currentPosition.distanceBetween(pathToDest[0],newPosition)){
                         pathToDest.pop_back();
                         pathToDest.push_back(currentPosition);
-                        cout << "path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
+                        // cout << "path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
                     }
                     else{
-                        cout << "kept last path " << endl;
+                        // cout << "kept last path " << endl;
                     }
                 }
-                cout << "remove last" << endl;
+                // cout << "remove last" << endl;
                 neighbors.pop_back();
 
                 if(currentPosition.distanceBetween(pathToDest.back(),newPosition)==0){
-                    cout << "final path: ";
+                    // cout << "final path: ";
                     for (size_t i = 0; i < pathToDest.size(); i++)
                     {
                         
                         cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
                     }
                     cout << "path found!" << endl;
+                    character.setStatus(Used);
                     return true;
                 }
             } 
@@ -82,7 +83,8 @@ bool Move::validate (state::Turn& turn){
 }
 
 bool Move::action(state::Turn& turn){
-    
+    character.getPosition().setPos(newPosition.getX(),newPosition.getY());
+    return true;
 }
 
 Move::Move (state::Character& targetCharacter, state::Position& destination):character(targetCharacter),newPosition(destination){
