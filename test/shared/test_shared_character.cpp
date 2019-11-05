@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
 
   BOOST_CHECK_EQUAL(Gilbert.getDefense(),20);
 
-  Gilbert.initHPMP(Gilbert.getRace(),Gilbert.getJob(),testLevel);
+  Gilbert.initHPMP();
   BOOST_CHECK_EQUAL(Gilbert.getCurrentHP(),60);
   BOOST_CHECK_EQUAL(Gilbert.getCurrentMP(),10);
   Gilbert.setCurrentHP(-10);

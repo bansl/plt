@@ -189,17 +189,18 @@ int Character::getDefense (){
 
 }
 
-std::vector<state::Skill> Character::getSkillList (){
-    std::vector<Skill> skills(0);
+std::vector<std::unique_ptr<Skill>>& Character::getSkillList (){
+    std::vector<std::unique_ptr<Skill>> skills;
     if (this->job.getJob() == Magician){
         Skill fire {};
         fire.skillName="fire ball";
-        fire.damage=10;
-        fire.hpRecovery=0;
-        skills.push_back(fire);
+        fire.setEffect(10,0);
+        fire.setMpCost(5);
+        std::unique_ptr<Skill> ptr_skill (new Skill(fire));
+        skills.push_back(move(ptr_skill));;
     }
-
-    return skills;
+    std::vector<std::unique_ptr<Skill>>& addrSkills=skills;
+    return addrSkills;
 }
 
 state::Position& Character::getPosition(){
@@ -248,7 +249,7 @@ int Character::getCurrentMP (){
     return currentMP;
 }
 
-void Character::initHPMP (state::Race race, state::Job job, state::Level level){
+void Character::initHPMP (){
     this->currentHP=getMaxHP();
     this->currentMP=getMaxMP();
 }
