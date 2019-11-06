@@ -9,7 +9,7 @@
 using namespace std;
 using namespace render;
 using namespace state;
-bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, int rotation, std::vector<int> pos, std::vector<int> posEnd){
+bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, std::vector<int> pos, std::vector<int> posEnd){
 
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
@@ -64,7 +64,7 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
 
 }
 
-bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, int rotation, std::vector<int> pos, std::vector<int> posEnd){
+bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, std::vector<int> pos, std::vector<int> posEnd){
 
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
@@ -148,7 +148,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 
 
 
-bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation, int playerId){
+bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
 
         sf::Image image;
         image.loadFromFile(tileset.getImagePath()[playerId]);
@@ -167,7 +167,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
-        for (int q=0; q<rotation; q++){
+        for (int q=0; q<turn.rotation; q++){
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;
           tempPosY=temp;
@@ -198,7 +198,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
 
 
-        
+
         // shaders.loadFromFile("res/transparency.frag", sf::Shader::Fragment) ;
         // shaders.setParameter("opacity", 0.4f);
         // shaders.setParameter("texture", sf::Shader::CurrentTexture) ;
@@ -211,7 +211,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
 // void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states, sf::Shader& shaders) const  {
 void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  {
-        
+
         // states.blendMode = sf::BlendAlpha ;
         states.transform *= getTransform();
         states.texture = &texture;

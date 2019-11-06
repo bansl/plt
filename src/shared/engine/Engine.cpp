@@ -16,24 +16,24 @@ state::Turn& Engine::getTurn (){
 
 void Engine::addCommand (std::unique_ptr<Command> ptr_command){
 	commands.push_back(move(ptr_command));
-	
+
 }
-bool Engine::turnCheckOut(sf::RenderWindow& window, int rotation){
+bool Engine::turnCheckOut(sf::RenderWindow& window){
 	isTurnFinished=true;
 	isGameFinished=true;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
 	{
 		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() == Available){
-			isTurnFinished=false;	
+			isTurnFinished=false;
 		}
 		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() != Dead){
-			isGameFinished=false;	
+			isGameFinished=false;
 		}
 
 		for(size_t i=0; i<commands.size();i++){
 			commands[i]->action(turn);
 			cout << "action #" << i <<" done" <<endl;
-			turn.notifyObservers(turn, rotation, window);
+			turn.notifyObservers(turn, window);
 			// sf::Time t1 = sf::seconds(1.0f);
 			// sf::sleep(t1);
 		}
@@ -49,7 +49,7 @@ bool Engine::turnCheckOut(sf::RenderWindow& window, int rotation){
 		cout << "TURN END" << endl;
 	}
 	return isTurnFinished;
-}	
+}
 
 bool Engine::turnCheckIn(){
 	if (isTurnFinished) {
