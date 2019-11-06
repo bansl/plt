@@ -9,7 +9,7 @@ using namespace render;
 
 BOOST_AUTO_TEST_CASE(TestEngine)
 {
-  for(int i=0;i<200;i++){
+  for(int i=0;i<20;i++){
   Turn testTurn{};
   testTurn.initMap(10,10,"g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1");
   testTurn.initTeams();
@@ -32,6 +32,14 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testEngine.currentPlayerId=0;
   testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
   BOOST_CHECK_EQUAL(testEngine.getTurn().rotation,1);
+  testEngine.isTurnFinished=false;
+  testEngine.turnCheckIn();
+
+
+  TurnDisplay layer(testTurn);
+  TurnDisplay* ptr_layer=&layer;
+  testEngine.getTurn().registerObserver(ptr_layer);
+  sf::RenderWindow window;
 
   Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
   if(testDefend.validate(testEngine.getTurn())){
@@ -98,5 +106,21 @@ BOOST_AUTO_TEST_CASE(TestEngine)
       std::unique_ptr<EndTurn> ptr_endTestTurn (new EndTurn(endturnTest));
       testEngine.addCommand(move(ptr_endTestTurn));
     }
+
+    Attack testFailedAttack(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+    testFailedAttack.validate(testEngine.getTurn());
+    Defend testFailedDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+    testFailedDefend.validate(testEngine.getTurn());
+    UseObject testFailedUseObject(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,1,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+    testFailedUseObject.validate(testEngine.getTurn());
+    UseSkill testFailedUseSkill(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],addrtestTargetList,1);
+    testFailedUseSkill.validate(testEngine.getTurn());
+
+
+    testEngine.turnCheckOut(window);
+    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
+
+
+    testEngine.turnCheckIn();
 }
 }
