@@ -241,16 +241,20 @@ int main(int argc,char* argv[])
                     if (event.type == sf::Event::Closed){
                         window.close();
                     }
-                    if (event.type == sf::Event::LostFocus){
+                    if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         resume=false;
                         window.setView(view2);
                         window.draw(message);
                         window.display();
+                        sf::Time t1 = sf::seconds(0.1f);
+                        sf::sleep(t1);
                     }
-                    if (event.type == sf::Event::GainedFocus){
+                    if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         window.clear();
                         window.setView(view1);
                         resume=true;
+                        sf::Time t1 = sf::seconds(0.1f);
+                        sf::sleep(t1);
                     }
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
