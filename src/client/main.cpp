@@ -157,19 +157,7 @@ int main(int argc,char* argv[])
                         layer.initRender(rotation);
                     }
                     // Draw map(roofs and walls)
-                    size_t j=0;
-
-                    for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
-                    {
-                        window.draw(*layer.getDrawmaps()[i]);
-
-
-                        if((i+1)%6==0 && j<layer.getDrawchars().size()){
-                            window.draw(*layer.getDrawchars()[j][k]);
-                            j++;
-                        }
-
-                    }
+                    layer.display(window,k);
 
 
                         k=(k+1)%6;
@@ -200,8 +188,12 @@ int main(int argc,char* argv[])
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
+            
+            testTurn.initTeams();
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,8);
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             // === Init Engine ===
             Engine testEngine(testTurn);
             // === Display Turn ===
@@ -259,24 +251,13 @@ int main(int argc,char* argv[])
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                     
-                    window.clear();
-                    size_t j=0;
+                    
+                    layer.display(window,k);
 
-                    for (size_t i = 0; i < layer.getDrawmaps().size(); i++)
-                    {
-                        window.draw(*layer.getDrawmaps()[i]);
-
-
-                        if((i+1)%6==0 && j<layer.getDrawchars().size()){
-                            window.draw(*layer.getDrawchars()[j][k]);
-                            j++;
-                        }
-
-                    }
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
-                    window.display();
+    
                     
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
@@ -302,28 +283,37 @@ int main(int argc,char* argv[])
                     }
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
-                        cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
+                        // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
                         cout << "begin engine test: " << endl;
                         testEngine.turnCheckIn();
-                        cout << "engine turnCheckIn done: " << endl;
+                        cout << "engine turnCheckIn " << endl;
+                        
                         Position dest;
-                        dest.setPos(2,3);
+                        dest.setPos(2,8);
                         Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
                         if(movetest.validate(testEngine.getTurn())){
                             unique_ptr<Command> ptr_movetest (new Move (movetest));
                             testEngine.addCommand(move(ptr_movetest));
-                            cout << "move instruction added: " << endl;
+                            cout << "->move instruction added " << endl;
+                        }
+                        Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
+                        if(attacktest.validate(testEngine.getTurn())){
+                            unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
+                            testEngine.addCommand(move(ptr_attacktest));
+                            cout << "->attack instruction added " << endl;
                         }
                         cout << "instructions done: " << endl;
                         testEngine.turnCheckOut(window,rotation);
                         testEngine.getTurn().notifyObservers(testEngine.getTurn(), rotation, window);
                         cout << "engine turnCheckOut done: " << endl;
                         cout << "char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
+                    
+                        testEngine.turnCheckIn();
+                        cout << "engine turnCheckIn" << endl;
+                        sf::Time t1 = sf::seconds(0.1f);
+                        sf::sleep(t1);
                     }
-                    
-                    k=(k+1)%6;
-                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-                    
+                       
                 }
             }
         }

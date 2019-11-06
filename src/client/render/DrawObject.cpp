@@ -151,7 +151,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb,int rotation, int playerId){
 
         sf::Image image;
-        image.loadFromFile(tileset.getImagePath()[charNb]);
+        image.loadFromFile(tileset.getImagePath()[playerId]);
         sf::Color color(147, 187, 236);
         image.createMaskFromColor(color);
         sf::Color color2(27, 89, 153);
@@ -175,7 +175,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
         float charPosX= (float) tempPosX;
         float charPosY= (float) tempPosY;
-        float tileheight= (float) (turn.getMap()[turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getX()][turn.getTeams()[0]->getListCharacter()[charNb]->getPosition().getY()].getHeight());
+        float tileheight= (float) (turn.getMap()[turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX()][turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY()].getHeight());
         tileheight +=-1;
         int tv=0; //idle anim
                                 // xpos=(j-i)*(tileDims[0]/2);

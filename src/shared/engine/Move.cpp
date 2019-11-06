@@ -83,6 +83,11 @@ bool Move::validate (state::Turn& turn){
 }
 
 bool Move::action(state::Turn& turn){
+    // for (size_t i = 0; i < pathToDest.size(); i++)
+    // {
+    //     character.getPosition().setPos(pathToDest[i].getX(),pathToDest[i].getY());
+    // }
+    
     character.getPosition().setPos(newPosition.getX(),newPosition.getY());
     return true;
 }

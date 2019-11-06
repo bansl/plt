@@ -83,7 +83,7 @@ void TurnDisplay::initRender(int rotation){
                 }
         }
         for (size_t player = 0; player < turnDisplay.getTeams().size(); player++){
-                for (int k=0; k< (int) turnDisplay.getTeams()[0]->getListCharacter().size(); k++){
+                for (int k=0; k< (int) turnDisplay.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
                         std::vector<std::unique_ptr<render::DrawObject>> charframe;
                         for (size_t spriteAnimNumber = 0; spriteAnimNumber < 6; spriteAnimNumber++)
@@ -166,7 +166,7 @@ void TurnDisplay::initRender(state::Turn& turn, int rotation){
                 }
         }
         for (size_t player = 0; player < turn.getTeams().size(); player++){
-                for (int k=0; k< (int) turn.getTeams()[0]->getListCharacter().size(); k++){
+                for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
                         std::vector<std::unique_ptr<render::DrawObject>> charframe;
                         for (size_t spriteAnimNumber = 0; spriteAnimNumber < 6; spriteAnimNumber++)
@@ -201,20 +201,61 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 void TurnDisplay::redraw (state::Turn& turn, int rotation, sf::RenderWindow& window){
 	initRender(turn,rotation);
         cout << "====redraw" << endl;
-	// display(window);
 }
 
-void TurnDisplay::display (sf::RenderWindow& window){
+void TurnDisplay::display (sf::RenderWindow& window, int frame){
 	window.clear();
 	size_t j=0;
+        vector< vector<int> >  indexlist=charPrintOrder();
         for (size_t i = 0; i < drawmaps.size(); i++){
                 window.draw(*drawmaps[i]);
                 if((i+1)%6==0 && j<drawchars.size()){
-                        window.draw(*drawchars[j][0]); // TODO
-                        j++;
+                        int order=0;
+                        for (int k = 0; k < indexlist[j][0]; k++)
+                        {
+                                order+=turnDisplay.getTeams()[k]->getListCharacter().size();
+                        }
+                        order+=indexlist[j][1];
+                        // cout << "order:" << order << endl;
+                        window.draw(*drawchars[order][frame]); 
+                        j++;  
                 }
         }
-        cout << "====display new turn" << endl;
+        // cout << drawchars.size() <<"====="<< endl;
 	window.display();
 }
 
+std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
+
+    vector<pair<Character, vector<int> >> vp; 
+   
+    for (size_t i = 0; i < turnDisplay.getTeams().size(); i++)
+    {
+        for (size_t j = 0; j < turnDisplay.getTeams()[i]->getListCharacter().size(); j++)
+        {
+                vector<int> indexes;
+                indexes.push_back(j);
+                indexes.push_back(i);
+                vp.push_back(make_pair(*turnDisplay.getTeams()[i]->getListCharacter()[j], indexes));
+        }
+        
+    } 
+        std::sort(vp.begin(),  vp.end(), []( pair<Character, vector<int>>  a, pair<Character, vector<int>>  b) -> bool
+        { 
+        //    cout << "a get X" << a.first.getPosition().getX() << "|" << "b get X" << b.first.getPosition().getX() << endl;
+           if(a.first.getPosition().getX() == b.first.getPosition().getX()){
+                   return a.first.getPosition().getY() < b.first.getPosition().getY();
+           }
+           return a.first.getPosition().getX() < b.first.getPosition().getX(); 
+        });
+
+    vector< vector<int> > indexlist;
+    for (size_t i = 0; i < vp.size(); i++) {
+        vector<int> indexes(2,0);
+        indexes[0]= vp[i].second[0],indexes[1]= vp[i].second[1]; 
+        // cout << vp[i].second[0] << "|" << vp[i].second[1] << endl;
+        indexlist.push_back(indexes);
+    } 
+    
+    return indexlist;
+} 

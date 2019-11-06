@@ -70,7 +70,7 @@ void Turn::initMap (int row, int column,std::string seed){
     for (int i = 0; i < column; i++) {
         vector<state::Tile> generatedmaprow;
         for (int j = 0; j < row; j++) {
-          char * type;
+          char * type= (char *) "";
           *type=seed.at(i*2+row*j*2);
           int height=(int)seed.at(i*2+row*j*2+1);
           //char type=seed.at(i*2+row*j*2);

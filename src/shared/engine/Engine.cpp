@@ -45,6 +45,9 @@ bool Engine::turnCheckOut(sf::RenderWindow& window, int rotation){
 	if(isGameFinished){
 		cout << "GAME OVER" << endl;
 	}
+	if(isTurnFinished){
+		cout << "TURN END" << endl;
+	}
 	return isTurnFinished;
 }	
 
@@ -55,7 +58,7 @@ bool Engine::turnCheckIn(){
 		for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Available);
 		}
-
+		cout << "NEW TURN" << endl;
 		isTurnFinished=false;
 		return true;
 	}
