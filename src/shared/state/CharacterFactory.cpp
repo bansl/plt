@@ -9,6 +9,7 @@ state::Character CharacterFactory::createCharacter(){
   RandomRaceFactory rrf {};
   newCharacter.getJob().setJob(rjf.getRandomJob());
   newCharacter.getRace().setRace(rrf.getRandomRace());
+  newCharacter.initializeSkill();
   newCharacter.setStatus(Available);
   return newCharacter;
 }

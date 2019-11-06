@@ -9,10 +9,6 @@ using namespace state;
 BOOST_AUTO_TEST_CASE(TestCharacter)
 {
   Character Gilbert {  };
-  // Race testRace {};
-  // testRace.setRace(Human);
-  // Job testJob {};
-  // testJob.setJob(Pugilist);
   state::Level testLevel {};
   testLevel.levelUp(2);
   testLevel.levelUp(2);
@@ -44,15 +40,14 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   BOOST_CHECK_EQUAL(Gilbert.getSkillList().size(),0);
 
   Character Mage {};
-  // Job testJob2 {};
-  // testJob2.setJob(Magician);
   Mage.getJob().setJob(Magician);
-    BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
-    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),10);
-    // Mage.getSkillList()[0]->setMpCost(10);
-    // Mage.getSkillList()[0]->setEffect(0,5);
-    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),0);
-    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getMpCost(),10);
-    // BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getHeal(),5);
+  Mage.initializeSkill();
+  BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),10);
+    Mage.getSkillList()[0]->setMpCost(10);
+    Mage.getSkillList()[0]->setEffect(0,5);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),0);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getMpCost(),10);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getHeal(),5);
 
 }

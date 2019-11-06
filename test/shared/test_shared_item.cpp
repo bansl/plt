@@ -18,4 +18,9 @@ BOOST_AUTO_TEST_CASE(TestItem)
   testItem.getConsumable().setConsumable(0,10);
   BOOST_CHECK_EQUAL(testItem.getConsumable().getHealth(),0);
   BOOST_CHECK_EQUAL(testItem.getConsumable().getMana(),10);
+  Team testTeam{};
+  BOOST_CHECK_EQUAL(testTeam.getItems().size(),0);
+  testTeam.addItem(testItem);
+  BOOST_CHECK_EQUAL(testTeam.getItems().size(),1);
+  BOOST_CHECK_EQUAL(testTeam.getItems()[0]->getConsumable().getHealth(),0);
 }
