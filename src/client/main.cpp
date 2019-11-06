@@ -182,16 +182,17 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(4,4,"g1g2g2g3g2g2g2g2g1g2g2g2g2g2g1g2"); //squares only
-            // testTurn.initTeams();
-            // testTurn.getTeams()[0]->addCharacter();
-            // testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
+            //testTurn.initMap(4,4,"g1g2g2g3g2g2g2g2g1g2g2g2g2g2g1g2"); //squares only
+            testTurn.initMap(10,10);
+            testTurn.initTeams();
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
 
-            // testTurn.initTeams();
-            // testTurn.getTeams()[1]->addCharacter();
-            // testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,8);
-            // testTurn.getTeams()[1]->addCharacter();
-            // testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
+            testTurn.initTeams();
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,8);
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             // === Init Engine ===
             Engine testEngine(testTurn);
             // === Display Turn ===
