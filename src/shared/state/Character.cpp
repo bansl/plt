@@ -161,16 +161,16 @@ int Character::getMagicPower (){
 int Character::getDefense (){
     int defense=0;
     if (this->race.getRace() == Monster){
-        defense=10 + 5*this->level.getLevel();
+        defense=5 + 1*this->level.getLevel();
     }
     else if (this->race.getRace() == Beastman){
-        defense=15 + 5*this->level.getLevel();
+        defense=5 + 1*this->level.getLevel();
     }
     else if (this->race.getRace() == Demon){
-        defense=20 + 5*this->level.getLevel();
+        defense=5 + 1*this->level.getLevel();
     }
     else if (this->race.getRace() == Human){
-        defense=10 + 5*this->level.getLevel();
+        defense=5 + 1*this->level.getLevel();
     }
     if(getStatus()==Defending){
       defense=defense*1.5;

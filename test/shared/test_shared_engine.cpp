@@ -120,7 +120,6 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     testEngine.turnCheckOut(window);
     testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
 
-
     testEngine.turnCheckIn();
 }
 }

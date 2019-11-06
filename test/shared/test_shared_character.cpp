@@ -27,9 +27,9 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
 
   BOOST_CHECK_EQUAL(Gilbert.getMagicPower(),20);
 
-  BOOST_CHECK_EQUAL(Gilbert.getDefense(),20);
+  BOOST_CHECK_EQUAL(Gilbert.getDefense(),7);
   Gilbert.setStatus(Defending);
-  BOOST_CHECK_GT(Gilbert.getDefense(),20);
+  BOOST_CHECK_GT(Gilbert.getDefense(),8);
 
   Gilbert.initHPMP();
   BOOST_CHECK_EQUAL(Gilbert.getCurrentHP(),60);

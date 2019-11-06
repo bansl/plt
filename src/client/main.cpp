@@ -176,7 +176,7 @@ int main(int argc,char* argv[])
         else if(strcmp(argv[1],"engine") == 0){
             cout<<"Engine Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
-            cout << "-Press E key to launch 1 turn of Engine Simulation Scenario" << endl;
+            cout << "-Press E key to launch 1 turn of Engine Simulation Scenario" << endl << "   Simulation contains 5 turns" << endl;
             cout << "-Press P key to Pause" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
             cout << "-Press R key to rotate map anti-clockwise " << endl;
@@ -197,6 +197,9 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
             // === Init Engine ===
             Engine testEngine(testTurn);
+
+            Item testItem("TestHeal",10,0,3) ;
+            testEngine.getTurn().getTeams()[0]->addItem(testItem);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -287,7 +290,7 @@ int main(int argc,char* argv[])
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
                         Epressed+=1;
                         if (Epressed==1) cout << "====TURN 1: ====" << endl;
-
+                        
                         testEngine.turnCheckIn();
 
                         if (Epressed==1){
@@ -344,9 +347,57 @@ int main(int argc,char* argv[])
                             }
                             else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
-                        
-                        testEngine.turnCheckOut(window);
 
+                        if(Epressed==3){
+
+                            cout << "[COMMAND]character blue attempts to DEFEND, SHOULD SUCCEED" << endl;
+                            Defend deftest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            if(deftest.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_deftest (new Defend (deftest));
+                                testEngine.addCommand(move(ptr_deftest));
+                                cout << "->[SUCCESS]defend instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no defend instruction added" << endl;
+
+                        }
+                        
+                        if(Epressed==4){
+
+                            cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
+                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            if(attacktest4.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_attacktest4 (new Attack (attacktest4));
+                                testEngine.addCommand(move(ptr_attacktest4));
+                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no attack instruction added" << endl;
+
+                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                            EndTurn endturntest2(1);
+                            if(endturntest2.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_endturntest2 (new EndTurn (endturntest2));
+                                testEngine.addCommand(move(ptr_endturntest2));
+                                cout << "->[SUCCESS]endturn instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no endturn instruction added" << endl;
+                        }
+
+                        if(Epressed==5){
+
+                            cout << "[COMMAND]character blue attempts to USE HEAL POTION, SHOULD SUCCEED" << endl;
+                            UseObject testUseItem(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            if(testUseItem.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_testUseItem (new UseObject (testUseItem));
+                                testEngine.addCommand(move(ptr_testUseItem));
+                                cout << "->[SUCCESS]objectuse instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no objectuse instruction added" << endl;
+                        }
+
+                        testEngine.turnCheckOut(window);
+                        int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
+                        int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
+                        cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
                         sf::Time t1 = sf::seconds(0.1f);
                         sf::sleep(t1);
                     }
