@@ -240,13 +240,21 @@ std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
         }
 
     }
-        std::sort(vp.begin(),  vp.end(), []( pair<Character, vector<int>>  a, pair<Character, vector<int>>  b) -> bool
+        std::sort(vp.begin(),  vp.end(), [&]( pair<Character, vector<int>>  a, pair<Character, vector<int>>  b) -> bool
         {
-        //    cout << "a get X" << a.first.getPosition().getX() << "|" << "b get X" << b.first.getPosition().getX() << endl;
-           if(a.first.getPosition().getX() == b.first.getPosition().getX()){
-                   return a.first.getPosition().getY() < b.first.getPosition().getY();
-           }
-           return a.first.getPosition().getX() < b.first.getPosition().getX();
+                int aPosX=a.first.getPosition().getX(),bPosX=b.first.getPosition().getX();
+                int aPosY=a.first.getPosition().getY(),bPosY=b.first.getPosition().getY();
+                int atemp=0,btemp=0;
+                for (int q=0; q<turnDisplay.rotation; q++){
+                        atemp=aPosX,btemp=bPosX;
+                        aPosX=turnDisplay.getMap().size()-aPosY-1,bPosX=turnDisplay.getMap().size()-bPosY-1;
+                        aPosY=atemp,bPosY=btemp;
+                }
+                //    cout << "a get X" << a.first.getPosition().getX() << "|" << "b get X" << b.first.getPosition().getX() << endl;
+                if(aPosX == bPosX){
+                        return aPosY < bPosY;
+                }
+                return aPosX < bPosX;
         });
 
     vector< vector<int> > indexlist;
