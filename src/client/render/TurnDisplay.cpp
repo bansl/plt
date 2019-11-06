@@ -29,7 +29,7 @@ void TurnDisplay::initRender(int rotation){
         for (int i=0; i<rotation; i++){
                 rotateMapVector = RotMap.rotateMap(rotateMapVector,rotateMapVector.size());
         }
-
+        
         vector<vector<int>> map_segmentation;
         for (size_t i = 0; i < turnDisplay.getTeams().size(); i++){
                 for (int k=0; k< (int) turnDisplay.getTeams()[i]->getListCharacter().size(); k++) {
@@ -51,10 +51,10 @@ void TurnDisplay::initRender(int rotation){
         map_segmentation.push_back(lastcoord);
 
         sort(map_segmentation.begin(),map_segmentation.end());
-        // for (int k=0; k< (int) map_segmentation.size(); k++) {
-        //         cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
-        //         cout <<" y: " << map_segmentation[k][1] << endl;
-        // }
+        for (int k=0; k< (int) map_segmentation.size(); k++) {
+                cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
+                cout <<" y: " << map_segmentation[k][1] << endl;
+        }
         vector<int> segStart(2,0),segEnd(2,0);
         for (int l=0; l< (int) map_segmentation.size(); l++){  
                 segStart[0]=segEnd[0],segStart[1]=segEnd[1];

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
+#include<string>
+
 
 using namespace state;
 using namespace std;
@@ -64,38 +66,40 @@ void Turn::initTeams (){
 }
 
 void Turn::initMap (int row, int column,std::string seed){
-
+    
     vector< vector<state::Tile> > generatedmap;
-    int position=row*column*8-1;
+    
     for (int i = 0; i < column; i++) {
         vector<state::Tile> generatedmaprow;
         for (int j = 0; j < row; j++) {
-          char * type= (char *) "";
-          *type=seed.at(i*2+row*j*2);
-          int height=(int)seed.at(i*2+row*j*2+1);
-          //char type=seed.at(i*2+row*j*2);
+          if((int) seed.size()<=j*2+row*i*2) break;
+          
+          int height=(int) (seed.at(j*2+row*i*2+1)) -48;
+          
+          char type=seed.at(j*2+row*i*2);
           Tile newTile;
           newTile.setHeight(height);
-          if(strcmp(type,"d")==0){
+          if( type== (char) 'd'){
             newTile.tile=Dirt;
           }
-          else if(strcmp(type,"g")==0){
+          else if(type== (char) 'g'){
             newTile.tile=Grass;
           }
-          else if(strcmp(type,"w")==0){
+          else if(type== (char) 'w'){
             newTile.tile=Water;
           }
-          else if(strcmp(type,"s")==0){
+          else if(type== (char) 's'){
             newTile.tile=Sand;
           }
-          else if(strcmp(type,"p")==0){
+          else if(type== (char) 'p'){
             newTile.tile=Pound;
           }
-          else if(strcmp(type,"r")==0){
+          else if(type== (char) 'r'){
             newTile.tile=Rock;
           }
           generatedmaprow.push_back(newTile);
-          position+=-8;
+          
+          
         }
         generatedmap.push_back(generatedmaprow);
     }

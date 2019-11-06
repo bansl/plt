@@ -29,9 +29,11 @@ BOOST_AUTO_TEST_CASE(TestTurn)
   BOOST_CHECK_GT(testTurn.getMap()[0][0].getTile(),0);
 
 
-  // Turn testTurn2 {};
-  // std::string testSeed="d1d1d1d1";
-  // testTurn2.initMap(2,2,testSeed);
-  // BOOST_CHECK_EQUAL(testTurn2.getMap().size(),1);
-  // BOOST_CHECK_EQUAL(testTurn2.getMap()[0][0].getTile(),Dirt);
+  Turn testTurn2 {};
+  std::string testSeed="d1d1d1d1";
+  testTurn2.initMap(2,2,testSeed);
+  BOOST_CHECK_EQUAL(testTurn2.getMap().size(),2);
+  BOOST_CHECK_EQUAL(testTurn2.getMap()[0].size(),2);
+  BOOST_CHECK_EQUAL(testTurn2.getMap()[0][0].getHeight(),1);
+  BOOST_CHECK_EQUAL(testTurn2.getMap()[1][1].getTile(),Dirt);
 }
