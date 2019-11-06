@@ -1,4 +1,8 @@
 #include "../state.h"
+#include <sstream>
+#include <iostream>
+#include <cstring>
+#include <stdio.h>
 
 using namespace state;
 using namespace std;
@@ -57,4 +61,43 @@ std::vector<std::vector<state::Tile>> Turn::getMap (){
 void Turn::initTeams (){
     std::unique_ptr<state::Team> ptr_team (new Team);
     teams.push_back(move( ptr_team));
+}
+
+void Turn::initMap (int row, int column,std::string seed){
+
+    vector< vector<state::Tile> > generatedmap;
+    int position=row*column*8-1;
+    for (int i = 0; i < column; i++) {
+        vector<state::Tile> generatedmaprow;
+        for (int j = 0; j < row; j++) {
+          char * type;
+          *type=seed.at(i*2+row*j*2);
+          int height=(int)seed.at(i*2+row*j*2+1);
+          //char type=seed.at(i*2+row*j*2);
+          Tile newTile;
+          newTile.setHeight(height);
+          if(strcmp(type,"d")==0){
+            newTile.tile=Dirt;
+          }
+          else if(strcmp(type,"g")==0){
+            newTile.tile=Grass;
+          }
+          else if(strcmp(type,"w")==0){
+            newTile.tile=Water;
+          }
+          else if(strcmp(type,"s")==0){
+            newTile.tile=Sand;
+          }
+          else if(strcmp(type,"p")==0){
+            newTile.tile=Pound;
+          }
+          else if(strcmp(type,"r")==0){
+            newTile.tile=Rock;
+          }
+          generatedmaprow.push_back(newTile);
+          position+=-8;
+        }
+        generatedmap.push_back(generatedmaprow);
+    }
+    this->map=generatedmap;
 }

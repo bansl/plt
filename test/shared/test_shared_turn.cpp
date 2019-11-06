@@ -1,5 +1,8 @@
 #include <boost/test/unit_test.hpp>
 #include "../../src/shared/state.h"
+#include <sstream>
+#include <iostream>
+#include <cstring>
 
 using namespace state;
 
@@ -24,4 +27,11 @@ BOOST_AUTO_TEST_CASE(TestTurn)
   testTurn.initMap(49,49);
   BOOST_CHECK_EQUAL(testTurn.getMap().size(),49);
   BOOST_CHECK_GT(testTurn.getMap()[0][0].getTile(),0);
+
+
+  // Turn testTurn2 {};
+  // std::string testSeed="d1d1d1d1";
+  // testTurn2.initMap(2,2,testSeed);
+  // BOOST_CHECK_EQUAL(testTurn2.getMap().size(),1);
+  // BOOST_CHECK_EQUAL(testTurn2.getMap()[0][0].getTile(),Dirt);
 }

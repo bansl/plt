@@ -1,6 +1,6 @@
 #include "../state.h"
 
-using namespace state; 
+using namespace state;
 using namespace std;
 
 int Tile::getHeight (){
