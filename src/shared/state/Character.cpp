@@ -192,21 +192,6 @@ int Character::getDefense (){
 
 }
 
-// std::vector<Skill&>& Character::getSkillList (){
-//     std::vector<Skill&> skills;
-//     std::vector<Skill&>& addrSkills=skills;
-//     if (this->job.getJob() == Magician){
-//         Skill fire {};
-//         fire.skillName="fire ball";
-//         fire.setEffect(10,0);
-//         fire.setMpCost(5);
-//         Skill& ptr_fire =fire;
-//         addrSkills.push_back(ptr_fire);
-//     }
-//     //std::vector<Skill *>& addrSkills=skills;
-//     return addrSkills;
-// }
-
 void Character::initializeSkill(){
   if (this->job.getJob() == Magician){
           Skill fire {};

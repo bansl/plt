@@ -17,6 +17,11 @@ BOOST_AUTO_TEST_CASE(TestTurn)
   BOOST_CHECK_EQUAL( CursorPos.getX(),7);
   BOOST_CHECK_EQUAL( CursorPos.getY(),4);
 
-  testTurn.initMap(50,50);
-  BOOST_CHECK_EQUAL(testTurn.map.size(),50);
+  testTurn.initTeams();
+  testTurn.getTeams()[0]->addCharacter();
+  BOOST_CHECK_GT(testTurn.getTeams()[0]->getListCharacter()[0]->getMaxHP(),0);
+
+  testTurn.initMap(49,49);
+  BOOST_CHECK_EQUAL(testTurn.getMap().size(),49);
+  BOOST_CHECK_GT(testTurn.getMap()[0][0].getTile(),0);
 }

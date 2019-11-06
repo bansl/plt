@@ -28,6 +28,8 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   BOOST_CHECK_EQUAL(Gilbert.getMagicPower(),20);
 
   BOOST_CHECK_EQUAL(Gilbert.getDefense(),20);
+  Gilbert.setStatus(Defending);
+  BOOST_CHECK_GT(Gilbert.getDefense(),20);
 
   Gilbert.initHPMP();
   BOOST_CHECK_EQUAL(Gilbert.getCurrentHP(),60);
@@ -36,7 +38,16 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   Gilbert.setCurrentMP(-5);
   BOOST_CHECK_EQUAL(Gilbert.getCurrentHP(),50);
   BOOST_CHECK_EQUAL(Gilbert.getCurrentMP(),5);
+  Gilbert.setCurrentHP(20);
+  Gilbert.setCurrentMP(20);
+  BOOST_CHECK_EQUAL(Gilbert.getCurrentHP(),60);
+  BOOST_CHECK_EQUAL(Gilbert.getCurrentMP(),10);
 
+  Gilbert.getPosition().setPos(5,3);
+  BOOST_CHECK_EQUAL(Gilbert.getPosition().getX(),5);
+  BOOST_CHECK_EQUAL(Gilbert.getPosition().getY(),3);
+
+  Gilbert.initializeSkill();
   BOOST_CHECK_EQUAL(Gilbert.getSkillList().size(),0);
 
   Character Mage {};

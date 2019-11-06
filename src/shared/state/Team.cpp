@@ -4,17 +4,6 @@
 using namespace state;
 using namespace std;
 
-
-void Team::viewPartyStats(){
-
-
-}
-
-void Team::assignPartyStats(){
-
-
-}
-
 std::vector<std::unique_ptr<Item>>& Team::getItems (){
   std::vector<std::unique_ptr<Item>>& myListItems=listItems;
     return myListItems;
