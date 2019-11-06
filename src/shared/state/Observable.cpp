@@ -10,7 +10,7 @@ void Observable::registerObserver (IObserver* observer){
 }
 
 void Observable::notifyObservers ( Turn& turn, sf::RenderWindow& window){
-	cout << "notifyObservers" << endl;
+	// cout << "notifyObservers" << endl;
 	for(auto observer : observers){
 		observer->redraw(turn, window);
 	}

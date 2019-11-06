@@ -5,7 +5,7 @@ using namespace state;
 
 
 bool EndTurn::action(state::Turn& turn){
-
+  
   for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
   {
     if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() == Available){

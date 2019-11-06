@@ -51,10 +51,10 @@ void TurnDisplay::initRender(){
         map_segmentation.push_back(lastcoord);
 
         sort(map_segmentation.begin(),map_segmentation.end());
-        for (int k=0; k< (int) map_segmentation.size(); k++) {
-                cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
-                cout <<" y: " << map_segmentation[k][1] << endl;
-        }
+        // for (int k=0; k< (int) map_segmentation.size(); k++) {
+        //         cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
+        //         cout <<" y: " << map_segmentation[k][1] << endl;
+        // }
         vector<int> segStart(2,0),segEnd(2,0);
         for (int l=0; l< (int) map_segmentation.size(); l++){
                 segStart[0]=segEnd[0],segStart[1]=segEnd[1];
@@ -200,7 +200,7 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window){
 	initRender(turn);
-        cout << "====redraw" << endl;
+        // cout << "====redraw" << endl;
 }
 
 void TurnDisplay::display (sf::RenderWindow& window, int frame){
@@ -211,11 +211,12 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame){
                 window.draw(*drawmaps[i]);
                 if((i+1)%6==0 && j<drawchars.size()){
                         int order=0;
-                        for (int k = 0; k < indexlist[j][0]; k++)
+                        for (int k = 0; k < indexlist[j][1]; k++)
                         {
                                 order+=turnDisplay.getTeams()[k]->getListCharacter().size();
+                                
                         }
-                        order+=indexlist[j][1];
+                        order+=indexlist[j][0];
                         // cout << "order:" << order << endl;
                         window.draw(*drawchars[order][frame]);
                         j++;

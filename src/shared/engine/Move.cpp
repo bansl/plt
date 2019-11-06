@@ -25,7 +25,7 @@ bool Move::validate (state::Turn& turn){
             return false;
             // character.getPosition().setPos(newPosition.getX(),newPosition.getY());
         }
-
+        
         //Find Path
         Position currentPosition(character.getPosition());
         vector<Position> neighbors;
@@ -44,7 +44,13 @@ bool Move::validate (state::Turn& turn){
                 // cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) << endl ;
                 // cout << "posX:" << currentPosition.getX() << endl ;
                 // cout << "posY:" << currentPosition.getY() << endl ;
-                if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition)){
+                bool newpos=true;
+                for (size_t q = 0; q < pathToDest.size(); q++)
+                  {
+                      if((pathToDest[q].getX()==currentPosition.getX()) && (pathToDest[q].getY()==currentPosition.getY())) newpos=false;
+                  }
+                if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition) && newpos){
+                  
                     if(firstpos){
                         pathToDest.push_back(currentPosition);
                         // cout << "path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
@@ -64,18 +70,23 @@ bool Move::validate (state::Turn& turn){
 
                 if(currentPosition.distanceBetween(pathToDest.back(),newPosition)==0){
                     // cout << "final path: ";
-                    for (size_t i = 0; i < pathToDest.size(); i++)
-                    {
+                    // for (size_t i = 0; i < pathToDest.size(); i++)
+                    // {
                         
-                        cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
-                    }
-                    cout << "path found!" << endl;
+                    //     cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
+                    // }
+                    // cout << "path found!" << endl;
                     character.setStatus(Used);
                     return true;
                 }
             } 
         }  
-        cout << "couldn't find path within 10 moves..." << endl;  
+        // for (size_t i = 0; i < pathToDest.size(); i++)
+        //             {
+                        
+        //                 cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
+        //             }
+        // cout << "couldn't find path within 10 moves..." << endl;  
         return false;
     }
     return false; 

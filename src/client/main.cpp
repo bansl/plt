@@ -176,7 +176,8 @@ int main(int argc,char* argv[])
         else if(strcmp(argv[1],"engine") == 0){
             cout<<"Engine Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
-            cout << "-Press E key to launch a turn" << endl;
+            cout << "-Press E key to launch 1 turn of Engine Simulation Scenario" << endl;
+            cout << "-Press P key to Pause" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
             cout << "-Press R key to rotate map anti-clockwise " << endl;
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
@@ -185,13 +186,15 @@ int main(int argc,char* argv[])
             testTurn.initMap(8,8,"g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1"); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
-
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
+    
             testTurn.initTeams();
             testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,6);
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
             // === Init Engine ===
             Engine testEngine(testTurn);
             // === Display Turn ===
@@ -218,9 +221,9 @@ int main(int argc,char* argv[])
             message.setColor(sf::Color::White);
             message.setStyle(sf::Text::Bold);
             message.setCharacterSize(25);
-            message.setString("PAUSED\n\n Controls: \n -Press Up, Down, Right or Left key \n to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
+            message.setString("PAUSED\n\n Controls: \n -Press E key to launch 1 turn of \n   Engine Simulation Scenario \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
 
-            int k=0;
+            int k=0, Epressed=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             window.setFramerateLimit(60);
@@ -282,32 +285,68 @@ int main(int argc,char* argv[])
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
-                        cout << "begin engine test: " << endl;
-                        testEngine.turnCheckIn();
-                        cout << "engine turnCheckIn " << endl;
+                        Epressed+=1;
+                        if (Epressed==1) cout << "====TURN 1: ====" << endl;
 
-                        Position dest;
-                        dest.setPos(2,8);
-                        Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
-                        if(movetest.validate(testEngine.getTurn())){
-                            unique_ptr<Command> ptr_movetest (new Move (movetest));
-                            testEngine.addCommand(move(ptr_movetest));
-                            cout << "->move instruction added " << endl;
+                        testEngine.turnCheckIn();
+
+                        if (Epressed==1){
+                            Position dest;
+                            dest.setPos(2,5);
+                            cout << "[COMMAND]character blue at 2,2 attempts to MOVE to 2,5, SHOULD SUCCEED" << endl;
+                            Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
+                            if(movetest.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_movetest (new Move (movetest));
+                                testEngine.addCommand(move(ptr_movetest));
+                                cout << "->[SUCCESS]move instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no move instruction added" << endl;
                         }
-                        Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
-                        if(attacktest.validate(testEngine.getTurn())){
-                            unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
-                            testEngine.addCommand(move(ptr_attacktest));
-                            cout << "->attack instruction added " << endl;
+
+                        if (Epressed==2){
+                            cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
+                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
+                            if(attacktest.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
+                                testEngine.addCommand(move(ptr_attacktest));
+                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no attack instruction added" << endl;
+
+                            
+
+                            cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
+                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            if(attacktest2.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_attacktest2 (new Attack (attacktest2));
+                                testEngine.addCommand(move(ptr_attacktest2));
+                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no attack instruction added" << endl;
+                            
+                            
+
+                            cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
+                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            if(attacktest3.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_attacktest3 (new Attack (attacktest3));
+                                testEngine.addCommand(move(ptr_attacktest3));
+                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no attack instruction added" << endl;
+
+                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                            EndTurn endturntest(1);
+                            if(endturntest.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
+                                testEngine.addCommand(move(ptr_endturntest));
+                                cout << "->[SUCCESS]endturn instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
-                        cout << "instructions done: " << endl;
+                        
                         testEngine.turnCheckOut(window);
-                        testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
-                        cout << "engine turnCheckOut done: " << endl;
-                        cout << "char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
 
-                        testEngine.turnCheckIn();
-                        cout << "engine turnCheckIn" << endl;
                         sf::Time t1 = sf::seconds(0.1f);
                         sf::sleep(t1);
                     }
