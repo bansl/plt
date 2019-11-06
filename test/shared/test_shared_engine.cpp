@@ -100,6 +100,14 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     //     testEngine.addCommand(move(ptr_movetest));
     // }
     // BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Used);
+    if(i!=19){
+      Defend testDefend2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[4]);
+      if(testDefend2.validate(testEngine.getTurn())){
+        std::unique_ptr<Defend> ptr_defend2 (new Defend(testDefend2));
+        testEngine.addCommand(move(ptr_defend2));
+      }
+      BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Defending);
+    }
 
     EndTurn endturnTest(0);
     if(endturnTest.validate(testEngine.getTurn())){
@@ -118,7 +126,10 @@ BOOST_AUTO_TEST_CASE(TestEngine)
 
 
     testEngine.turnCheckOut(window);
-    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
+    BOOST_CHECK(testEngine.isTurnFinished);
+    if(i!=19){
+      testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
+    }
 
     testEngine.turnCheckIn();
 }

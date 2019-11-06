@@ -23,7 +23,9 @@ bool Engine::turnCheckOut(sf::RenderWindow& window){
 	isGameFinished=true;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
 	{
-		
+		if(turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getCurrentHP()<=0){
+			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Dead);
+		}
 		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() == Available){
 			isTurnFinished=false;
 		}
