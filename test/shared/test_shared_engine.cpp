@@ -36,10 +36,11 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testEngine.turnCheckIn();
 
 
-  TurnDisplay layer(testTurn);
+  TurnDisplay layer(testEngine.getTurn());
   TurnDisplay* ptr_layer=&layer;
   testEngine.getTurn().registerObserver(ptr_layer);
   sf::RenderWindow window;
+  layer.initRender(testEngine.getTurn());
 
   Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
   if(testDefend.validate(testEngine.getTurn())){
@@ -109,6 +110,9 @@ BOOST_AUTO_TEST_CASE(TestEngine)
       BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Defending);
     }
 
+    layer.initRender();
+    layer.display(window,0);
+
     EndTurn endturnTest(0);
     if(endturnTest.validate(testEngine.getTurn())){
       std::unique_ptr<EndTurn> ptr_endTestTurn (new EndTurn(endturnTest));
@@ -132,5 +136,6 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     }
 
     testEngine.turnCheckIn();
+    window.close();
 }
 }
