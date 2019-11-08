@@ -213,8 +213,7 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame){
                         int order=0;
                         for (int k = 0; k < indexlist[j][1]; k++)
                         {
-                                order+=turnDisplay.getTeams()[k]->getListCharacter().size();
-                                
+                                order+=turnDisplay.getTeams()[k]->getListCharacter().size();      
                         }
                         order+=indexlist[j][0];
                         // cout << "order:" << order << endl;

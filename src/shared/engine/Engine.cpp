@@ -18,7 +18,7 @@ void Engine::addCommand (std::unique_ptr<Command> ptr_command){
 	commands.push_back(move(ptr_command));
 
 }
-bool Engine::turnCheckOut(sf::RenderWindow& window){
+bool Engine::turnCheckOut(){
 	isTurnFinished=true;
 	isGameFinished=true;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
@@ -40,8 +40,7 @@ bool Engine::turnCheckOut(sf::RenderWindow& window){
 	if(isTurnFinished){
 		for(size_t i=0; i<commands.size();i++){
 			commands[i]->action(turn);
-			// cout << "action #" << i <<" done" <<endl;
-			turn.notifyObservers(turn, window);
+			
 			sf::Time t1 = sf::seconds(0.2f);
 			sf::sleep(t1);
 		}
@@ -52,6 +51,10 @@ bool Engine::turnCheckOut(sf::RenderWindow& window){
 		cout << "TURN END" << endl << endl;
 	}
 	return isTurnFinished;
+}
+
+void Engine::updateDisplay (sf::RenderWindow& window){
+	turn.notifyObservers(turn, window);
 }
 
 bool Engine::turnCheckIn(){

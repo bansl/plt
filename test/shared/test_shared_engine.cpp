@@ -29,10 +29,8 @@ BOOST_AUTO_TEST_CASE(TestEngine)
 
   Engine testEngine(testTurn);
 
-  testEngine.currentPlayerId=0;
   testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
   BOOST_CHECK_EQUAL(testEngine.getTurn().rotation,1);
-  testEngine.isTurnFinished=false;
   //testEngine.turnCheckIn();
 
 
@@ -135,7 +133,7 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     // testFailedUseSkill.validate(testEngine.getTurn());
 
 
-    testEngine.turnCheckOut(window);
+    testEngine.turnCheckOut();
     BOOST_CHECK(testEngine.isTurnFinished);
     testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
 

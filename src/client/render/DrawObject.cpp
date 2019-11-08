@@ -162,7 +162,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(4);
-
+        
         int i=0;
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
@@ -197,11 +197,8 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
         quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
 
-
-
-        // shaders.loadFromFile("res/transparency.frag", sf::Shader::Fragment) ;
-        // shaders.setParameter("opacity", 0.4f);
-        // shaders.setParameter("texture", sf::Shader::CurrentTexture) ;
+        if(turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus()!=Available) shaders=1;
+        else shaders =0;
 	return true;
 }
 
@@ -211,13 +208,19 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
 // void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states, sf::Shader& shaders) const  {
 void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  {
-
-        // states.blendMode = sf::BlendAlpha ;
+        sf::Shader shaderobj;
+        if (shaders==1){
+                
+                shaderobj.loadFromFile("res/transparency.frag", sf::Shader::Fragment) ;
+                shaderobj.setParameter("opacity", 0.6f);
+                shaderobj.setParameter("texture", sf::Shader::CurrentTexture) ;
+                states.blendMode = sf::BlendAlpha ;
+                states.shader = &shaderobj;
+        }
+        
         states.transform *= getTransform();
         states.texture = &texture;
-        // states.shader = &shaders;
         target.draw(vertexarray, states);
-
 }
 
 std::vector<std::vector<state::Tile>> DrawObject::rotateMap(std::vector<std::vector<state::Tile>> map, int N){
