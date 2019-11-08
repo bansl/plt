@@ -142,7 +142,7 @@ int main(int argc,char* argv[])
                         // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-                        Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
+                        Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1],testTurn.getCharacterHeight(0,0));
                         testattack.action(testTurn);
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
@@ -176,7 +176,7 @@ int main(int argc,char* argv[])
         else if(strcmp(argv[1],"engine") == 0){
             cout<<"Engine Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
-            cout << "-Press E key to launch 1 turn of Engine Simulation Scenario" << endl << "   Simulation contains 5 turns" << endl;
+            cout << "-Press E key to launch 1 turn of Engine Simulation Scenario" << endl << "   Simulation contains 6 turns" << endl;
             cout << "-Press P key to Pause" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
             cout << "-Press R key to rotate map anti-clockwise " << endl;
@@ -308,7 +308,7 @@ int main(int argc,char* argv[])
 
                         if (Epressed==2){
                             cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
-                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
+                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(0,0));
                             if(attacktest.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
                                 testEngine.addCommand(move(ptr_attacktest));
@@ -319,7 +319,7 @@ int main(int argc,char* argv[])
 
 
                             cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
-                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,0));
                             if(attacktest2.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest2 (new Attack (attacktest2));
                                 testEngine.addCommand(move(ptr_attacktest2));
@@ -330,7 +330,7 @@ int main(int argc,char* argv[])
 
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
-                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,2));
                             if(attacktest3.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest3 (new Attack (attacktest3));
                                 testEngine.addCommand(move(ptr_attacktest3));
@@ -364,7 +364,7 @@ int main(int argc,char* argv[])
                         if(Epressed==4){
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
-                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,2));
                             if(attacktest4.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest4 (new Attack (attacktest4));
                                 testEngine.addCommand(move(ptr_attacktest4));
@@ -392,6 +392,46 @@ int main(int argc,char* argv[])
                                 cout << "->[SUCCESS]objectuse instruction added " << endl;
                             }
                             else cout << "->[FAILED]no objectuse instruction added" << endl;
+                        }
+
+                        if(Epressed==6){
+                          Skill fireStrike {};
+                          fireStrike.skillName="fire strike";
+                          fireStrike.setEffect(10,0);
+                          fireStrike.setMpCost(5);
+                          testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->addSkill(fireStrike);
+
+                          // std::vector<state::Character> testTargetList;
+                          // testTargetList.push_back(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                          // std::vector<state::Character> & addrtestTargetList= testTargetList;
+
+                            // cout << "[COMMAND]character red at 3,1 attempts to USE FIRE STRIKE SKILL, SHOULD FAILED" << endl;
+                            // UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],addrtestTargetList,0);
+                            // if(testUseSkill.validate(testEngine.getTurn())){
+                            //   std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
+                            //   testEngine.addCommand(move(ptr_testUseSkill));
+                            //   cout << "->[SUCCESS]skilluse instruction added " << endl;
+                            // }
+                            // else cout << "->[FAILED]no skilluse instruction added" << endl;
+                            //
+                            // cout << "[COMMAND]character red at 3,5 attempts to USE FIRE STRIKE SKILL, SHOULD SUCCESS" << endl;
+                            // UseSkill testUseSkill2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],addrtestTargetList,0);
+                            // if(testUseSkill2.validate(testEngine.getTurn())){
+                            //   std::unique_ptr<UseSkill> ptr_testUseSkill2 (new UseSkill(testUseSkill2));
+                            //   testEngine.addCommand(move(ptr_testUseSkill2));
+                            //   cout << "->[SUCCESS]skilluse instruction added " << endl;
+                            // }
+                            // else cout << "->[FAILED]no skilluse instruction added" << endl;
+                            //
+                            //
+                            // cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                            // EndTurn endturntest3(1);
+                            // if(endturntest3.validate(testEngine.getTurn())){
+                            //     unique_ptr<Command> ptr_endturntest3 (new EndTurn (endturntest3));
+                            //     testEngine.addCommand(move(ptr_endturntest3));
+                            //     cout << "->[SUCCESS]endturn instruction added " << endl;
+                            // }
+                            // else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
 
                         testEngine.turnCheckOut(window);

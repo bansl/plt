@@ -8,6 +8,11 @@ using namespace state;
 using namespace std;
 
 bool Attack::validate (state::Turn& turn){
+  //int height=0;
+  // int x=attacker.getPosition().getX(), y=attacker.getPosition().getY();
+  // std::vector<std::vector<state::Tile>> map=turn.getMap();
+  // Tile tile=map[x][y];
+  // height=tile.getHeight();
   if (attacker.getStatus()==Available){
     if(attacker.getJob().getJob()==Pugilist||attacker.getJob().getJob()==Swordman){
       if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())==1){
@@ -25,7 +30,7 @@ bool Attack::validate (state::Turn& turn){
       }
     }
     if(attacker.getJob().getJob()==Magician||attacker.getJob().getJob()==Archer){
-      if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())<=4){
+      if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())<=4+height){
         // cout<<"attacker pos:"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;
         // cout<<"target pos:"<<target.getPosition().getX()<<"|"<< target.getPosition().getY() <<endl;
         // cout<<"CAN Attack!"<<attacker.getJob().getJob()<<endl;
@@ -50,6 +55,6 @@ bool Attack::action(state::Turn& turn){
   return true;
 }
 
-Attack::Attack (state::Character& attackerCharacter, state::Character& targetCharacter):attacker(attackerCharacter),target(targetCharacter){
+Attack::Attack (state::Character& attackerCharacter, state::Character& targetCharacter, int attackerHeight):attacker(attackerCharacter),target(targetCharacter),height(attackerHeight){
     commandType= Attackcmd;
 }

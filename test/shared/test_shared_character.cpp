@@ -55,10 +55,13 @@ BOOST_AUTO_TEST_CASE(TestCharacter)
   Mage.initializeSkill();
   BOOST_CHECK_EQUAL(Mage.getSkillList().size(),1);
     BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),10);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getRange(),1);
     Mage.getSkillList()[0]->setMpCost(10);
     Mage.getSkillList()[0]->setEffect(0,5);
+    Mage.getSkillList()[0]->setRange(5);
     BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getDamage(),0);
     BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getMpCost(),10);
     BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getHeal(),5);
+    BOOST_CHECK_EQUAL(Mage.getSkillList()[0]->getRange(),5);
 
 }

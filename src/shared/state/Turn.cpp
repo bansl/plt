@@ -66,16 +66,16 @@ void Turn::initTeams (){
 }
 
 void Turn::initMap (int row, int column,std::string seed){
-    
+
     vector< vector<state::Tile> > generatedmap;
-    
+
     for (int i = 0; i < column; i++) {
         vector<state::Tile> generatedmaprow;
         for (int j = 0; j < row; j++) {
           if((int) seed.size()<=j*2+row*i*2) break;
-          
+
           int height=(int) (seed.at(j*2+row*i*2+1)) -48;
-          
+
           char type=seed.at(j*2+row*i*2);
           Tile newTile;
           newTile.setHeight(height);
@@ -98,10 +98,14 @@ void Turn::initMap (int row, int column,std::string seed){
             newTile.tile=Rock;
           }
           generatedmaprow.push_back(newTile);
-          
-          
+
+
         }
         generatedmap.push_back(generatedmaprow);
     }
     this->map=generatedmap;
+}
+
+int Turn::getCharacterHeight(int numberTeam, int numberCharacter){
+  return map[getTeams()[numberTeam]->getListCharacter()[numberCharacter]->getPosition().getX()][getTeams()[numberTeam]->getListCharacter()[numberCharacter]->getPosition().getY()].getHeight();
 }

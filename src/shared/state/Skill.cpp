@@ -24,3 +24,11 @@ void Skill::setMpCost(int newMpCost){
 int Skill::getMpCost(){
   return mpCost;
 }
+
+int Skill::getRange(){
+  return range;
+}
+
+void Skill::setRange(int newRange){
+  range=newRange;
+}
