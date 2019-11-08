@@ -11,16 +11,16 @@ TileSet::TileSet(TileSetType id){
 		sizeX=129;
 		sizeY=129;
 		margin=0;
-		imagePath.push_back("res/maptile2x129.png");	
+		imagePath.push_back("res/maptile2x129.png");
 	}
-	
+
 	else if (type==CharaSpritesheet){
 		sizeX=129; //TBD
 		sizeY=155; //TBD
 		margin=12; //TBD
 		imagePath.push_back("res/char1.png");
 		imagePath.push_back("res/char2.png");
-		
+
 	}
 }
 
@@ -38,4 +38,8 @@ int TileSet::getYsize(){
 
 int TileSet::getMargin(){
         return margin;
+}
+
+void TileSet::setImagePath(std::vector<std::string> imagePath){
+	this->imagePath=imagePath;
 }

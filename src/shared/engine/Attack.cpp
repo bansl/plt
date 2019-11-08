@@ -30,7 +30,7 @@ bool Attack::validate (state::Turn& turn){
       }
     }
     if(attacker.getJob().getJob()==Magician||attacker.getJob().getJob()==Archer){
-      if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())<=4+height){
+      if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())<=2+height){
         // cout<<"attacker pos:"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;
         // cout<<"target pos:"<<target.getPosition().getX()<<"|"<< target.getPosition().getY() <<endl;
         // cout<<"CAN Attack!"<<attacker.getJob().getJob()<<endl;

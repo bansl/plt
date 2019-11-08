@@ -27,8 +27,8 @@ state::Cursor* Turn::getCursor (){
     return ptrCursor;
 }
 
-std::vector<std::unique_ptr<Team>>& Turn::getTeams (){
-  std::vector<std::unique_ptr<Team>>& myteams = teams;
+std::vector<std::shared_ptr<Team>>& Turn::getTeams (){
+  std::vector<std::shared_ptr<Team>>& myteams = teams;
   return myteams;
 }
 
@@ -61,8 +61,8 @@ std::vector<std::vector<state::Tile>> Turn::getMap (){
 }
 
 void Turn::initTeams (){
-    std::unique_ptr<state::Team> ptr_team (new Team);
-    teams.push_back(move( ptr_team));
+    std::shared_ptr<state::Team> ptr_team (new Team);
+    teams.push_back(ptr_team);
 }
 
 void Turn::initMap (int row, int column,std::string seed){

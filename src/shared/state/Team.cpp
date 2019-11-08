@@ -4,8 +4,8 @@
 using namespace state;
 using namespace std;
 
-std::vector<std::unique_ptr<Item>>& Team::getItems (){
-  std::vector<std::unique_ptr<Item>>& myListItems=listItems;
+std::vector<std::shared_ptr<Item>>& Team::getItems (){
+  std::vector<std::shared_ptr<Item>>& myListItems=listItems;
     return myListItems;
 }
 
@@ -14,17 +14,17 @@ void Team::addCharacter(){
   CharacterFactory cf {};
   character=cf.createCharacter();
 
-  std::unique_ptr<Character> ptr_char (new Character(character));
-  listCharacter.push_back(move( ptr_char));
+  std::shared_ptr<Character> ptr_char (new Character(character));
+  listCharacter.push_back(ptr_char);
   this->characterNumber+=1;
 }
 
-std::vector<std::unique_ptr<Character>>& Team::getListCharacter (){
-  std::vector<std::unique_ptr<Character>>& mylistCharacter = listCharacter;
+std::vector<std::shared_ptr<Character>>& Team::getListCharacter (){
+  std::vector<std::shared_ptr<Character>>& mylistCharacter = listCharacter;
   return mylistCharacter;
 }
 
 void Team::addItem(Item & newItem){
-  std::unique_ptr<Item> ptr_newItem (new Item(newItem));
-  listItems.push_back(move(ptr_newItem));
+  std::shared_ptr<Item> ptr_newItem (new Item(newItem));
+  listItems.push_back(ptr_newItem);
 }

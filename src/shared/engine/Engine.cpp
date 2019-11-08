@@ -14,8 +14,8 @@ state::Turn& Engine::getTurn (){
 	return myturn;
 }
 
-void Engine::addCommand (std::unique_ptr<Command> ptr_command){
-	commands.push_back(move(ptr_command));
+void Engine::addCommand (std::shared_ptr<Command> ptr_command){
+	commands.push_back(ptr_command);
 
 }
 bool Engine::turnCheckOut(){
@@ -40,7 +40,7 @@ bool Engine::turnCheckOut(){
 	if(isTurnFinished){
 		for(size_t i=0; i<commands.size();i++){
 			commands[i]->action(turn);
-			
+
 			sf::Time t1 = sf::seconds(0.2f);
 			sf::sleep(t1);
 		}

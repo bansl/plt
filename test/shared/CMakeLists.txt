@@ -16,4 +16,5 @@ add_custom_test(shared_job)
 add_custom_test(shared_tile)
 add_custom_test(shared_item)
 add_custom_test(shared_engine)
+add_custom_test(shared_drawobject)
 # vim: set sw=2 sts=2 et:

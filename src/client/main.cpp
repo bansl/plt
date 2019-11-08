@@ -402,39 +402,35 @@ int main(int argc,char* argv[])
                           fireStrike.setMpCost(5);
                           testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->addSkill(fireStrike);
 
-                          // std::vector<state::Character> testTargetList;
-                          // testTargetList.push_back(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                          // std::vector<state::Character> & addrtestTargetList= testTargetList;
+                            cout << "[COMMAND]character red at 3,1 attempts to USE "<<testEngine.getTurn().getTeams()[1]->getListCharacter()[0]->getSkillList()[0]->skillName<<" SKILL, SHOULD FAILED" << endl;
+                            UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
+                            if(testUseSkill.validate(testEngine.getTurn())){
+                              std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
+                              testEngine.addCommand(move(ptr_testUseSkill));
+                              cout << "->[SUCCESS]skilluse instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no skilluse instruction added" << endl;
 
-                            // cout << "[COMMAND]character red at 3,1 attempts to USE FIRE STRIKE SKILL, SHOULD FAILED" << endl;
-                            // UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],addrtestTargetList,0);
-                            // if(testUseSkill.validate(testEngine.getTurn())){
-                            //   std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
-                            //   testEngine.addCommand(move(ptr_testUseSkill));
-                            //   cout << "->[SUCCESS]skilluse instruction added " << endl;
-                            // }
-                            // else cout << "->[FAILED]no skilluse instruction added" << endl;
-                            //
-                            // cout << "[COMMAND]character red at 3,5 attempts to USE FIRE STRIKE SKILL, SHOULD SUCCESS" << endl;
-                            // UseSkill testUseSkill2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],addrtestTargetList,0);
-                            // if(testUseSkill2.validate(testEngine.getTurn())){
-                            //   std::unique_ptr<UseSkill> ptr_testUseSkill2 (new UseSkill(testUseSkill2));
-                            //   testEngine.addCommand(move(ptr_testUseSkill2));
-                            //   cout << "->[SUCCESS]skilluse instruction added " << endl;
-                            // }
-                            // else cout << "->[FAILED]no skilluse instruction added" << endl;
-                            //
-                            //
-                            // cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
-                            // EndTurn endturntest3(1);
-                            // if(endturntest3.validate(testEngine.getTurn())){
-                            //     unique_ptr<Command> ptr_endturntest3 (new EndTurn (endturntest3));
-                            //     testEngine.addCommand(move(ptr_endturntest3));
-                            //     cout << "->[SUCCESS]endturn instruction added " << endl;
-                            // }
-                            // else cout << "->[FAILED]no endturn instruction added" << endl;
+                            cout << "[COMMAND]character red at 3,5 attempts to USE "<<testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->getSkillList()[0]->skillName<<" SKILL, SHOULD SUCCESS" << endl;
+                            UseSkill testUseSkill2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
+                            if(testUseSkill2.validate(testEngine.getTurn())){
+                              std::unique_ptr<UseSkill> ptr_testUseSkill2 (new UseSkill(testUseSkill2));
+                              testEngine.addCommand(move(ptr_testUseSkill2));
+                              cout << "->[SUCCESS]skilluse instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no skilluse instruction added" << endl;
+
+
+                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                            EndTurn endturntest3(1);
+                            if(endturntest3.validate(testEngine.getTurn())){
+                                unique_ptr<Command> ptr_endturntest3 (new EndTurn (endturntest3));
+                                testEngine.addCommand(move(ptr_endturntest3));
+                                cout << "->[SUCCESS]endturn instruction added " << endl;
+                            }
+                            else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
-                        
+
                         testEngine.turnCheckOut();
                         testEngine.updateDisplay(window);
                         layer.display(window,k);
