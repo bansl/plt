@@ -187,7 +187,7 @@ int main(int argc,char* argv[])
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
-    
+
             testTurn.initTeams();
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
@@ -290,7 +290,7 @@ int main(int argc,char* argv[])
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
                         Epressed+=1;
                         if (Epressed==1) cout << "====TURN 1: ====" << endl;
-                        
+
                         testEngine.turnCheckIn();
 
                         if (Epressed==1){
@@ -316,7 +316,7 @@ int main(int argc,char* argv[])
                             }
                             else cout << "->[FAILED]no attack instruction added" << endl;
 
-                            
+
 
                             cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
                             Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
@@ -326,8 +326,8 @@ int main(int argc,char* argv[])
                                 cout << "->[SUCCESS]attack instruction added " << endl;
                             }
                             else cout << "->[FAILED]no attack instruction added" << endl;
-                            
-                            
+
+
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
                             Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
@@ -360,7 +360,7 @@ int main(int argc,char* argv[])
                             else cout << "->[FAILED]no defend instruction added" << endl;
 
                         }
-                        
+
                         if(Epressed==4){
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;

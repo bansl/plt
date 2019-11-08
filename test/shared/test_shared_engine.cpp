@@ -9,7 +9,7 @@ using namespace render;
 
 BOOST_AUTO_TEST_CASE(TestEngine)
 {
-  for(int i=0;i<20;i++){
+  for(int i=0;i<5;i++){
   Turn testTurn{};
   testTurn.initMap(10,10,"g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1");
   testTurn.initTeams();
@@ -41,6 +41,9 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testEngine.getTurn().registerObserver(ptr_layer);
   sf::RenderWindow window;
   layer.initRender(testEngine.getTurn());
+  sf::Font font;
+  font.loadFromFile("res/COURG___.TTF");
+  window.display();
 
   Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
   if(testDefend.validate(testEngine.getTurn())){
@@ -101,13 +104,16 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     //     testEngine.addCommand(move(ptr_movetest));
     // }
     // BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Used);
-    if(i!=19){
+    if(i!=4){
       Defend testDefend2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[4]);
       if(testDefend2.validate(testEngine.getTurn())){
         std::unique_ptr<Defend> ptr_defend2 (new Defend(testDefend2));
         testEngine.addCommand(move(ptr_defend2));
       }
       BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Defending);
+    }
+    if(i==4){
+      testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->setCurrentHP(-100);
     }
 
     layer.initRender();
@@ -131,9 +137,7 @@ BOOST_AUTO_TEST_CASE(TestEngine)
 
     testEngine.turnCheckOut(window);
     BOOST_CHECK(testEngine.isTurnFinished);
-    if(i!=19){
-      testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
-    }
+    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
 
     testEngine.turnCheckIn();
     window.close();
