@@ -186,7 +186,7 @@ int main(int argc,char* argv[])
             testTurn.initMap(8,8,"g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1"); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,2);
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
 
             testTurn.initTeams();
             testTurn.getTeams()[1]->addCharacter();
