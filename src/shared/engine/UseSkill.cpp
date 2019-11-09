@@ -25,16 +25,36 @@ UseSkill::UseSkill(state::Character& usedCharacter,state::Character& targetChara
 
 bool UseSkill::validate(state::Turn& turn){
   if(character.getStatus()==Available){
+    cout<<"Character is availible"<<endl;
     if((int)character.getSkillList().size()>skillNumber){
+      cout<<"Character has a skill"<<endl;
       if(character.getCurrentMP()>=character.getSkillList()[skillNumber]->getMpCost()){
+        cout<<"Charachter go enough mp to pay mp cost"<<endl;
         if(character.getPosition().distanceBetween(character.getPosition(),targetList.getPosition())<=character.getSkillList()[skillNumber]->getRange()){
+          cout<<"Target character in range of skill"<<endl;
           if(remaining==0){
-            character.setStatus(Used);
+            cout<<"Set character status to Attacking"<<endl;
+            character.setStatus(Attacking);
+            return true;
           }
-          return true;
+          else{
+            return true;
+          }
+        }
+        else{
+          return false;
         }
       }
+      else {
+        return false;
+      }
     }
+    else{
+      return false;
+    }
+  }
+  else{
+    return false;
   }
   return false;
 }

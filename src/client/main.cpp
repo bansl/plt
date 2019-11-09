@@ -142,7 +142,7 @@ int main(int argc,char* argv[])
                         // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-                        Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1],testTurn.getCharacterHeight(0,0));
+                        Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
                         testattack.action(testTurn);
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::M)){
@@ -262,7 +262,7 @@ int main(int argc,char* argv[])
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
 
-                
+
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
                     }
@@ -309,7 +309,7 @@ int main(int argc,char* argv[])
 
                         if (Epressed==2){
                             cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
-                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(0,0));
+                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
                             if(attacktest.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
                                 testEngine.addCommand(move(ptr_attacktest));
@@ -320,7 +320,7 @@ int main(int argc,char* argv[])
 
 
                             cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
-                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,0));
+                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                             if(attacktest2.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest2 (new Attack (attacktest2));
                                 testEngine.addCommand(move(ptr_attacktest2));
@@ -331,7 +331,7 @@ int main(int argc,char* argv[])
 
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
-                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,2));
+                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                             if(attacktest3.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest3 (new Attack (attacktest3));
                                 testEngine.addCommand(move(ptr_attacktest3));
@@ -365,7 +365,7 @@ int main(int argc,char* argv[])
                         if(Epressed==4){
 
                             cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
-                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(1,2));
+                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                             if(attacktest4.validate(testEngine.getTurn())){
                                 unique_ptr<Command> ptr_attacktest4 (new Attack (attacktest4));
                                 testEngine.addCommand(move(ptr_attacktest4));
@@ -431,7 +431,7 @@ int main(int argc,char* argv[])
                             else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
 
-                        
+
                         testEngine.updateDisplay(window);
                         testEngine.turnCheckOut();
 

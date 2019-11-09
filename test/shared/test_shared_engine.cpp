@@ -60,14 +60,16 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   fireStrike.skillName="fire strike";
   fireStrike.setEffect(10,0);
   fireStrike.setMpCost(5);
+  fireStrike.setRange(10);
   testEngine.getTurn().getTeams()[0]->getListCharacter()[2]->addSkill(fireStrike);
+  testEngine.getTurn().getTeams()[0]->getListCharacter()[2]->getSkillList()[0]->setRange(10);
 
   UseSkill testUseSkill(*testEngine.getTurn().getTeams()[0]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
-//  if(testUseSkill.validate(testEngine.getTurn())){
-//    std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
-  //  testEngine.addCommand(move(ptr_testUseSkill));
-//  }
-//  BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[2]->getStatus(),Used);
+ if(testUseSkill.validate(testEngine.getTurn())){
+   std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
+   testEngine.addCommand(move(ptr_testUseSkill));
+ }
+ BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[2]->getStatus(),Attacking);
 
 
   Item testItem("TestHeal",10,0,3) ;
