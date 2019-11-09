@@ -242,14 +242,14 @@ int main(int argc,char* argv[])
                         window.setView(view2);
                         window.draw(message);
                         window.display();
-                        sf::Time t1 = sf::seconds(0.1f);
+                        sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
                     }
                     if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         window.clear();
                         window.setView(view1);
                         resume=true;
-                        sf::Time t1 = sf::seconds(0.1f);
+                        sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
                     }
                 }
@@ -262,7 +262,7 @@ int main(int argc,char* argv[])
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
 
-
+                
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
                     }
@@ -431,14 +431,16 @@ int main(int argc,char* argv[])
                             else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
 
-                        testEngine.turnCheckOut();
+                        
                         testEngine.updateDisplay(window);
+                        testEngine.turnCheckOut();
                         layer.display(window,k);
                         int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
                         int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
                         cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
                         sf::Time t1 = sf::seconds(0.1f);
                         sf::sleep(t1);
+                        cout << "Press E to play next turn" <<  endl;
                     }
 
                 }

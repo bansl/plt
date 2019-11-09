@@ -200,6 +200,12 @@ std::vector<std::vector<std::shared_ptr<render::DrawObject>>>& TurnDisplay::getD
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window){
 	initRender(turn);
+        sf::Time t_anim = sf::seconds(1.0f);
+        for (size_t k = 0; k < 6; k++)
+        {
+                display(window,k);
+                sf::sleep(t_anim);
+        }
         // cout << "====redraw" << endl;
 }
 

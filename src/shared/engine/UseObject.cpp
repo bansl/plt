@@ -13,6 +13,7 @@ bool UseObject::action(state::Turn& turn){
   turn.getTeams()[teamNumber]->getItems()[object]->modifyQuantity(-1);
   character.setCurrentHP(turn.getTeams()[teamNumber]->getItems()[object]->getConsumable().getHealth());
   character.setCurrentMP(turn.getTeams()[teamNumber]->getItems()[object]->getConsumable().getMana());
+  usedCharacter.setStatus(Used);
   return true;
 }
 
@@ -20,7 +21,7 @@ bool UseObject::action(state::Turn& turn){
 bool UseObject::validate(state::Turn& turn){
   if(usedCharacter.getStatus()==Available){
     if(turn.getTeams()[teamNumber]->getItems()[object]->getQuantity()>0){
-      usedCharacter.setStatus(Used);
+      usedCharacter.setStatus(UsingObj);
       return true;
     }
   }

@@ -178,6 +178,11 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         float tileheight= (float) (turn.getMap()[turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX()][turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY()].getHeight());
         tileheight +=-1;
         int tv=0; //idle anim
+        StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
+        if(status==Attacking) tv=6;
+        if(status==UsingObj) tv=5;
+        if(status==Moving) tv=3;
+
                                 // xpos=(j-i)*(tileDims[0]/2);
                                 // ypos=(j+i-tileheight)*(tileDims[1]/4);
         float isoPosX=(charPosY-charPosX+1.f)/2.011;
@@ -198,7 +203,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
 
         if(turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus()!=Available) shaders=1;
-        else shaders =0;
+        else shaders=0;
 	return true;
 }
 
