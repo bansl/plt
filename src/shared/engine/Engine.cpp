@@ -14,8 +14,8 @@ state::Turn& Engine::getTurn (){
 	return myturn;
 }
 
-void Engine::addCommand (std::shared_ptr<Command> ptr_command){
-	commands.push_back(ptr_command);
+void Engine::addCommand (std::unique_ptr<Command> ptr_command){
+	commands.push_back(move(ptr_command));
 
 }
 bool Engine::turnCheckOut(){
@@ -23,8 +23,8 @@ bool Engine::turnCheckOut(){
 	if(isGameFinished){
 		cout << "GAME OVER" << endl;
 	}
-	
-	if(isTurnFinished){	
+
+	if(isTurnFinished){
 		turn.nextTurn();
 		cout << "TURN END" << endl << endl;
 	}
@@ -58,7 +58,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		}
 	while (!commands.empty()){
 			commands.pop_back();
-		}	
+		}
 	}
 }
 

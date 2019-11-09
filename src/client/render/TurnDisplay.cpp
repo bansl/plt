@@ -9,12 +9,12 @@ using namespace render;
 
 TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
         TileSet tilesetMap(Maptile);
-        std::shared_ptr<TileSet> ptr_tilesetMap (new TileSet(tilesetMap));
-        tilesets.push_back(ptr_tilesetMap);
+        std::unique_ptr<TileSet> ptr_tilesetMap (new TileSet(tilesetMap));
+        tilesets.push_back(move(ptr_tilesetMap));
 
         TileSet tilesetPersonnages(CharaSpritesheet);
-	std::shared_ptr<TileSet> ptr_tilesetPersonnages (new TileSet(tilesetPersonnages));
-	tilesets.push_back(ptr_tilesetPersonnages);
+	std::unique_ptr<TileSet> ptr_tilesetPersonnages (new TileSet(tilesetPersonnages));
+	tilesets.push_back(move(ptr_tilesetPersonnages));
 }
 
 void TurnDisplay::initRender(){
@@ -34,15 +34,15 @@ void TurnDisplay::initRender(){
         for (size_t i = 0; i < turnDisplay.getTeams().size(); i++){
                 for (int k=0; k< (int) turnDisplay.getTeams()[i]->getListCharacter().size(); k++) {
                         vector<int> coord;
-                        coord.push_back(turnDisplay.getTeams()[i]->getListCharacter()[k]->getPosition().getX());
-                        coord.push_back(turnDisplay.getTeams()[i]->getListCharacter()[k]->getPosition().getY());
+                        coord.push_back(move(turnDisplay.getTeams()[i]->getListCharacter()[k]->getPosition().getX()));
+                        coord.push_back(move(turnDisplay.getTeams()[i]->getListCharacter()[k]->getPosition().getY()));
                         int temp=0;
                         for (int q=0; q<turnDisplay.rotation; q++){
                                 temp=coord[0];
                                 coord[0]=turnDisplay.getMap().size()-coord[1]-1;
                                 coord[1]=temp;
                         }
-                        map_segmentation.push_back(coord);
+                        map_segmentation.push_back(move(coord));
                 }
         }
         vector<int> lastcoord;
@@ -68,16 +68,16 @@ void TurnDisplay::initRender(){
                                                                         {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
                                                                         tilesets[0]->getMargin(),k,
                                                                         segStart,segEnd)){
-                                std::shared_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
-                                drawmaps.push_back(ptr_drawMapWallsbis);
+                                std::unique_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
+                                drawmaps.push_back(move(ptr_drawMapWallsbis));
                                 DrawObject DrawMap;
                                 if(DrawMap.renderMapBase(rotateMapVector,*tilesets[0], {(int)turnDisplay.getMap().size(),
                                                                                 (int) turnDisplay.getMap()[0].size()},
                                                                                 {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
                                                                                 tilesets[0]->getMargin(),k,
                                                                                 segStart,segEnd)){
-                                        std::shared_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
-                                        drawmaps.push_back(ptr_drawMap);
+                                        std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
+                                        drawmaps.push_back(move(ptr_drawMap));
                                 }
                         }
                 }
@@ -85,17 +85,17 @@ void TurnDisplay::initRender(){
         for (size_t player = 0; player < turnDisplay.getTeams().size(); player++){
                 for (int k=0; k< (int) turnDisplay.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
-                        std::vector<std::shared_ptr<render::DrawObject>> charframe;
+                        std::vector<std::unique_ptr<render::DrawObject>> charframe;
                         for (size_t spriteAnimNumber = 0; spriteAnimNumber < 6; spriteAnimNumber++)
                         {
                                 DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(),
                                                                                 turnDisplay.getMap()[0].size(),
                                                                                 tilesets[1]->getXsize(), tilesets[1]->getYsize(),
                                                                                 tilesets[1]->getMargin(),spriteAnimNumber,k,player);
-                                std::shared_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
-                                charframe.push_back(ptr_drawChar);
+                                std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
+                                charframe.push_back(move(ptr_drawChar));
                         }
-                        drawchars.push_back(charframe);
+                        drawchars.push_back(move(charframe));
                 }
         }
 }
@@ -117,21 +117,21 @@ void TurnDisplay::initRender(state::Turn& turn){
         for (size_t i = 0; i < turn.getTeams().size(); i++){
                 for (int k=0; k< (int) turn.getTeams()[i]->getListCharacter().size(); k++) {
                         vector<int> coord;
-                        coord.push_back(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getX());
-                        coord.push_back(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getY());
+                        coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getX()));
+                        coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getY()));
                         int temp=0;
                         for (int q=0; q<turn.rotation; q++){
                                 temp=coord[0];
                                 coord[0]=turn.getMap().size()-coord[1]-1;
                                 coord[1]=temp;
                         }
-                        map_segmentation.push_back(coord);
+                        map_segmentation.push_back(move(coord));
                 }
         }
         vector<int> lastcoord;
-        lastcoord.push_back(turn.getMap().size());
-        lastcoord.push_back(turn.getMap()[0].size());
-        map_segmentation.push_back(lastcoord);
+        lastcoord.push_back(move(turn.getMap().size()));
+        lastcoord.push_back(move(turn.getMap()[0].size()));
+        map_segmentation.push_back(move(lastcoord));
 
         sort(map_segmentation.begin(),map_segmentation.end());
         // for (int k=0; k< (int) map_segmentation.size(); k++) {
@@ -151,16 +151,16 @@ void TurnDisplay::initRender(state::Turn& turn){
                                                                         {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
                                                                         tilesets[0]->getMargin(),k,
                                                                         segStart,segEnd)){
-                                std::shared_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
-                                drawmaps.push_back(ptr_drawMapWallsbis);
+                                std::unique_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
+                                drawmaps.push_back(move(ptr_drawMapWallsbis));
                                 DrawObject DrawMap;
                                 if(DrawMap.renderMapBase(rotateMapVector,*tilesets[0], {(int)turn.getMap().size(),
                                                                                 (int) turn.getMap()[0].size()},
                                                                                 {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
                                                                                 tilesets[0]->getMargin(),k,
                                                                                 segStart,segEnd)){
-                                        std::shared_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
-                                        drawmaps.push_back(ptr_drawMap);
+                                        std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
+                                        drawmaps.push_back(move(ptr_drawMap));
                                 }
                         }
                 }
@@ -168,33 +168,33 @@ void TurnDisplay::initRender(state::Turn& turn){
         for (size_t player = 0; player < turn.getTeams().size(); player++){
                 for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
-                        std::vector<std::shared_ptr<render::DrawObject>> charframe;
+                        std::vector<std::unique_ptr<render::DrawObject>> charframe;
                         for (size_t spriteAnimNumber = 0; spriteAnimNumber < 6; spriteAnimNumber++)
                         {
                                 DrawChar.renderCharacter(turn,*tilesets[1], turn.getMap().size(),
                                                                                 turn.getMap()[0].size(),
                                                                                 tilesets[1]->getXsize(), tilesets[1]->getYsize(),
                                                                                 tilesets[1]->getMargin(),spriteAnimNumber,k,player);
-                                std::shared_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
-                                charframe.push_back(ptr_drawChar);
+                                std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
+                                charframe.push_back(move(ptr_drawChar));
                         }
-                        drawchars.push_back(charframe);
+                        drawchars.push_back(move(charframe));
                 }
         }
 }
 
-std::vector<std::shared_ptr<render::TileSet>>& TurnDisplay::getTilesets (){
-        std::vector<std::shared_ptr<TileSet>>& mytilesets = tilesets;
+std::vector<std::unique_ptr<render::TileSet>>& TurnDisplay::getTilesets (){
+        std::vector<std::unique_ptr<TileSet>>& mytilesets = tilesets;
         return mytilesets;
 }
 
-std::vector<std::shared_ptr<render::DrawObject>>& TurnDisplay::getDrawmaps (){
-        std::vector<std::shared_ptr<DrawObject>>& mydrawobjects = drawmaps;
+std::vector<std::unique_ptr<render::DrawObject>>& TurnDisplay::getDrawmaps (){
+        std::vector<std::unique_ptr<DrawObject>>& mydrawobjects = drawmaps;
         return mydrawobjects;
 }
 
-std::vector<std::vector<std::shared_ptr<render::DrawObject>>>& TurnDisplay::getDrawchars (){
-        std::vector<std::vector<std::shared_ptr<DrawObject>>>& mydrawobjects = drawchars;
+std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getDrawchars (){
+        std::vector<std::vector<std::unique_ptr<DrawObject>>>& mydrawobjects = drawchars;
         return mydrawobjects;
 }
 
