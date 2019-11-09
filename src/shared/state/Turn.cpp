@@ -109,3 +109,7 @@ void Turn::initMap (int row, int column,std::string seed){
 int Turn::getCharacterHeight(int numberTeam, int numberCharacter){
   return map[getTeams()[numberTeam]->getListCharacter()[numberCharacter]->getPosition().getX()][getTeams()[numberTeam]->getListCharacter()[numberCharacter]->getPosition().getY()].getHeight();
 }
+
+void Turn::skipTurn(){
+  isTurnSkipped=!isTurnSkipped;
+}

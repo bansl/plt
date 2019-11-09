@@ -35,26 +35,29 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 
 	isTurnFinished=true;
 	isGameFinished=true;
+	StatusList status;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
 	{
+		status=turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus();
 		if(turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getCurrentHP()<=0){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Dead);
 		}
-		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() == Available){
+		if (status== Available){
 			isTurnFinished=false;
 		}
-		if (turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus() != Dead){
+		if (status != Dead){
 			isGameFinished=false;
 		}
+
 	}
 
 	if(isTurnFinished){
 		for(size_t i=0; i<commands.size();i++){
 			commands[i]->action(turn);
-			sf::Time t1 = sf::seconds(0.01f);
-			sf::sleep(t1);
+			
 			turn.notifyObservers(turn, window);
-			sf::sleep(t1);
+			commands[i]->finish(turn);
+			turn.notifyObservers(turn, window);
 		}
 	while (!commands.empty()){
 			commands.pop_back();

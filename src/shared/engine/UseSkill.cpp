@@ -38,3 +38,8 @@ bool UseSkill::validate(state::Turn& turn){
   }
   return false;
 }
+
+bool UseSkill::finish(state::Turn& turn){
+  character.setStatus(Used);
+  return true;
+}

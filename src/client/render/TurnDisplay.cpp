@@ -200,13 +200,14 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window){
 	initRender(turn);
-        sf::Time t_anim = sf::seconds(1.0f);
+        sf::Time t_anim = sf::seconds(0.2f);
         for (size_t k = 0; k < 6; k++)
         {
                 display(window,k);
                 sf::sleep(t_anim);
         }
-        // cout << "====redraw" << endl;
+
+        cout << "====redraw" << endl;
 }
 
 void TurnDisplay::display (sf::RenderWindow& window, int frame){

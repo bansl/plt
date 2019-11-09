@@ -27,3 +27,8 @@ bool UseObject::validate(state::Turn& turn){
   }
   return false;
 }
+
+bool UseObject::finish(state::Turn& turn){
+  usedCharacter.setStatus(Used);
+  return true;
+}

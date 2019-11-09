@@ -100,7 +100,11 @@ bool Move::action(state::Turn& turn){
     // }
     
     character.getPosition().setPos(newPosition.getX(),newPosition.getY());
-    // character.setStatus(Used);
+    return true;
+}
+
+bool Move::finish(state::Turn& turn){
+    character.setStatus(Used);
     return true;
 }
 

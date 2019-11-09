@@ -19,3 +19,7 @@ bool Defend::validate(state::Turn& turn){
 Defend::Defend(state::Character& targetCharacter):character(targetCharacter){
   commandType=Defendcmd;
 }
+
+bool Defend::finish(state::Turn& turn){
+  return true;
+}

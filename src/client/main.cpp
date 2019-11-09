@@ -293,7 +293,7 @@ int main(int argc,char* argv[])
 
                         testEngine.turnCheckIn();
                         testEngine.updateDisplay(window);
-                        layer.display(window,k);
+
                         if (Epressed==1){
                             Position dest;
                             dest.setPos(2,5);
@@ -434,7 +434,7 @@ int main(int argc,char* argv[])
                         
                         testEngine.updateDisplay(window);
                         testEngine.turnCheckOut();
-                        layer.display(window,k);
+
                         int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
                         int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
                         cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
