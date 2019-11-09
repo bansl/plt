@@ -52,7 +52,7 @@ bool Attack::action(state::Turn& turn){
   if(attacker.getAttackPower()>target.getDefense()){
     target.setCurrentHP(-attacker.getAttackPower()+target.getDefense());
   }
-  attacker.setStatus(Used);
+  attacker.setStatus(Attacking);
   return true;
 }
 
