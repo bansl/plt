@@ -51,8 +51,14 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 
 	}
 
+	if(turn.getIsSkipped()){
+		isTurnFinished=true;
+		turn.skipTurn();
+	}
 	if(isTurnFinished){
+		cout << "cmd size: " << commands.size() << endl;
 		for(size_t i=0; i<commands.size();i++){
+			
 			commands[i]->action(turn);
 			
 			turn.notifyObservers(turn, window);

@@ -293,7 +293,7 @@ int main(int argc,char* argv[])
 
                         testEngine.turnCheckIn();
                         testEngine.updateDisplay(window);
-
+                        
                         if (Epressed==1){
                             Position dest;
                             dest.setPos(2,5);

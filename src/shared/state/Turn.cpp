@@ -113,3 +113,7 @@ int Turn::getCharacterHeight(int numberTeam, int numberCharacter){
 void Turn::skipTurn(){
   isTurnSkipped=!isTurnSkipped;
 }
+
+bool Turn::getIsSkipped(){
+  return isTurnSkipped;
+}
