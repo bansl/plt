@@ -183,7 +183,7 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(8,8,"g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1g1"); //squares only
+            testTurn.initMap(8,8,"g1d2g2g1g1g1g3g1g1g1d3g1g1g2g2g1g1s1s1s2s2g1d1g1g2g1g1g1g1g1g2g2g1g1p1g1w1g2g3g2g2g3g1g1w1g3g1g1g1w1w1w1g1s1g1g1p1g1g1g1r1g1g1g1"); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
