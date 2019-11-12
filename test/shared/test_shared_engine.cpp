@@ -36,9 +36,10 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   //
   // TurnDisplay layer(testEngine.getTurn());
   // TurnDisplay* ptr_layer=&layer;
-  // testEngine.getTurn().registerObserver(ptr_layer);
   sf::RenderWindow window;
-  //layer.initRender(testEngine.getTurn());
+  // testEngine.getTurn().registerObserver(ptr_layer);
+
+  // layer.initRender(testEngine.getTurn(),fullRender);
   window.display();
 
   Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
@@ -109,9 +110,9 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     if(i==4){
       testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->setCurrentHP(-100);
     }
-
-    //layer.initRender();
-    //layer.display(window,0);
+    //
+    // layer.initRender();
+    // layer.display(window,0);
 
     EndTurn endturnTest(0);
     if(endturnTest.validate(testEngine.getTurn())){
@@ -125,13 +126,13 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     testFailedDefend.validate(testEngine.getTurn());
     UseObject testFailedUseObject(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,1,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
     testFailedUseObject.validate(testEngine.getTurn());
-    // UseSkill testFailedUseSkill(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],2,0);
-    // testFailedUseSkill.validate(testEngine.getTurn());
+    UseSkill testFailedUseSkill(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],2,0);
+    testFailedUseSkill.validate(testEngine.getTurn());
 
 
     testEngine.turnCheckOut();
     BOOST_CHECK(!testEngine.isTurnFinished);
-    // testEngine.getTurn().notifyObservers(testEngine.getTurn(), window);
+    // testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
     testEngine.updateDisplay(window);
     testEngine.turnCheckIn();
     window.close();

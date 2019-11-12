@@ -12,8 +12,15 @@ using namespace state;
 bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, std::vector<int> pos, std::vector<int> posEnd){
 
         if (!texture.loadFromFile(tileset.getImagePath()[0])){
+          std::vector<std::string> imagePath;
+          imagePath.push_back("../../../res/maptile2x129.png");
+          imagePath.push_back("../../../res/char1.png");
+          imagePath.push_back("../../../res/char2.png");
+          tileset.setImagePath(imagePath);
+          if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
-	}
+          }
+	       }
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(mapDims[0] * mapDims[1] * 4);
 
@@ -66,9 +73,16 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
 
 bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims, int margin, int layer, std::vector<int> pos, std::vector<int> posEnd){
 
-        if (!texture.loadFromFile(tileset.getImagePath()[0])){
-            return false;
-	}
+  if (!texture.loadFromFile(tileset.getImagePath()[0])){
+    std::vector<std::string> imagePath;
+    imagePath.push_back("../../../res/maptile2x129.png");
+    imagePath.push_back("../../../res/char1.png");
+    imagePath.push_back("../../../res/char2.png");
+    tileset.setImagePath(imagePath);
+    if (!texture.loadFromFile(tileset.getImagePath()[0])){
+      return false;
+    }
+   }
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(2*mapDims[0] * mapDims[1] * 4);
         int l=0, tileheight,xpos,ypos;
@@ -151,6 +165,16 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
 
         sf::Image image;
+        if (!texture.loadFromFile(tileset.getImagePath()[playerId])){
+          std::vector<std::string> imagePath;
+          imagePath.push_back("../../../res/maptile2x129.png");
+          imagePath.push_back("../../../res/char1.png");
+          imagePath.push_back("../../../res/char2.png");
+          tileset.setImagePath(imagePath);
+          if (!texture.loadFromFile(tileset.getImagePath()[playerId])){
+            return false;
+          }
+         }
         image.loadFromFile(tileset.getImagePath()[playerId]);
         sf::Color color(147, 187, 236);
         image.createMaskFromColor(color);
