@@ -266,6 +266,15 @@ void Character::initHPMP (){
 state::StatusList Character::getStatus(){
     return status;
 }
+
 void Character::setStatus(state::StatusList newstatus){
     status=newstatus;
+}
+
+void Character::setFacing(state::FacingDirection direction){
+    facing=direction;
+}
+
+state::FacingDirection Character::getFacing(){
+    return facing;
 }
