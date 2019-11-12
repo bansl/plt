@@ -66,8 +66,8 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		for(size_t i=0; i<commands.size();i++){
 
 			commands[i]->action(turn);
-
-			turn.notifyObservers(turn, window,charRender);
+			if (commands[i]->commandType==Movecmd) turn.notifyObservers(turn, window,fullRender);
+			else turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);
 			turn.notifyObservers(turn, window,charRender);
 		}
