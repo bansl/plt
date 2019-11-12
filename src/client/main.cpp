@@ -288,6 +288,11 @@ int main(int argc,char* argv[])
 
                     testEngine.turnCheckIn();
                     testEngine.updateDisplay(window);
+                    if(testEngine.turnCheckOut()){
+                        int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
+                        int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
+                        cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
+                    }
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
@@ -430,13 +435,6 @@ int main(int argc,char* argv[])
                             else cout << "->[FAILED]no endturn instruction added" << endl;
                         }
 
-
-                        testEngine.updateDisplay(window);
-                        testEngine.turnCheckOut();
-
-                        int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
-                        int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
-                        cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
                         sf::Time t1 = sf::seconds(0.1f);
                         sf::sleep(t1);
                     }
