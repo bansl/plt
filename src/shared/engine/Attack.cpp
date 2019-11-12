@@ -69,7 +69,7 @@ bool Attack::validate (state::Turn& turn){
         heightModifier=std::max(heightModifier,turn.getMap()[pathToDest[i].getX()][pathToDest[i].getY()].getHeight());
       }
       heightModifier=turn.getMap()[pathToDest[0].getX()][pathToDest[0].getY()].getHeight()-heightModifier;
-      cout<<"Range : "<<heightModifier+4<<endl;
+      // cout<<"Range : "<<heightModifier+4<<endl;
 
       if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())<=4+heightModifier){
         // cout<<"attacker pos:"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;

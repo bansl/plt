@@ -26,7 +26,7 @@ bool Engine::turnCheckOut(){
 
 	if(isTurnFinished){
 		turn.nextTurn();
-		cout << "TURN END" << endl << endl;
+		cout << "TURN END" << endl;
 	}
 	return isTurnFinished;
 }
@@ -55,15 +55,21 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		isTurnFinished=true;
 		turn.skipTurn();
 	}
+	if(isTurnBegin){
+		turn.notifyObservers(turn, window,charRender);
+		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
+		cout << "---Press E key to launch next turn---" << endl;
+		isTurnBegin=false;
+	}
 	if(isTurnFinished){
-		cout << "cmd size: " << commands.size() << endl;
+
 		for(size_t i=0; i<commands.size();i++){
-			
+
 			commands[i]->action(turn);
-			
-			turn.notifyObservers(turn, window);
+
+			turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);
-			turn.notifyObservers(turn, window);
+			turn.notifyObservers(turn, window,charRender);
 		}
 	while (!commands.empty()){
 			commands.pop_back();
@@ -78,9 +84,8 @@ bool Engine::turnCheckIn(){
 		for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Available);
 		}
-		cout << "NEW TURN " << endl;
-		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
 		isTurnFinished=false;
+		isTurnBegin=true;
 		return true;
 	}
 	return false;
@@ -89,5 +94,6 @@ bool Engine::turnCheckIn(){
 Engine::Engine(state::Turn& turn):turn(turn){
 	isGameFinished=false;
 	isTurnFinished=false;
+	isTurnBegin=true;
 	currentPlayerId=0;
 }

@@ -100,70 +100,74 @@ void TurnDisplay::initRender(){
         }
 }
 
-void TurnDisplay::initRender(state::Turn& turn){
+void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
         while (!drawchars.empty()){
         drawchars.pop_back();
         }
-        while (!drawmaps.empty()){
-        drawmaps.pop_back();
-        }
-        std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
-        DrawObject RotMap;
-        for (int i=0; i<turn.rotation; i++){
-                rotateMapVector = RotMap.rotateMap(rotateMapVector,rotateMapVector.size());
-        }
 
-        vector<vector<int>> map_segmentation;
-        for (size_t i = 0; i < turn.getTeams().size(); i++){
-                for (int k=0; k< (int) turn.getTeams()[i]->getListCharacter().size(); k++) {
-                        vector<int> coord;
-                        coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getX()));
-                        coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getY()));
-                        int temp=0;
-                        for (int q=0; q<turn.rotation; q++){
-                                temp=coord[0];
-                                coord[0]=turn.getMap().size()-coord[1]-1;
-                                coord[1]=temp;
-                        }
-                        map_segmentation.push_back(move(coord));
-                }
-        }
-        vector<int> lastcoord;
-        lastcoord.push_back(move(turn.getMap().size()));
-        lastcoord.push_back(move(turn.getMap()[0].size()));
-        map_segmentation.push_back(move(lastcoord));
+        if(rendertype==fullRender){
+          
+          while (!drawmaps.empty()){
+          drawmaps.pop_back();
+          }
+          std::vector<std::vector<state::Tile>> rotateMapVector(turn.getMap());
+          DrawObject RotMap;
+          for (int i=0; i<turn.rotation; i++){
+                  rotateMapVector = RotMap.rotateMap(rotateMapVector,rotateMapVector.size());
+          }
 
-        sort(map_segmentation.begin(),map_segmentation.end());
-        // for (int k=0; k< (int) map_segmentation.size(); k++) {
-        //         cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
-        //         cout <<" y: " << map_segmentation[k][1] << endl;
-        // }
-        vector<int> segStart(2,0),segEnd(2,0);
-        for (int l=0; l< (int) map_segmentation.size(); l++){
-                segStart[0]=segEnd[0],segStart[1]=segEnd[1];
-                segEnd[0]=(map_segmentation[l][0]),segEnd[1]=(map_segmentation[l][1]);
-                // cout << "region begin:"<< segStart[0] <<" | " << segStart[1] << endl;
-                // cout << "region end:"<< segEnd[0] <<" | " << segEnd[1] << endl;
-                for (int k=1; k<4; k++){
-                        DrawObject DrawMap;
-                        if(DrawMap.renderMapWalls(rotateMapVector,*tilesets[0], {(int)turn.getMap().size(),
-                                                                        (int) turn.getMap()[0].size()},
-                                                                        {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
-                                                                        tilesets[0]->getMargin(),k,
-                                                                        segStart,segEnd)){
-                                std::unique_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
-                                drawmaps.push_back(move(ptr_drawMapWallsbis));
-                                DrawObject DrawMap;
-                                if(DrawMap.renderMapBase(rotateMapVector,*tilesets[0], {(int)turn.getMap().size(),
-                                                                                (int) turn.getMap()[0].size()},
-                                                                                {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
-                                                                                tilesets[0]->getMargin(),k,
-                                                                                segStart,segEnd)){
-                                        std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
-                                        drawmaps.push_back(move(ptr_drawMap));
-                                }
-                        }
-                }
+          vector<vector<int>> map_segmentation;
+          for (size_t i = 0; i < turn.getTeams().size(); i++){
+                  for (int k=0; k< (int) turn.getTeams()[i]->getListCharacter().size(); k++) {
+                          vector<int> coord;
+                          coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getX()));
+                          coord.push_back(move(turn.getTeams()[i]->getListCharacter()[k]->getPosition().getY()));
+                          int temp=0;
+                          for (int q=0; q<turn.rotation; q++){
+                                  temp=coord[0];
+                                  coord[0]=turn.getMap().size()-coord[1]-1;
+                                  coord[1]=temp;
+                          }
+                          map_segmentation.push_back(move(coord));
+                  }
+          }
+          vector<int> lastcoord;
+          lastcoord.push_back(move(turn.getMap().size()));
+          lastcoord.push_back(move(turn.getMap()[0].size()));
+          map_segmentation.push_back(move(lastcoord));
+
+          sort(map_segmentation.begin(),map_segmentation.end());
+          // for (int k=0; k< (int) map_segmentation.size(); k++) {
+          //         cout << "map_segmentation "<< k <<" x: " << map_segmentation[k][0] << " | ";
+          //         cout <<" y: " << map_segmentation[k][1] << endl;
+          // }
+          vector<int> segStart(2,0),segEnd(2,0);
+          for (int l=0; l< (int) map_segmentation.size(); l++){
+                  segStart[0]=segEnd[0],segStart[1]=segEnd[1];
+                  segEnd[0]=(map_segmentation[l][0]),segEnd[1]=(map_segmentation[l][1]);
+                  // cout << "region begin:"<< segStart[0] <<" | " << segStart[1] << endl;
+                  // cout << "region end:"<< segEnd[0] <<" | " << segEnd[1] << endl;
+                  for (int k=1; k<4; k++){
+                          DrawObject DrawMap;
+                          if(DrawMap.renderMapWalls(rotateMapVector,*tilesets[0], {(int)turn.getMap().size(),
+                                                                          (int) turn.getMap()[0].size()},
+                                                                          {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
+                                                                          tilesets[0]->getMargin(),k,
+                                                                          segStart,segEnd)){
+                                  std::unique_ptr<DrawObject> ptr_drawMapWallsbis (new DrawObject(DrawMap));
+                                  drawmaps.push_back(move(ptr_drawMapWallsbis));
+                                  DrawObject DrawMap;
+                                  if(DrawMap.renderMapBase(rotateMapVector,*tilesets[0], {(int)turn.getMap().size(),
+                                                                                  (int) turn.getMap()[0].size()},
+                                                                                  {tilesets[0]->getXsize(), tilesets[0]->getYsize()},
+                                                                                  tilesets[0]->getMargin(),k,
+                                                                                  segStart,segEnd)){
+                                          std::unique_ptr<DrawObject> ptr_drawMap (new DrawObject(DrawMap));
+                                          drawmaps.push_back(move(ptr_drawMap));
+                                  }
+                          }
+                  }
+          }
         }
         for (size_t player = 0; player < turn.getTeams().size(); player++){
                 for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
@@ -198,16 +202,14 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
         return mydrawobjects;
 }
 
-void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window){
-	initRender(turn);
+void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype){
+	initRender(turn,rendertype);
         sf::Time t_anim = sf::seconds(0.2f);
         for (size_t k = 0; k < 6; k++)
         {
                 display(window,k);
                 sf::sleep(t_anim);
         }
-
-        cout << "====redraw" << endl;
 }
 
 void TurnDisplay::display (sf::RenderWindow& window, int frame){
