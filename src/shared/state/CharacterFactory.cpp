@@ -11,6 +11,7 @@ state::Character CharacterFactory::createCharacter(){
   newCharacter.getRace().setRace(rrf.getRandomRace());
   newCharacter.initializeSkill();
   newCharacter.setStatus(Available);
+  newCharacter.setFacing(Down);
   newCharacter.initHPMP();
   return newCharacter;
 }

@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testTurn.getTeams()[0]->addCharacter();
   testTurn.getTeams()[0]->getListCharacter()[4]->getPosition().setPos(4,6);
   testTurn.getTeams()[0]->addCharacter();
-  testTurn.getTeams()[0]->getListCharacter()[5]->getPosition().setPos(6,6);
+  testTurn.getTeams()[0]->getListCharacter()[5]->getPosition().setPos(2,4);
 
 
   Engine testEngine(testTurn);
@@ -81,12 +81,12 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   }
  BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[3]->getStatus(),UsingObj);
 
-  //Attack testAttack2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[5],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(0,5));
-  // if(testAttack2.validate(testEngine.getTurn())){
-  //   std::unique_ptr<Attack> ptr_attack2 (new Attack(testAttack2));
-  //   testEngine.addCommand(move(ptr_attack2));
-  // }
-  // BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[5]->getStatus(),Attacking);
+  Attack testAttack2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[5],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+  if(testAttack2.validate(testEngine.getTurn())){
+    std::unique_ptr<Attack> ptr_attack2 (new Attack(testAttack2));
+    testEngine.addCommand(move(ptr_attack2));
+  }
+  BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[5]->getStatus(),Attacking);
 
     // Position dest;
     // dest.setPos(2,6);

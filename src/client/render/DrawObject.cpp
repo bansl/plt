@@ -162,8 +162,9 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(4);
-        
+
         int i=0;
+        int facing=turn.getTeams()[playerId]->getListCharacter()[charNb]->getFacing();
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
@@ -171,6 +172,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;
           tempPosY=temp;
+          facing=(facing+1)%4;
         }
 
         float charPosX= (float) tempPosX;
@@ -179,9 +181,10 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         tileheight +=-1;
         int tv=0; //idle anim
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
-        if(status==Attacking) tv=2;
-        if(status==UsingObj) tv=0;
-        if(status==Moving) tv=1;
+        if(status==Attacking) tv=3*(facing)+2;
+        if(status==UsingObj) tv=3*(facing)+0;
+        if(status==Moving) tv=3*(facing)+1;
+        else tv=3*(facing)+0;
 
                                 // xpos=(j-i)*(tileDims[0]/2);
                                 // ypos=(j+i-tileheight)*(tileDims[1]/4);
@@ -215,14 +218,14 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states) const  {
         sf::Shader shaderobj;
         if (shaders==1){
-                
+
                 shaderobj.loadFromFile("res/transparency.frag", sf::Shader::Fragment) ;
                 shaderobj.setParameter("opacity", 0.6f);
                 shaderobj.setParameter("texture", sf::Shader::CurrentTexture) ;
                 states.blendMode = sf::BlendAlpha ;
                 states.shader = &shaderobj;
         }
-        
+
         states.transform *= getTransform();
         states.texture = &texture;
         target.draw(vertexarray, states);
