@@ -22,10 +22,11 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testTurn.getTeams()[0]->addCharacter();
   testTurn.getTeams()[0]->getListCharacter()[3]->getPosition().setPos(5,5);
   testTurn.getTeams()[0]->addCharacter();
-  testTurn.getTeams()[0]->getListCharacter()[4]->getPosition().setPos(4,6);
+  testTurn.getTeams()[0]->getListCharacter()[4]->getPosition().setPos(4,3);
   testTurn.getTeams()[0]->addCharacter();
   testTurn.getTeams()[0]->getListCharacter()[5]->getPosition().setPos(2,4);
-
+  testTurn.getTeams()[0]->addCharacter();
+  testTurn.getTeams()[0]->getListCharacter()[6]->getPosition().setPos(1,4);
 
   Engine testEngine(testTurn);
   testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
@@ -88,22 +89,22 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   }
   BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[5]->getStatus(),Attacking);
 
-    // Position dest;
-    // dest.setPos(2,6);
-    // Position & addrDest=dest;
-    // Move movetest(*testEngine.getTurn().getTeams()[4]->getListCharacter()[0],addrDest);
-    // if(movetest.validate(testEngine.getTurn())){
-    //     std::unique_ptr<Move> ptr_movetest (new Move(movetest));
-    //     testEngine.addCommand(move(ptr_movetest));
-    // }
-    // BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Moving);
+    Position dest;
+    dest.setPos(3,2);
+    Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[4],dest);
+    if(movetest.validate(testEngine.getTurn())){
+        std::unique_ptr<Move> ptr_movetest (new Move(movetest));
+        testEngine.addCommand(move(ptr_movetest));
+    }
+    BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Moving);
+
     if(i!=4){
-      Defend testDefend2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[4]);
+      Defend testDefend2(*testEngine.getTurn().getTeams()[0]->getListCharacter()[6]);
       if(testDefend2.validate(testEngine.getTurn())){
         std::unique_ptr<Defend> ptr_defend2 (new Defend(testDefend2));
         testEngine.addCommand(move(ptr_defend2));
       }
-      BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getStatus(),Defending);
+      BOOST_CHECK_EQUAL(testEngine.getTurn().getTeams()[0]->getListCharacter()[6]->getStatus(),Defending);
     }
     if(i==4){
       testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->setCurrentHP(-100);
