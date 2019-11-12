@@ -293,7 +293,7 @@ int main(int argc,char* argv[])
 
                         testEngine.turnCheckIn();
                         testEngine.updateDisplay(window);
-                        
+
                         if (Epressed==1){
                             Position dest;
                             dest.setPos(2,5);
@@ -402,7 +402,7 @@ int main(int argc,char* argv[])
                           fireStrike.setMpCost(5);
                           testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->addSkill(fireStrike);
 
-                            cout << "[COMMAND]character red at 3,1 attempts to USE "<<testEngine.getTurn().getTeams()[1]->getListCharacter()[0]->getSkillList()[0]->skillName<<" SKILL, SHOULD FAILED" << endl;
+                            cout << "[COMMAND]character red at 3,1 attempts to USE a SKILL, SHOULD FAILED" << endl;
                             UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
                             if(testUseSkill.validate(testEngine.getTurn())){
                               std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
