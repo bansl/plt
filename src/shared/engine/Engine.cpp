@@ -22,12 +22,10 @@ bool Engine::turnCheckOut(){
 
 	if(isGameFinished){
 		cout << "GAME OVER" << endl;
+		return false;
 	}
-
-	if(isTurnFinished){
-		turn.nextTurn();
-	}
-	return isTurnFinished;
+	turn.nextTurn();
+	return true;
 }
 
 void Engine::updateDisplay (sf::RenderWindow& window){
@@ -80,16 +78,17 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	while (!commands.empty()){
 			commands.pop_back();
 		}
-	isTurnFinished=true;
-	turnCheckOut();
+	
+	
 	int characterblue_hp_indic=getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
     int characterblue_hp_indic_max=getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
     cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
+	if(turnCheckOut()) isTurnFinished=true;
 	}
 }
 
 bool Engine::turnCheckIn(){
-	if (isTurnFinished && !isTurnBegin) {
+	if (isTurnFinished) {
 		isTurnFinished=false;
 		currentPlayerId= (currentPlayerId+1) % turn.getTeams().size();
 
@@ -104,8 +103,8 @@ bool Engine::turnCheckIn(){
 
 Engine::Engine(state::Turn& turn):turn(turn){
 	isGameFinished=false;
-	isTurnFinished=false;
-	isTurnBegin=true;
+	isTurnFinished=true;
+	isTurnBegin=false;
 	currentPlayerId=0;
 }
 

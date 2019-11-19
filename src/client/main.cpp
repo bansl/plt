@@ -562,14 +562,18 @@ int main(int argc,char* argv[])
                         layer.initRender(testEngine.getTurn(),fullRender);
                     }
                 }
-                    testEngine.turnCheckIn();
-                    testEngine.updateDisplay(window);
+                    
 
-                    if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run) && (turn_nb==testEngine.getTurn().getTurn())){    
-                        testAI.runAI();
-                        turn_nb++;
-                        last_time_ai_run=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 1500;
-                    }    
+                    // if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run) && (turn_nb==testEngine.getTurn().getTurn())){    
+                    //     testAI.runAI();
+                    //     turn_nb++;
+                    //     last_time_ai_run=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 1500;
+                    // }  
+                    if(testEngine.turnCheckIn()){
+                         testEngine.updateDisplay(window); 
+                         testAI.runAI(); 
+                    }      
+                    testEngine.updateDisplay(window);  
                     sf::Time t1 = sf::seconds(0.1f);
                     sf::sleep(t1);
                 
