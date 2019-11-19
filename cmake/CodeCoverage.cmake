@@ -140,8 +140,9 @@ endif()
 #     EXECUTABLE testrunner -j ${PROCESSOR_COUNT} # Executable in PROJECT_BINARY_DIR
 #     DEPENDENCIES testrunner                     # Dependencies to build first
 # )
-function(SETUP_TARGET_FOR_COVERAGE_LCOV)
 
+function(SETUP_TARGET_FOR_COVERAGE_LCOV)
+list(APPEND COVERAGE_LCOV_EXCLUDES 'src/client/main.cpp')
     set(options NONE)
     set(oneValueArgs NAME)
     set(multiValueArgs EXECUTABLE EXECUTABLE_ARGS DEPENDENCIES LCOV_ARGS GENHTML_ARGS)
@@ -259,7 +260,7 @@ endfunction() # SETUP_TARGET_FOR_COVERAGE_GCOVR_XML
 #     DEPENDENCIES executable_target         # Dependencies to build first
 # )
 function(SETUP_TARGET_FOR_COVERAGE_GCOVR_HTML)
-
+	
     set(options NONE)
     set(oneValueArgs NAME)
     set(multiValueArgs EXECUTABLE EXECUTABLE_ARGS DEPENDENCIES)
