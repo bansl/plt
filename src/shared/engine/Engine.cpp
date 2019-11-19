@@ -26,15 +26,13 @@ bool Engine::turnCheckOut(){
 
 	if(isTurnFinished){
 		turn.nextTurn();
-		cout << "TURN END" << endl;
 	}
 	return isTurnFinished;
 }
 
 void Engine::updateDisplay (sf::RenderWindow& window){
-
-	isTurnFinished=true;
 	isGameFinished=true;
+	bool updateisTurnFinished=true;
 	StatusList status;
 	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
 	{
@@ -43,7 +41,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Dead);
 		}
 		if (status== Available){
-			isTurnFinished=false;
+			updateisTurnFinished=false;
 		}
 		if (status != Dead){
 			isGameFinished=false;
@@ -52,30 +50,28 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	}
 
 	if(turn.getIsSkipped()){
-		isTurnFinished=true;
+		updateisTurnFinished=true;
 		turn.skipTurn();
 	}
 	if(isTurnBegin){
 		turn.notifyObservers(turn, window,charRender);
 		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
-		cout << "---Press E key to launch next turn---" << endl;
 		isTurnBegin=false;
 	}
-	if(isTurnFinished){
-
+	if(updateisTurnFinished){
+		
 		for(size_t i=0; i<commands.size();i++){
 
 			commands[i]->action(turn);
 			if (commands[i]->commandType==Movecmd){
-				//std::unique_ptr<Movement> pM=dynamic_cast<std::unique_ptr<Movement>>(commands[i]);
-				//std::unique_ptr<Movement> pM(new commands[i]);
-				// std::unique_ptr<engine::Command> pC(new command[i]);
-				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
-				for(size_t j=0;j<pM->getPathToDest().size();j++){
-					pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
-					turn.notifyObservers(turn, window,fullRender);
-			 	}
-				commands[i]->action(turn);
+				
+				// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+				// for(size_t j=0;j<pM->getPathToDest().size();j++){
+				// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
+				// 	turn.notifyObservers(turn, window,fullRender);
+			 	// }
+				// commands[i]->action(turn);
+				turn.notifyObservers(turn, window,fullRender);
 			}
 			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);
@@ -84,17 +80,22 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	while (!commands.empty()){
 			commands.pop_back();
 		}
+	isTurnFinished=true;
+	turnCheckOut();
+	int characterblue_hp_indic=getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
+    int characterblue_hp_indic_max=getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
+    cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
 	}
 }
 
 bool Engine::turnCheckIn(){
 	if (isTurnFinished) {
+		isTurnFinished=false;
 		currentPlayerId= (currentPlayerId+1) % turn.getTeams().size();
 
 		for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++){
 			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Available);
 		}
-		isTurnFinished=false;
 		isTurnBegin=true;
 		return true;
 	}
@@ -106,4 +107,8 @@ Engine::Engine(state::Turn& turn):turn(turn){
 	isTurnFinished=false;
 	isTurnBegin=true;
 	currentPlayerId=0;
+}
+
+int Engine::getCurrentPlayerID(){
+	return currentPlayerId;
 }

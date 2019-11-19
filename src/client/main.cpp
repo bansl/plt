@@ -3,6 +3,7 @@
 #include <state.h>
 #include "render.h"
 #include "../shared/engine.h"
+#include "../shared/ai.h"
 
 #include <unistd.h>
 #include <chrono>
@@ -11,6 +12,7 @@ using namespace std;
 using namespace state;
 using namespace render;
 using namespace engine;
+using namespace ai;
 using namespace std::chrono;
 
 // Les lignes suivantes ne servent qu'à vérifier que la compilation avec SFML fonctionne
@@ -288,11 +290,6 @@ int main(int argc,char* argv[])
 
                     testEngine.turnCheckIn();
                     testEngine.updateDisplay(window);
-                    if(testEngine.turnCheckOut()){
-                        int characterblue_hp_indic=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
-                        int characterblue_hp_indic_max=testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
-                        cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
-                    }
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
@@ -442,12 +439,147 @@ int main(int argc,char* argv[])
                 }
             }
         }
+
+//=====================================================================================================
+//
+//                                             RANDOM AI TEST
+//
+//=====================================================================================================
+
+        else if(strcmp(argv[1],"random_ai") == 0){
+
+            cout<<"Engine Test"<<endl<<endl;
+            cout<<"Controls:"<<endl;
+            cout << "-Press P key to Pause" << endl;
+            cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
+            cout << "-Press R key to rotate map anti-clockwise " << endl;
+            cout << "-Press T key to rotate map clockwise " << endl<< endl;
+
+            // === Init Turn ===
+            Turn testTurn;
+            testTurn.initMap(8,8); //squares only
+            testTurn.initTeams();
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
+
+            testTurn.initTeams();
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
+            // === Init Engine ===
+            Engine testEngine(testTurn);
+
+            Item testItem("TestHeal",10,0,3) ;
+            testEngine.getTurn().getTeams()[0]->addItem(testItem);
+            // === Init AI ===
+            RandomAI testAI(testEngine);
+            // === Display Turn ===
+            TurnDisplay layer(testTurn);
+
+            TurnDisplay* ptr_layer=&layer;
+			testEngine.getTurn().registerObserver(ptr_layer);
+
+            sf::RenderWindow window(sf::VideoMode(  800,
+                                                    (600)),
+                                                    "Random AI");
+            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            view1.zoom(3.f);
+            window.setView(view1);
+            cout << "Render begin." << endl;
+            layer.initRender();
+            cout << "Render done." << endl;
+
+            sf::Text message;
+            sf::Font font;
+            font.loadFromFile("res/COURG___.TTF");
+            message.setFont(font);
+            message.setColor(sf::Color::White);
+            message.setStyle(sf::Text::Bold);
+            message.setCharacterSize(25);
+            message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
+
+            int k=0;
+            milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+            milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+            last_ms+=(milliseconds) 60;
+            // window.setFramerateLimit(60);
+            bool resume=true, firstturn=true;
+            while (window.isOpen()){
+                sf::Event event;
+                while (window.pollEvent(event)){
+                    if (event.type == sf::Event::Closed){
+                        window.close();
+                    }
+                    if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
+                        resume=false;
+                        window.setView(view2);
+                        window.draw(message);
+                        window.display();
+                        sf::Time t1 = sf::seconds(0.2f);
+                        sf::sleep(t1);
+                    }
+                    if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
+                        window.clear();
+                        window.setView(view1);
+                        resume=true;
+                        sf::Time t1 = sf::seconds(0.2f);
+                        sf::sleep(t1);
+                    }
+                }
+                if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
+
+
+                    layer.display(window,k);
+
+                    k=(k+1)%6;
+                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                        view1.move(40, 40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                        view1.move(-40, -40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                        view1.move(-40, +40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                        view1.move(+40, -40),window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                        // right key is pressed: rotate map
+                        testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
+                        layer.initRender(testEngine.getTurn(),fullRender);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                        // left key is pressed: rotate map to other side
+                        testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
+                        layer.initRender(testEngine.getTurn(),fullRender);
+                    }
+                }
+                    testEngine.turnCheckIn();
+                    testEngine.updateDisplay(window);
+
+                    if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run)){    
+                        testAI.runAI();
+                        last_time_ai_run=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 1500;
+                    }    
+                    sf::Time t1 = sf::seconds(0.1f);
+                    sf::sleep(t1);
+                
+            }
+
+        }
         else{
-            cout << "Type hello to get welcome message." << endl;
+            cout << "Type hello to get welcome message.\nType random_ai to get random AI test." << endl;
         }
     }
     else{
-            cout << "Type hello to get welcome message." << endl;
+            cout << "Type hello to get welcome message.\nType random_ai to get random AI test." << endl;
         }
     return 0;
 }
