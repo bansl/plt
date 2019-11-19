@@ -448,7 +448,7 @@ int main(int argc,char* argv[])
 
         else if(strcmp(argv[1],"random_ai") == 0){
 
-            cout<<"Engine Test"<<endl<<endl;
+            cout<<"Random AI Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
             cout << "-Press P key to Pause" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;

@@ -78,11 +78,22 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	while (!commands.empty()){
 			commands.pop_back();
 		}
-	
-	
-	int characterblue_hp_indic=getTurn().getTeams()[0]->getListCharacter()[0]->getCurrentHP();
-    int characterblue_hp_indic_max=getTurn().getTeams()[0]->getListCharacter()[0]->getMaxHP();
-    cout << "HP of Character Blue: " << characterblue_hp_indic << "/" << characterblue_hp_indic_max << endl;
+	vector<string> teamlabel(2);
+	teamlabel[0]="Blue", teamlabel[1]="Red";
+	cout << "###########################" << endl << "# CURRENT STATUS" << endl;
+	for (size_t k = 0; k < getTurn().getTeams().size(); k++)
+	{	
+		for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
+		{
+			int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
+			int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
+			int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
+			int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
+			cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << endl;
+		}
+		
+	}
+	cout << "###########################" << endl;	
 	if(turnCheckOut()) isTurnFinished=true;
 	}
 }
