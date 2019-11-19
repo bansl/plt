@@ -39,10 +39,11 @@ TurnDisplay* ptr_layer=&layer;
 testEngine.getTurn().registerObserver(ptr_layer);
 
 sf::RenderWindow window;
-
+for(int i=0;i<10;i++){
 if(testEngine.turnCheckIn()){
      testEngine.updateDisplay(window);
      testAI.runAI();
+}
 }
 BOOST_CHECK(testEngine.turnCheckOut());
 }

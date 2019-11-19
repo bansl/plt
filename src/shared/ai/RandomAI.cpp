@@ -10,7 +10,7 @@ using namespace state;
 void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 	size_t k=0;
 	cout << "team playing:" << teamNumber << endl;
-	while(k<engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){  
+	while(k<engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
 		std::random_device dev;
   		std::mt19937 rng(dev());
   		std::uniform_int_distribution<std::mt19937::result_type> distribution(1,6);
@@ -25,7 +25,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 
 		Position dest;
 		dest.setPos(rndPosX,rndPosY);
-		
+
 		// cout << "cmd type:" << rndCommandtype << endl;
 		// cout << "rndPosX:" << rndPosX << endl;
 		// cout << "rndPosY:" << rndPosY << endl;
@@ -34,7 +34,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 
 		switch (rndCommandtype)
 		{
-		case 1: 
+		case 1:
 		{
 			/* ATTACK */
 			// cout << "Attacking" << endl;
@@ -46,9 +46,9 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 				k++;
 			}
 			// else cout << "->[FAILED]no attack instruction added" << endl;
-			break;	
+			break;
 		}
-		case 2: 
+		case 2:
 		{
 			/* MOVE */
 			// cout << "Moving" << endl;
@@ -62,7 +62,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 			// else cout << "->[FAILED]no move instruction added" << endl;
 			break;
 		}
-		case 3: 
+		case 3:
 		{
 			/* DEFEND */
 			// cout << "Defending" << endl;
@@ -76,21 +76,21 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 			// else cout << "->[FAILED]no defend instruction added" << endl;
 			break;
 		}
-		case 4: 
+		case 4:
 		{
-			/* DEFEND */
-			// cout << "Defending" << endl;
-			Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
-			if(deftest.validate(engine.getTurn())){
-				unique_ptr<Command> ptr_deftest (new Defend (deftest));
-				engine.addCommand(move(ptr_deftest));
-				cout << "->[SUCCESS]defend instruction added " << endl;
+			/* USE OBJECT */
+			// cout << "Using an Object" << endl;
+			UseObject testUseObject(*engine.getTurn().getTeams()[rndTeam]->getListCharacter()[rndCharacter],0,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
+			if(testUseObject.validate(engine.getTurn())){
+				std::unique_ptr<UseObject> ptr_testUseObject (new UseObject(testUseObject));
+				engine.addCommand(move(ptr_testUseObject));
+				cout << "->[SUCCESS]objectuse instruction added " << endl;
 				k++;
 			}
-			// else cout << "->[FAILED]no defend instruction added" << endl;
+			// else cout << "->[FAILED]no objectuse instruction added" << endl;
 			break;
 		}
-		case 5: 
+		case 5:
 		{
 			/* USE SKILL */
 			// cout << "Using a Skill" << endl;
@@ -104,7 +104,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 			// else cout << "->[FAILED]no skilluse instruction added" << endl;
 			break;
 		}
-		case 6: 
+		case 6:
 		{
 			/* END TURN */
 			// cout << "Skipping Turn" << endl;
@@ -115,14 +115,14 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 				cout << "->[SUCCESS]endturn instruction added " << endl;
 				k=engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();
 			}
-			// else cout << "->[FAILED]no endturn instruction added" << endl;			
+			// else cout << "->[FAILED]no endturn instruction added" << endl;
 			break;
 		}
 		default:
 			break;
 		}
 	}
-	
+
 }
 
 void RandomAI::runAI(){
@@ -130,5 +130,5 @@ void RandomAI::runAI(){
 }
 
 RandomAI::RandomAI(engine::Engine& engine):engine(engine){
-	
+
 }
