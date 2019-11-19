@@ -66,7 +66,17 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		for(size_t i=0; i<commands.size();i++){
 
 			commands[i]->action(turn);
-			if (commands[i]->commandType==Movecmd) turn.notifyObservers(turn, window,fullRender);
+			if (commands[i]->commandType==Movecmd){
+				//std::unique_ptr<Movement> pM=dynamic_cast<std::unique_ptr<Movement>>(commands[i]);
+				//std::unique_ptr<Movement> pM(new commands[i]);
+				// std::unique_ptr<engine::Command> pC(new command[i]);
+				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+				for(size_t j=0;j<pM->getPathToDest().size();j++){
+					pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
+					turn.notifyObservers(turn, window,fullRender);
+			 	}
+				commands[i]->action(turn);
+			}
 			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);
 			turn.notifyObservers(turn, window,charRender);

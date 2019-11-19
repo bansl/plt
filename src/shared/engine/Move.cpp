@@ -25,7 +25,7 @@ bool Move::validate (state::Turn& turn){
             return false;
             // character.getPosition().setPos(newPosition.getX(),newPosition.getY());
         }
-        
+
         //Find Path
         Position currentPosition(character.getPosition());
         vector<Position> neighbors;
@@ -49,7 +49,7 @@ bool Move::validate (state::Turn& turn){
                       if((pathToDest[q].getX()==currentPosition.getX()) && (pathToDest[q].getY()==currentPosition.getY())) newpos=false;
                   }
                 if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition) && newpos){
-                  
+
                     if(firstpos){
                         pathToDest.push_back(currentPosition);
                         // cout << "--first path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
@@ -71,7 +71,7 @@ bool Move::validate (state::Turn& turn){
                     // cout << "final path: ";
                     // for (size_t i = 0; i < pathToDest.size(); i++)
                     // {
-                        
+
                     //     cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
                     // }
                     // cout << "path found!" << endl;
@@ -80,16 +80,16 @@ bool Move::validate (state::Turn& turn){
                 }
             }
             // cout << "MOVING TO NEXT TILE" << endl;
-        }  
+        }
         // for (size_t i = 0; i < pathToDest.size(); i++)
         //             {
-                        
+
         //                 cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
         //             }
-        // cout << "couldn't find path within 10 moves..." << endl;  
+        // cout << "couldn't find path within 10 moves..." << endl;
         return false;
     }
-    return false; 
+    return false;
 
 }
 
@@ -98,7 +98,7 @@ bool Move::action(state::Turn& turn){
     // {
     //     character.getPosition().setPos(pathToDest[i].getX(),pathToDest[i].getY());
     // }
-    
+
     character.getPosition().setPos(newPosition.getX(),newPosition.getY());
     return true;
 }
@@ -110,4 +110,14 @@ bool Move::finish(state::Turn& turn){
 
 Move::Move (state::Character& targetCharacter, state::Position& destination):character(targetCharacter),newPosition(destination){
     commandType= Movecmd;
+}
+
+state::Character& Move::getCharacter(){
+  Character & addrCharacter = character;
+  return addrCharacter;
+}
+
+std::vector<state::Position>& Move::getPathToDest(){
+  std::vector<state::Position>& addrPath = pathToDest;
+  return addrPath;
 }
