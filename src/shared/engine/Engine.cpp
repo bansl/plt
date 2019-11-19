@@ -54,9 +54,9 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		turn.skipTurn();
 	}
 	if(isTurnBegin){
+		isTurnBegin=false;
 		turn.notifyObservers(turn, window,charRender);
 		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
-		isTurnBegin=false;
 	}
 	if(updateisTurnFinished){
 		
@@ -89,7 +89,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 }
 
 bool Engine::turnCheckIn(){
-	if (isTurnFinished) {
+	if (isTurnFinished && !isTurnBegin) {
 		isTurnFinished=false;
 		currentPlayerId= (currentPlayerId+1) % turn.getTeams().size();
 

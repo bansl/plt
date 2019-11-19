@@ -64,16 +64,16 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 		}
 		case 3: 
 		{
-			/* USE OBJECT */
-			// cout << "Using an object" << endl;
-			UseObject testUseItem(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],0,0,*engine.getTurn().getTeams()[rndTeam]->getListCharacter()[rndCharacter]);
-			if(testUseItem.validate(engine.getTurn())){
-				unique_ptr<Command> ptr_testUseItem (new UseObject (testUseItem));
-				engine.addCommand(move(ptr_testUseItem));
-				cout << "->[SUCCESS]objectuse instruction added " << endl;
+			/* DEFEND */
+			// cout << "Defending" << endl;
+			Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
+			if(deftest.validate(engine.getTurn())){
+				unique_ptr<Command> ptr_deftest (new Defend (deftest));
+				engine.addCommand(move(ptr_deftest));
+				cout << "->[SUCCESS]defend instruction added " << endl;
 				k++;
 			}
-			// else cout << "->[FAILED]no objectuse instruction added" << endl;
+			// else cout << "->[FAILED]no defend instruction added" << endl;
 			break;
 		}
 		case 4: 

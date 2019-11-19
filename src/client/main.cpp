@@ -474,6 +474,7 @@ int main(int argc,char* argv[])
 
             Item testItem("TestHeal",10,0,3) ;
             testEngine.getTurn().getTeams()[0]->addItem(testItem);
+            testEngine.getTurn().getTeams()[1]->addItem(testItem);
             // === Init AI ===
             RandomAI testAI(testEngine);
             // === Display Turn ===
@@ -502,12 +503,12 @@ int main(int argc,char* argv[])
             message.setCharacterSize(25);
             message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
 
-            int k=0;
+            int k=0, turn_nb=1;
             milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
             // window.setFramerateLimit(60);
-            bool resume=true, firstturn=true;
+            bool resume=true;
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
@@ -564,8 +565,9 @@ int main(int argc,char* argv[])
                     testEngine.turnCheckIn();
                     testEngine.updateDisplay(window);
 
-                    if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run)){    
+                    if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run) && (turn_nb==testEngine.getTurn().getTurn())){    
                         testAI.runAI();
+                        turn_nb++;
                         last_time_ai_run=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 1500;
                     }    
                     sf::Time t1 = sf::seconds(0.1f);
