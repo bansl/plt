@@ -32,14 +32,7 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
   BOOST_CHECK_EQUAL(testEngine.getTurn().rotation,1);
   testEngine.turnCheckIn();
-
-  //
-  // TurnDisplay layer(testEngine.getTurn());
-  // TurnDisplay* ptr_layer=&layer;
   sf::RenderWindow window;
-  // testEngine.getTurn().registerObserver(ptr_layer);
-
-  // layer.initRender(testEngine.getTurn(),fullRender);
   window.display();
 
   Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
@@ -94,6 +87,8 @@ BOOST_AUTO_TEST_CASE(TestEngine)
     dest.setPos(3,2);
     Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[4],dest);
     if(movetest.validate(testEngine.getTurn())){
+      BOOST_CHECK_GT(movetest.getPathToDest().size(),0);
+      BOOST_CHECK_EQUAL(movetest.getCharacter().getAttackPower(),testEngine.getTurn().getTeams()[0]->getListCharacter()[4]->getAttackPower());
         std::unique_ptr<Move> ptr_movetest (new Move(movetest));
         testEngine.addCommand(move(ptr_movetest));
     }
@@ -120,8 +115,8 @@ BOOST_AUTO_TEST_CASE(TestEngine)
       testEngine.addCommand(move(ptr_endTestTurn));
     }
 
-    // Attack testFailedAttack(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],testEngine.getTurn().getCharacterHeight(0,0));
-    // testFailedAttack.validate(testEngine.getTurn());
+    Attack testFailedAttack(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+    testFailedAttack.validate(testEngine.getTurn());
     Defend testFailedDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
     testFailedDefend.validate(testEngine.getTurn());
     UseObject testFailedUseObject(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,1,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
@@ -132,9 +127,50 @@ BOOST_AUTO_TEST_CASE(TestEngine)
 
     testEngine.turnCheckOut();
     BOOST_CHECK(!testEngine.isTurnFinished);
-    // testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
+    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
     testEngine.updateDisplay(window);
     testEngine.turnCheckIn();
+    testEngine.updateDisplay(window);
     window.close();
 }
+
+Turn testTurn{};
+testTurn.initMap(6,6,"g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g3");
+testTurn.initTeams();
+testTurn.getTeams()[0]->addCharacter();
+testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
+
+Engine testEngine(testTurn);
+testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
+BOOST_CHECK_EQUAL(testEngine.getTurn().rotation,1);
+testEngine.turnCheckIn();
+sf::RenderWindow window;
+
+
+  TurnDisplay layer(testEngine.getTurn());
+  TurnDisplay* ptr_layer=&layer;
+  testEngine.getTurn().registerObserver(ptr_layer);
+  layer.initRender(testEngine.getTurn(),fullRender);
+  layer.initRender();
+  layer.getTilesets();
+  layer.getDrawmaps();
+  layer.getDrawchars();
+
+window.display();
+
+Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+if(testDefend.validate(testEngine.getTurn())){
+  std::unique_ptr<Defend> ptr_defend (new Defend(testDefend));
+  testEngine.addCommand(move(ptr_defend));
+}
+BOOST_CHECK(testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getStatus()==Defending);
+
+  testEngine.turnCheckOut();
+  BOOST_CHECK(!testEngine.isTurnFinished);
+  testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
+  testEngine.updateDisplay(window);
+  testEngine.turnCheckIn();
+  testEngine.updateDisplay(window);
+  layer.display(window,0);
+  window.close();
 }

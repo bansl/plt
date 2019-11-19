@@ -10,12 +10,20 @@ using namespace render;
 using namespace ai;
 
 BOOST_AUTO_TEST_CASE(TestRandomAI)
-{// === Init Turn ===
+{
+//for(int i=0;i<3;i++){
+  // === Init Turn ===
 Turn testTurn;
 testTurn.initMap(8,8); //squares only
 testTurn.initTeams();
 testTurn.getTeams()[0]->addCharacter();
 testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
+testTurn.getTeams()[0]->addCharacter();
+testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(3,3);
+testTurn.getTeams()[0]->addCharacter();
+testTurn.getTeams()[0]->getListCharacter()[2]->getPosition().setPos(3,4);
+testTurn.getTeams()[0]->addCharacter();
+testTurn.getTeams()[0]->getListCharacter()[3]->getPosition().setPos(5,5);
 
 testTurn.initTeams();
 testTurn.getTeams()[1]->addCharacter();
@@ -39,11 +47,14 @@ TurnDisplay* ptr_layer=&layer;
 testEngine.getTurn().registerObserver(ptr_layer);
 
 sf::RenderWindow window;
-for(int i=0;i<10;i++){
-if(testEngine.turnCheckIn()){
-     testEngine.updateDisplay(window);
-     testAI.runAI();
-}
-}
-BOOST_CHECK(testEngine.turnCheckOut());
+
+
+  if(testEngine.turnCheckIn()){
+      testEngine.updateDisplay(window);
+      testAI.runAI();
+    }
+
+    BOOST_CHECK(testEngine.turnCheckOut());
+//}
+
 }

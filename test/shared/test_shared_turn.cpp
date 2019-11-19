@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(TestTurn)
   testTurn.initMap(49,49);
   BOOST_CHECK_EQUAL(testTurn.getMap().size(),49);
   BOOST_CHECK_GT(testTurn.getMap()[0][0].getTile(),0);
-
+  BOOST_CHECK_EQUAL(testTurn.getCharacterHeight(0,0),testTurn.getMap()[testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getX()][testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().getY()].getHeight());
 
   Turn testTurn2 {};
   std::string testSeed="d1d1d1d1";
