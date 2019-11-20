@@ -48,13 +48,14 @@ testEngine.getTurn().registerObserver(ptr_layer);
 
 sf::RenderWindow window;
 
-
+bool checktestAI=false;
   if(testEngine.turnCheckIn()){
       testEngine.updateDisplay(window);
       testAI.runAI();
+      checktestAI=true;
     }
 
-    BOOST_CHECK(testEngine.turnCheckOut());
+    BOOST_CHECK(checktestAI);
 //}
 
 }
