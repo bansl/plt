@@ -288,9 +288,6 @@ int main(int argc,char* argv[])
                         layer.initRender(testEngine.getTurn(),fullRender);
                     }
                     
-                    // testEngine.updateDisplay(window);
-                    // testEngine.turnCheckIn();
-                    // testEngine.updateDisplay(window);
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
@@ -542,7 +539,7 @@ int main(int argc,char* argv[])
             milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
-            // window.setFramerateLimit(60);
+
             bool resume=true;
             while (window.isOpen()){
                 sf::Event event;
@@ -599,11 +596,6 @@ int main(int argc,char* argv[])
                 }
 
 
-                    // if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_time_ai_run) && (turn_nb==testEngine.getTurn().getTurn())){
-                    //     testAI.runAI();
-                    //     turn_nb++;
-                    //     last_time_ai_run=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 1500;
-                    // }
                     if(testEngine.turnCheckIn()){
                          testEngine.updateDisplay(window);
                          testAI.runAI();
