@@ -37,7 +37,8 @@ bool Attack::validate (state::Turn& turn){
       std::vector<state::Position> pathToDest;
       pathToDest={currentPosition};
       bool firstpos=true, notfound=true;
-      while(notfound){
+      int iter=0;
+      while(notfound && (iter<40)){
           currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
           currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
           currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
@@ -63,6 +64,7 @@ bool Attack::validate (state::Turn& turn){
                   notfound=false;
               }
           }
+          iter++;
       }
       int heightModifier=0;
       for(int i=1;i<(int)pathToDest.size();i++){

@@ -14,7 +14,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 		std::random_device dev;
   		std::mt19937 rng(dev());
   		std::uniform_int_distribution<std::mt19937::result_type> distribution(1,6);
-		std::uniform_int_distribution<std::mt19937::result_type> distributionPos(0,engine.getTurn().getMap().size()-1);
+		std::uniform_int_distribution<std::mt19937::result_type> distributionPos(1,engine.getTurn().getMap().size()-2);
   		std::uniform_int_distribution<std::mt19937::result_type> distributionTeam(0,engine.getTurn().getTeams().size()-1);
 		int rndCommandtype=distribution(rng);
 		int rndPosX=distributionPos(rng);
