@@ -287,149 +287,184 @@ int main(int argc,char* argv[])
                         testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
                         layer.initRender(testEngine.getTurn(),fullRender);
                     }
-
-                    testEngine.turnCheckIn();
-                    testEngine.updateDisplay(window);
+                    
+                    // testEngine.updateDisplay(window);
+                    // testEngine.turnCheckIn();
+                    // testEngine.updateDisplay(window);
                     //Commands
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)){
                         // cout << "initial char pos is: " << testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getX() << "|"<< testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getPosition().getY() << endl;
                         Epressed+=1;
 
                         if (Epressed==1){
-                            Position dest;
-                            dest.setPos(2,5);
-                            cout << "[COMMAND]character blue at 2,2 attempts to MOVE to 2,5, SHOULD SUCCEED" << endl;
-                            Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
-                            if(movetest.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_movetest (new Move (movetest));
-                                testEngine.addCommand(move(ptr_movetest));
-                                cout << "->[SUCCESS]move instruction added " << endl;
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                EndTurn endturntest(1);
+                                if(endturntest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
+                                    testEngine.addCommand(move(ptr_endturntest));
+                                    cout << "->[SUCCESS]endturn instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no move instruction added" << endl;
+                            testEngine.updateDisplay(window);
                         }
 
                         if (Epressed==2){
-                            cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
-                            Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
-                            if(attacktest.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
-                                testEngine.addCommand(move(ptr_attacktest));
-                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                Position dest;
+                                dest.setPos(2,5);
+                                cout << "[COMMAND]character blue at 2,2 attempts to MOVE to 2,5, SHOULD SUCCEED" << endl;
+                                Move movetest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0], dest);
+                                if(movetest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_movetest (new Move (movetest));
+                                    testEngine.addCommand(move(ptr_movetest));
+                                    cout << "->[SUCCESS]move instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no move instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no attack instruction added" << endl;
-
-
-
-                            cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
-                            Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                            if(attacktest2.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_attacktest2 (new Attack (attacktest2));
-                                testEngine.addCommand(move(ptr_attacktest2));
-                                cout << "->[SUCCESS]attack instruction added " << endl;
-                            }
-                            else cout << "->[FAILED]no attack instruction added" << endl;
-
-
-
-                            cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
-                            Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                            if(attacktest3.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_attacktest3 (new Attack (attacktest3));
-                                testEngine.addCommand(move(ptr_attacktest3));
-                                cout << "->[SUCCESS]attack instruction added " << endl;
-                            }
-                            else cout << "->[FAILED]no attack instruction added" << endl;
-
-                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
-                            EndTurn endturntest(1);
-                            if(endturntest.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
-                                testEngine.addCommand(move(ptr_endturntest));
-                                cout << "->[SUCCESS]endturn instruction added " << endl;
-                            }
-                            else cout << "->[FAILED]no endturn instruction added" << endl;
+                            testEngine.updateDisplay(window);
                         }
 
-                        if(Epressed==3){
+                        if (Epressed==3){
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
+                                Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
+                                if(attacktest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
+                                    testEngine.addCommand(move(ptr_attacktest));
+                                    cout << "->[SUCCESS]attack instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no attack instruction added" << endl;
 
-                            cout << "[COMMAND]character blue attempts to DEFEND, SHOULD SUCCEED" << endl;
-                            Defend deftest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                            if(deftest.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_deftest (new Defend (deftest));
-                                testEngine.addCommand(move(ptr_deftest));
-                                cout << "->[SUCCESS]defend instruction added " << endl;
+
+
+                                cout << "[COMMAND]character red at 3,1 attempts to ATTACK character blue, SHOULD FAIL" << endl;
+                                Attack attacktest2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                                if(attacktest2.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_attacktest2 (new Attack (attacktest2));
+                                    testEngine.addCommand(move(ptr_attacktest2));
+                                    cout << "->[SUCCESS]attack instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no attack instruction added" << endl;
+
+
+
+                                cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue, SHOULD SUCCEED" << endl;
+                                Attack attacktest3(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                                if(attacktest3.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_attacktest3 (new Attack (attacktest3));
+                                    testEngine.addCommand(move(ptr_attacktest3));
+                                    cout << "->[SUCCESS]attack instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no attack instruction added" << endl;
+
+                                cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                                EndTurn endturntest(1);
+                                if(endturntest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
+                                    testEngine.addCommand(move(ptr_endturntest));
+                                    cout << "->[SUCCESS]endturn instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no defend instruction added" << endl;
-
+                            testEngine.updateDisplay(window);
                         }
 
                         if(Epressed==4){
-
-                            cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
-                            Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                            if(attacktest4.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_attacktest4 (new Attack (attacktest4));
-                                testEngine.addCommand(move(ptr_attacktest4));
-                                cout << "->[SUCCESS]attack instruction added " << endl;
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                cout << "[COMMAND]character blue attempts to DEFEND, SHOULD SUCCEED" << endl;
+                                Defend deftest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                                if(deftest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_deftest (new Defend (deftest));
+                                    testEngine.addCommand(move(ptr_deftest));
+                                    cout << "->[SUCCESS]defend instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no defend instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no attack instruction added" << endl;
-
-                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
-                            EndTurn endturntest2(1);
-                            if(endturntest2.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_endturntest2 (new EndTurn (endturntest2));
-                                testEngine.addCommand(move(ptr_endturntest2));
-                                cout << "->[SUCCESS]endturn instruction added " << endl;
-                            }
-                            else cout << "->[FAILED]no endturn instruction added" << endl;
+                            testEngine.updateDisplay(window);
                         }
 
                         if(Epressed==5){
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
+                                Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                                if(attacktest4.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_attacktest4 (new Attack (attacktest4));
+                                    testEngine.addCommand(move(ptr_attacktest4));
+                                    cout << "->[SUCCESS]attack instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no attack instruction added" << endl;
 
-                            cout << "[COMMAND]character blue attempts to USE HEAL POTION, SHOULD SUCCEED" << endl;
-                            UseObject testUseItem(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
-                            if(testUseItem.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_testUseItem (new UseObject (testUseItem));
-                                testEngine.addCommand(move(ptr_testUseItem));
-                                cout << "->[SUCCESS]objectuse instruction added " << endl;
+                                cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                                EndTurn endturntest2(1);
+                                if(endturntest2.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_endturntest2 (new EndTurn (endturntest2));
+                                    testEngine.addCommand(move(ptr_endturntest2));
+                                    cout << "->[SUCCESS]endturn instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no objectuse instruction added" << endl;
+                            testEngine.updateDisplay(window);
                         }
 
                         if(Epressed==6){
-                          Skill fireStrike {};
-                          fireStrike.skillName="fire strike";
-                          fireStrike.setEffect(10,0);
-                          fireStrike.setMpCost(5);
-                          testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->addSkill(fireStrike);
-
-                            cout << "[COMMAND]character red at 3,1 attempts to USE a SKILL, SHOULD FAILED" << endl;
-                            UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
-                            if(testUseSkill.validate(testEngine.getTurn())){
-                              std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
-                              testEngine.addCommand(move(ptr_testUseSkill));
-                              cout << "->[SUCCESS]skilluse instruction added " << endl;
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                cout << "[COMMAND]character blue attempts to USE HEAL POTION, SHOULD SUCCEED" << endl;
+                                UseObject testUseItem(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
+                                if(testUseItem.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_testUseItem (new UseObject (testUseItem));
+                                    testEngine.addCommand(move(ptr_testUseItem));
+                                    cout << "->[SUCCESS]objectuse instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no objectuse instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no skilluse instruction added" << endl;
+                            testEngine.updateDisplay(window);
+                        }
 
-                            cout << "[COMMAND]character red at 3,5 attempts to USE "<<testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->getSkillList()[0]->skillName<<" SKILL, SHOULD SUCCESS" << endl;
-                            UseSkill testUseSkill2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
-                            if(testUseSkill2.validate(testEngine.getTurn())){
-                              std::unique_ptr<UseSkill> ptr_testUseSkill2 (new UseSkill(testUseSkill2));
-                              testEngine.addCommand(move(ptr_testUseSkill2));
-                              cout << "->[SUCCESS]skilluse instruction added " << endl;
+                        if(Epressed==7){
+                            if(testEngine.turnCheckIn()){
+                                testEngine.updateDisplay(window);
+                                Skill fireStrike {};
+                                fireStrike.skillName="fire strike";
+                                fireStrike.setEffect(10,0);
+                                fireStrike.setMpCost(5);
+                                testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->addSkill(fireStrike);
+
+                                cout << "[COMMAND]character red at 3,1 attempts to USE a SKILL, SHOULD FAILED" << endl;
+                                UseSkill testUseSkill(*testEngine.getTurn().getTeams()[1]->getListCharacter()[0],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
+                                if(testUseSkill.validate(testEngine.getTurn())){
+                                std::unique_ptr<UseSkill> ptr_testUseSkill (new UseSkill(testUseSkill));
+                                testEngine.addCommand(move(ptr_testUseSkill));
+                                cout << "->[SUCCESS]skilluse instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no skilluse instruction added" << endl;
+
+                                cout << "[COMMAND]character red at 3,5 attempts to USE "<<testEngine.getTurn().getTeams()[1]->getListCharacter()[2]->getSkillList()[0]->skillName<<" SKILL, SHOULD SUCCESS" << endl;
+                                UseSkill testUseSkill2(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0);
+                                if(testUseSkill2.validate(testEngine.getTurn())){
+                                std::unique_ptr<UseSkill> ptr_testUseSkill2 (new UseSkill(testUseSkill2));
+                                testEngine.addCommand(move(ptr_testUseSkill2));
+                                cout << "->[SUCCESS]skilluse instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no skilluse instruction added" << endl;
+
+
+                                cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
+                                EndTurn endturntest3(1);
+                                if(endturntest3.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_endturntest3 (new EndTurn (endturntest3));
+                                    testEngine.addCommand(move(ptr_endturntest3));
+                                    cout << "->[SUCCESS]endturn instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            else cout << "->[FAILED]no skilluse instruction added" << endl;
-
-
-                            cout << "[COMMAND]red players skip the rest of the turn, SHOULD SUCCEED" << endl;
-                            EndTurn endturntest3(1);
-                            if(endturntest3.validate(testEngine.getTurn())){
-                                unique_ptr<Command> ptr_endturntest3 (new EndTurn (endturntest3));
-                                testEngine.addCommand(move(ptr_endturntest3));
-                                cout << "->[SUCCESS]endturn instruction added " << endl;
-                            }
-                            else cout << "->[FAILED]no endturn instruction added" << endl;
+                            testEngine.updateDisplay(window);
                         }
 
                         sf::Time t1 = sf::seconds(0.1f);
@@ -503,7 +538,7 @@ int main(int argc,char* argv[])
             message.setCharacterSize(25);
             message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
 
-            int k=0, turn_nb=1;
+            int k=0;
             milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
