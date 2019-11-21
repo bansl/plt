@@ -121,3 +121,9 @@ std::vector<state::Position>& Move::getPathToDest(){
   std::vector<state::Position>& addrPath = pathToDest;
   return addrPath;
 }
+
+engine::Stats& Move::stats(){
+  Stats cstats(character);  
+  Stats & addrcstats = cstats;
+  return addrcstats;
+}

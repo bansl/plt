@@ -63,3 +63,8 @@ bool UseSkill::finish(state::Turn& turn){
   character.setStatus(Used);
   return true;
 }
+
+engine::Stats& UseSkill::stats(){
+  Stats cstats(character,targetList);  
+  return cstats;
+}

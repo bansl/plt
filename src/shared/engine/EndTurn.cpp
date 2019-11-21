@@ -27,3 +27,9 @@ bool EndTurn::finish(state::Turn& turn){
   }
   return true;
 }
+
+engine::Stats& EndTurn::stats(){
+  Stats cstats{};
+  Stats & addrcstats = cstats;
+  return addrcstats;
+}

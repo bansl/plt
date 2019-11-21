@@ -103,6 +103,13 @@ bool Attack::finish(state::Turn& turn){
   attacker.setStatus(Used);
   return true;
 }
+
+engine::Stats& Attack::stats(){
+  Stats cstats(attacker,target);
+  Stats & addrcstats = cstats;
+  return addrcstats;
+}
+
 Attack::Attack (state::Character& attackerCharacter, state::Character& targetCharacter):attacker(attackerCharacter),target(targetCharacter){
     commandType= Attackcmd;
 }

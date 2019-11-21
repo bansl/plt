@@ -33,3 +33,9 @@ bool UseObject::finish(state::Turn& turn){
   usedCharacter.setStatus(Used);
   return true;
 }
+
+engine::Stats& UseObject::stats(){
+  Stats cstats(usedCharacter,character);
+  Stats & addrcstats = cstats;
+  return addrcstats;
+}
