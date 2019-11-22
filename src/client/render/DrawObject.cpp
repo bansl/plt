@@ -165,7 +165,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
 
         sf::Image image;
-        if (!texture.loadFromFile(tileset.getImagePath()[playerId])){
+        if (!texture.loadFromFile(tileset.getImagePath()[playerId])){ // Segment of code to avoid error in build test on Jenkins server
           std::vector<std::string> imagePath;
           imagePath.push_back("../../../res/maptile2x129.png");
           imagePath.push_back("../../../res/char1.png");
@@ -235,7 +235,23 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 }
 
 
-
+void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYsize, int margin, state::Turn& turn, int playerId, int charNb){
+        int facing=turn.getTeams()[playerId]->getListCharacter()[charNb]->getFacing();
+        int tv=0; //idle anim
+        for (int q=0; q<turn.rotation; q++){
+          facing=(facing+1)%4;
+        }
+        StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
+        if(status==Attacking) tv=3*(facing)+2;
+        if(status==UsingObj) tv=3*(facing)+0;
+        if(status==Moving) tv=3*(facing)+1;
+        else tv=3*(facing)+0;
+        sf::Vertex* quad = &vertexarray[0];
+        quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);
+        quad[1].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb     , tv * tileYsize + margin);
+        quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
+        quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
+}
 
 
 // void DrawObject::draw(sf::RenderTarget& target, sf::RenderStates states, sf::Shader& shaders) const  {
