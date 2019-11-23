@@ -86,12 +86,16 @@ void TurnDisplay::initRender(){
                 for (int k=0; k< (int) turnDisplay.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
                         std::vector<std::unique_ptr<render::DrawObject>> charframe;
-                        for (size_t spriteAnimNumber = 0; spriteAnimNumber < 6; spriteAnimNumber++)
-                        {
+                        
                                 DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(),
                                                                                 turnDisplay.getMap()[0].size(),
                                                                                 tilesets[1]->getXsize(), tilesets[1]->getYsize(),
-                                                                                tilesets[1]->getMargin(),spriteAnimNumber,k,player);
+                                                                                tilesets[1]->getMargin(),0,k,player);
+                                std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
+                                charframe.push_back(move(ptr_drawChar));
+                        for (size_t spriteAnimNumber = 1; spriteAnimNumber < 6; spriteAnimNumber++)
+                        {
+                                DrawChar.changeCharAnimSpriteNb (spriteAnimNumber, tilesets[1]->getXsize(), tilesets[1]->getYsize(), tilesets[1]->getMargin(), turnDisplay, player, k);
                                 std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
                                 charframe.push_back(move(ptr_drawChar));
                         }
