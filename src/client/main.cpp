@@ -56,6 +56,9 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
+            testTurn.initTeams();
+            testTurn.getTeams()[1]->addCharacter();
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -86,8 +89,8 @@ int main(int argc,char* argv[])
             int k=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
-            window.setFramerateLimit(60);
-            bool resume=true;
+            // window.setFramerateLimit(60);
+            bool resume=true, keyPressed=false;
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
@@ -103,6 +106,9 @@ int main(int argc,char* argv[])
                     if (event.type == sf::Event::GainedFocus){
                         window.setView(view1);
                         resume=true;
+                    }
+                    if (event.type == sf::Event::KeyReleased){
+                        keyPressed=false;
                     }
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
@@ -127,21 +133,23 @@ int main(int argc,char* argv[])
                         window.setView(view1);
 
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !keyPressed){
                         // right key is pressed: rotate map
                         testTurn.rotation=(testTurn.rotation+1)%4;
-                        layer.initRender(testTurn,fullRender);
+                        // layer.initRender(testTurn,fullRender);
                         // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
                         // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                         // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                        keyPressed=true;
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) && !keyPressed){
                         // left key is pressed: rotate map to other side
                         testTurn.rotation=(testTurn.rotation+3)%4;
-                        layer.initRender(testTurn,fullRender);
+                        // layer.initRender(testTurn,fullRender);
                         // cout << "check map tile 0,0: " << testTurn.getMap()[0][0].getTile() << endl;
                         // cout << "check map tile 0,1: " << testTurn.getMap()[0][1].getTile() << endl;
                         // cout << "check map tile 1,0: " << testTurn.getMap()[1][0].getTile() << endl;
+                        keyPressed=true;
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
                         Attack testattack(*testTurn.getTeams()[0]->getListCharacter()[0],*testTurn.getTeams()[0]->getListCharacter()[1]);
@@ -195,8 +203,8 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
+            // testTurn.getTeams()[1]->addCharacter();
+            // testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -231,8 +239,8 @@ int main(int argc,char* argv[])
             int k=0, Epressed=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
-            window.setFramerateLimit(60);
-            bool resume=true;
+            // window.setFramerateLimit(60);
+            bool resume=true, keyPressed=false;
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
@@ -253,6 +261,10 @@ int main(int argc,char* argv[])
                         resume=true;
                         sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
+                    }
+
+                    if (event.type == sf::Event::KeyReleased){
+                        keyPressed=false;
                     }
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
@@ -277,15 +289,17 @@ int main(int argc,char* argv[])
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
                         view1.move(+40, -40),window.setView(view1);
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !keyPressed){
                         // right key is pressed: rotate map
                         testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
-                        layer.initRender(testEngine.getTurn(),fullRender);
+                        // layer.initRender(testEngine.getTurn(),fullRender);
+                        keyPressed=true;
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) && !keyPressed){
                         // left key is pressed: rotate map to other side
                         testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
-                        layer.initRender(testEngine.getTurn(),fullRender);
+                        // layer.initRender(testEngine.getTurn(),fullRender);
+                        keyPressed=true;
                     }
                     
                     //Commands
@@ -489,7 +503,7 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(8,8); //squares only
+            testTurn.initMap(10,10); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
@@ -540,7 +554,7 @@ int main(int argc,char* argv[])
             milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
 
-            bool resume=true;
+            bool resume=true, keyPressed=false;
             while (window.isOpen()){
                 sf::Event event;
                 while (window.pollEvent(event)){
@@ -561,6 +575,9 @@ int main(int argc,char* argv[])
                         resume=true;
                         sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
+                    }
+                    if (event.type == sf::Event::KeyReleased){
+                        keyPressed=false;
                     }
                 }
                 if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
@@ -583,15 +600,17 @@ int main(int argc,char* argv[])
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
                         view1.move(+40, -40),window.setView(view1);
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && !keyPressed){
                         // right key is pressed: rotate map
                         testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
-                        layer.initRender(testEngine.getTurn(),fullRender);
+                        // layer.initRender(testEngine.getTurn(),fullRender);
+                        keyPressed=true;
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) && !keyPressed){
                         // left key is pressed: rotate map to other side
                         testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
-                        layer.initRender(testEngine.getTurn(),fullRender);
+                        // layer.initRender(testEngine.getTurn(),fullRender);
+                        keyPressed=true;
                     }
                 }
 

@@ -162,7 +162,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 
 
 
-bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
+bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId, int rotation){
 
         sf::Image image;
         if (!texture.loadFromFile(tileset.getImagePath()[playerId])){ // Segment of code to avoid error in build test on Jenkins server
@@ -192,7 +192,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
-        for (int q=0; q<turn.rotation; q++){
+        for (int q=0; q<rotation; q++){
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;
           tempPosY=temp;
@@ -235,10 +235,10 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
 }
 
 
-void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYsize, int margin, state::Turn& turn, int playerId, int charNb){
+void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYsize, int margin, state::Turn& turn, int playerId, int charNb, int rotation){
         int facing=turn.getTeams()[playerId]->getListCharacter()[charNb]->getFacing();
         int tv=0; //idle anim
-        for (int q=0; q<turn.rotation; q++){
+        for (int q=0; q<rotation; q++){
           facing=(facing+1)%4;
         }
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
