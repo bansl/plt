@@ -34,8 +34,16 @@ bool UseObject::finish(state::Turn& turn){
   return true;
 }
 
-engine::Stats& UseObject::stats(){
-  Stats cstats(usedCharacter,character,object);
-  Stats & addrcstats = cstats;
-  return addrcstats;
+state::Character& UseObject::getCharacter(){
+  Character & addrCharacter = usedCharacter;
+  return addrCharacter;
+}
+
+state::Character& UseObject::getTargetCharacter(){
+  Character & addrCharacter = character;
+  return addrCharacter;
+}
+
+int UseObject::getNumberObject(){
+  return object;
 }

@@ -64,8 +64,16 @@ bool UseSkill::finish(state::Turn& turn){
   return true;
 }
 
-engine::Stats& UseSkill::stats(){
-  Stats cstats(character,targetList,skillNumber);
-  Stats & addrCstats=cstats;
-  return addrCstats;
+state::Character& UseSkill::getCharacter(){
+  Character & addrCharacter = character;
+  return addrCharacter;
+}
+
+state::Character& UseSkill::getTargetCharacter(){
+  Character & addrCharacter = targetList;
+  return addrCharacter;
+}
+
+int UseSkill::getSkillNumber(){
+  return skillNumber;
 }

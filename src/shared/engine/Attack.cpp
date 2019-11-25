@@ -104,12 +104,16 @@ bool Attack::finish(state::Turn& turn){
   return true;
 }
 
-engine::Stats& Attack::stats(){
-  Stats cstats(attacker,target);
-  Stats & addrcstats = cstats;
-  return addrcstats;
-}
-
 Attack::Attack (state::Character& attackerCharacter, state::Character& targetCharacter):attacker(attackerCharacter),target(targetCharacter){
     commandType= Attackcmd;
+}
+
+state::Character& Attack::getAttacker(){
+  Character & addrCharacter = attacker;
+  return addrCharacter;
+}
+
+state::Character& Attack::getDefender(){
+  Character & addrCharacter = target;
+  return addrCharacter;
 }

@@ -10,62 +10,127 @@ using namespace state;
 int HeuristicAI::computeScore(engine::Command& command){
     int score=0;
     if (command.commandType==Attackcmd){
-      if((command.stats().getTargetCharacter().getCurrentHP()-command.stats().getCharacter().getAttackPower()+command.stats().getTargetCharacter().getDefense())<=0){
+       //engine::Attack *pA=dynamic_cast<engine::Attack*>(command.get());
+
+      Command * pC=&command;
+      engine::Attack *pA=dynamic_cast<engine::Attack*>(pC);
+      if((pA->getDefender().getCurrentHP()-pA->getAttacker().getAttackPower()+pA->getDefender().getDefense())<=0){
         score+=4;
       }
       else{
         score+=3;
       }
+      for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
+        if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pA->getAttacker().getPosition())==1){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+            score--;
+          }
+        }
+        else if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pA->getAttacker().getPosition())==4){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+            score--;
+          }
+        }
+      }
     }
     else if (command.commandType==Defendcmd){
+      Command * pC=&command;
+      engine::Defend *pD=dynamic_cast<engine::Defend*>(pC);
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(command.stats().getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getCharacter().getPosition())==1&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
-          score++;
+        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())==1){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+            score+=2;
+          }
         }
-        else if(command.stats().getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getCharacter().getPosition())<=4&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
-          score++;
+        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())==4){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+            score+=2;
+          }
+        }
+      }
+      for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
+        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())==1){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+            score--;
+          }
+        }
+        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())==4){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+            score--;
+          }
         }
       }
     }
     else if (command.commandType==UseObjectcmd){
-      if((command.stats().getTargetCharacter().getCurrentHP()<(int)command.stats().getTargetCharacter().getCurrentHP()/5)&&(command.stats().getTargetCharacter().getCurrentHP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getHealth()>=command.stats().getTargetCharacter().getCurrentHP()/5)){
+      Command * pC=&command;
+      engine::UseObject *pUO=dynamic_cast<engine::UseObject*>(pC);
+      if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentHP()/5)&&(pUO->getTargetCharacter().getCurrentHP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>=pUO->getTargetCharacter().getCurrentHP()/5)){
+        score+=5;
+      }
+      else if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentMP()/5)&&(pUO->getTargetCharacter().getCurrentMP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>=pUO->getTargetCharacter().getCurrentMP()/5)){
         score+=3;
       }
-      else if((command.stats().getTargetCharacter().getCurrentHP()<(int)command.stats().getTargetCharacter().getCurrentMP()/5)&&(command.stats().getTargetCharacter().getCurrentMP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getMana()>=command.stats().getTargetCharacter().getCurrentMP()/5)){
-        score+=2;
-      }
-      else if((command.stats().getTargetCharacter().getCurrentHP()==command.stats().getTargetCharacter().getMaxHP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getHealth()>0)||(command.stats().getTargetCharacter().getCurrentMP()==command.stats().getTargetCharacter().getMaxMP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getMana()>0)){
+      else if((pUO->getTargetCharacter().getCurrentHP()==pUO->getTargetCharacter().getMaxHP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>0)||(pUO->getTargetCharacter().getCurrentMP()==pUO->getTargetCharacter().getMaxMP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>0)){
         score+=-5;
       }
       else{
         score++;
       }
+      for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
+        if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUO->getCharacter().getPosition())==1){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+            score--;
+          }
+        }
+        else if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUO->getCharacter().getPosition())==4){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+            score--;
+          }
+        }
+      }
     }
     else if (command.commandType==UseSkillcmd){
-      if((command.stats().getTargetCharacter().getCurrentHP()-command.stats().getCharacter().getSkillList()[command.stats().getNumber()]->getDamage())<=0){
+      Command * pC=&command;
+      engine::UseSkill *pUS=dynamic_cast<engine::UseSkill*>(pC);
+      if((pUS->getTargetCharacter().getCurrentHP()-pUS->getCharacter().getSkillList()[pUS->getSkillNumber()]->getDamage())<=0){
         score+=3;
       }
       else{
         score+=2;
       }
-    }
-    if (command.commandType==Movecmd){
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if((command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())==1)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
-          score--;
-          cout<<"testPos"<<endl;
+        if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUS->getCharacter().getPosition())==1){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+            score--;
+          }
         }
-        else if((command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())<=4)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
-          score--;
+        else if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUS->getCharacter().getPosition())==4){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+            score--;
+          }
         }
       }
     }
-    else{
+    else if (command.commandType==Movecmd){
+      Command * pC=&command;
+      engine::Move *pM=dynamic_cast<engine::Move*>(pC);
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(command.stats().getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getCharacter().getPosition())==1&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
-          score--;
+        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())==1)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
+          score+=-2;
         }
-        else if(command.stats().getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getCharacter().getPosition())<=4&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
+        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
+          score+=-2;
+        }
+        else{
+          score+=3;
+        }
+        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
+          score+=3;
+        }
+        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())==1)&&(pM->getCharacter().getJob().getJob()==Swordman||pM->getCharacter().getJob().getJob()==Pugilist)){
+          score+=3;
+        }
+        else{
           score--;
         }
       }
@@ -83,60 +148,52 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
     unique_ptr<Command> ptr_command (new UseSkill(commandnull));
 
+    cout<<"Start Attack scoring"<<endl;
     for(int i=0;i<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();i++){
       Attack attacktest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[i]);
       if(attacktest.validate(engine.getTurn())){
-        cout<<"ici"<<endl;
         engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-        cout<<"la"<<endl;
         if(maxScore<computeScore(attacktest)){
-          cout<<"non ici"<<endl;
           maxScore=computeScore(attacktest);
-          cout<<"maxscore: "<<maxScore<<endl;
-          unique_ptr<Command> ptr_command (new Attack(attacktest));
-          cout<<"par ici"<<endl;
+          cout<<"New MaxScore: "<<maxScore<<endl;
+          ptr_command.reset(new Attack(attacktest));
         }
       }
     }
-    cout<<"Attack"<<endl;
+    cout<<"End Attack scoring"<<endl;
 
-    // for(int x=1;x<(int)engine.getTurn().getMap().size()-1;x++){
-    //   for(int y=1;y<(int)engine.getTurn().getMap().size()-1;y++){
-    //     Position dest;
-    //     dest.setPos(x,y);
-    //     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-    //     cout<<"x : "<<x<<";y :"<<y<<endl;
-    //     if(movetest.validate(engine.getTurn())){
-    //       cout<<"la"<<endl;
-    //       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-    //       cout<<"ici"<<endl;
-    //       if(maxScore<computeScore(movetest)){
-    //         cout<<"non ici"<<endl;
-    //         maxScore=computeScore(movetest);
-    //         cout<<"maxscore: "<<maxScore<<endl;
-    //         unique_ptr<Command> ptr_command (new Move (movetest));
-    //         cout<<"par ici"<<endl;
-    //       }
-    //     }
-    //   }
-    // }
-    // cout<<"Move"<<endl;
-    //
-    // Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
-    // if(deftest.validate(engine.getTurn())){
-    //   cout<<"ici"<<endl;
-    //   engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-    //   cout<<"la"<<endl;
-    //   if(maxScore<computeScore(deftest)){
-    //     cout<<"non ici"<<endl;
-    //     maxScore=computeScore(deftest);
-    //     cout<<"maxscore: "<<maxScore<<endl;
-    //     unique_ptr<Command> ptr_command (new Defend (deftest));
-    //     cout<<"par ici"<<endl;
-    //   }
-    // }
-    // cout<<"Defend"<<endl;
+    cout<<"Start Move scoring"<<endl;
+    for(int x=0;x<(int)engine.getTurn().getMap().size();x++){
+      for(int y=0;y<(int)engine.getTurn().getMap().size();y++){
+        Position dest;
+        dest.setPos(x,y);
+        Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
+        // cout<<"x : "<<x<<";y :"<<y<<endl;
+        if(movetest.validate(engine.getTurn())){
+          engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+          if(maxScore<computeScore(movetest)){
+            maxScore=computeScore(movetest);
+            cout<<"New MaxScore: "<<maxScore<<endl;
+            ptr_command.reset(new Move (movetest));
+          }
+        }
+      }
+    }
+    cout<<"End Move scoring"<<endl;
 
+    cout<<"Start Defend scoring"<<endl;
+    Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
+    if(deftest.validate(engine.getTurn())){
+      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+      if(maxScore<computeScore(deftest)){
+        maxScore=computeScore(deftest);
+        cout<<"New MaxScore: "<<maxScore<<endl;
+        ptr_command.reset(new Defend (deftest));
+      }
+    }
+    cout<<"End Defend scoring"<<endl;
+
+    cout<<"Start UseObject scoring"<<endl;
     for (int o=0;o<(int)engine.getTurn().getTeams()[teamNumber]->getItems().size();o++){
       for (int c=0;c<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();c++){
         UseObject testUseObject(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[c],o,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
@@ -144,13 +201,15 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
           engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
           if(maxScore<computeScore(testUseObject)){
             maxScore=computeScore(testUseObject);
-  				  unique_ptr<Command> ptr_command (new UseObject(testUseObject));
+            cout<<"New MaxScore: "<<maxScore<<endl;
+  				  ptr_command.reset(new UseObject(testUseObject));
           }
         }
       }
     }
-    cout<<"UseObject"<<endl;
+    cout<<"End UseObject scoring"<<endl;
 
+    cout<<"Start UseSkill scoring"<<endl;
     for(int p=0;p<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();p++){
       for(int s=0;s<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getSkillList().size();s++){
         UseSkill testUseSkill(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[p],s,0);
@@ -158,15 +217,15 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
 				      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
               if(maxScore<computeScore(testUseSkill)){
                 maxScore=computeScore(testUseSkill);
-                unique_ptr<Command> ptr_command (new UseSkill(testUseSkill));
+                cout<<"New MaxScore: "<<maxScore<<endl;
+                ptr_command.reset(new UseSkill(testUseSkill));
               }
         }
       }
     }
-    cout<<"UseSkill"<<endl;
+    cout<<"End UseSkill scoring"<<endl;
 
     if(ptr_command->validate(engine.getTurn())){
-      engine.addCommand(move(ptr_command));
       if (ptr_command->commandType==Attackcmd){
 				cout << "->attack instruction added " << endl;
       }
@@ -182,6 +241,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
       else if (ptr_command->commandType==UseObjectcmd){
         cout << "->useobject instruction added " << endl;
       }
+      engine.addCommand(move(ptr_command));
       k++;
     }
     else{

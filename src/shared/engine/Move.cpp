@@ -116,13 +116,12 @@ state::Character& Move::getCharacter(){
   return addrCharacter;
 }
 
+state::Position& Move::getDest(){
+  Position& addrdest=newPosition;
+  return addrdest;
+}
+
 std::vector<state::Position>& Move::getPathToDest(){
   std::vector<state::Position>& addrPath = pathToDest;
   return addrPath;
-}
-
-engine::Stats& Move::stats(){
-  Stats cstats(character,newPosition);  
-  Stats & addrcstats = cstats;
-  return addrcstats;
 }

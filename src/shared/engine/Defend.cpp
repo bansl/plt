@@ -20,10 +20,9 @@ Defend::Defend(state::Character& targetCharacter):character(targetCharacter){
   commandType=Defendcmd;
 }
 
-engine::Stats& Defend::stats(){
-  Stats cstats(character); 
-  Stats & addrcstats = cstats;
-  return addrcstats;
+state::Character& Defend::getCharacter(){
+  Character & addrCharacter = character;
+  return addrCharacter;
 }
 
 bool Defend::finish(state::Turn& turn){
