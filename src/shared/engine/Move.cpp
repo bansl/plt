@@ -34,9 +34,9 @@ bool Move::validate (state::Turn& turn){
         while(pathToDest.size()<10){
             // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
             if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
-            if( (pathToDest.back().getX()-1>=0) ) currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
+            if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
             if( (pathToDest.back().getY()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
-            if( (pathToDest.back().getY()-1>=0) ) currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
+            if( (pathToDest.back().getY()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
             firstpos=true;
             while(!neighbors.empty()){
                 currentPosition.setPos(neighbors.back().getX(),neighbors.back().getY());
