@@ -34,12 +34,15 @@ int HeuristicAI::computeScore(engine::Command& command){
       else if((command.stats().getTargetCharacter().getCurrentHP()<(int)command.stats().getTargetCharacter().getCurrentMP()/5)&&(command.stats().getTargetCharacter().getCurrentMP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getMana()>=command.stats().getTargetCharacter().getCurrentMP()/5)){
         score+=2;
       }
+      else if((command.stats().getTargetCharacter().getCurrentHP()==command.stats().getTargetCharacter().getMaxHP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getHealth()>0)||(command.stats().getTargetCharacter().getCurrentMP()==command.stats().getTargetCharacter().getMaxMP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[command.stats().getNumber()]->getConsumable().getMana()>0)){
+        score+=-5;
+      }
       else{
         score++;
       }
     }
     else if (command.commandType==UseSkillcmd){
-      if((command.stats().getTargetCharacter().getCurrentHP()-command.stats().getCharacter().getListSkill()[command.stats().getNumber()]->getDamage())<=0){
+      if((command.stats().getTargetCharacter().getCurrentHP()-command.stats().getCharacter().getSkillList()[command.stats().getNumber()]->getDamage())<=0){
         score+=3;
       }
       else{
@@ -48,10 +51,11 @@ int HeuristicAI::computeScore(engine::Command& command){
     }
     if (command.commandType==Movecmd){
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())==1&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
+        if((command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())==1)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
           score--;
+          cout<<"testPos"<<endl;
         }
-        else if(command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())<=4&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
+        else if((command.stats().getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),command.stats().getDest())<=4)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
           score--;
         }
       }
@@ -71,42 +75,68 @@ int HeuristicAI::computeScore(engine::Command& command){
 
 
 void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
+  cout<<"Team Number "<<teamNumber<<" is playing"<<endl;
   int k=0;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
+    cout<<"Character Number "<<k<<" is playing"<<endl;
     int maxScore=-500;
-    unique_ptr<Command> ptr_command;
+    UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
+    unique_ptr<Command> ptr_command (new UseSkill(commandnull));
+
     for(int i=0;i<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();i++){
       Attack attacktest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[i]);
       if(attacktest.validate(engine.getTurn())){
+        cout<<"ici"<<endl;
         engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+        cout<<"la"<<endl;
         if(maxScore<computeScore(attacktest)){
+          cout<<"non ici"<<endl;
           maxScore=computeScore(attacktest);
+          cout<<"maxscore: "<<maxScore<<endl;
           unique_ptr<Command> ptr_command (new Attack(attacktest));
+          cout<<"par ici"<<endl;
         }
       }
     }
-    for(int x=0;x<(int)engine.getTurn().getMap().size();x++){
-      for(int y=0;y<(int)engine.getTurn().getMap().size();y++){
-        Position dest;
-        dest.setPos(x,y);
-        Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-        if(movetest.validate(engine.getTurn())){
-          engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-          if(maxScore<computeScore(movetest)){
-            maxScore=computeScore(movetest);
-            unique_ptr<Command> ptr_command (new Move (movetest));
-          }
-        }
-      }
-    }
-    Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
-    if(deftest.validate(engine.getTurn())){
-      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-      if(maxScore<computeScore(deftest)){
-        maxScore=computeScore(deftest);
-        unique_ptr<Command> ptr_deftest (new Defend (deftest));
-      }
-    }
+    cout<<"Attack"<<endl;
+
+    // for(int x=1;x<(int)engine.getTurn().getMap().size()-1;x++){
+    //   for(int y=1;y<(int)engine.getTurn().getMap().size()-1;y++){
+    //     Position dest;
+    //     dest.setPos(x,y);
+    //     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
+    //     cout<<"x : "<<x<<";y :"<<y<<endl;
+    //     if(movetest.validate(engine.getTurn())){
+    //       cout<<"la"<<endl;
+    //       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+    //       cout<<"ici"<<endl;
+    //       if(maxScore<computeScore(movetest)){
+    //         cout<<"non ici"<<endl;
+    //         maxScore=computeScore(movetest);
+    //         cout<<"maxscore: "<<maxScore<<endl;
+    //         unique_ptr<Command> ptr_command (new Move (movetest));
+    //         cout<<"par ici"<<endl;
+    //       }
+    //     }
+    //   }
+    // }
+    // cout<<"Move"<<endl;
+    //
+    // Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
+    // if(deftest.validate(engine.getTurn())){
+    //   cout<<"ici"<<endl;
+    //   engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+    //   cout<<"la"<<endl;
+    //   if(maxScore<computeScore(deftest)){
+    //     cout<<"non ici"<<endl;
+    //     maxScore=computeScore(deftest);
+    //     cout<<"maxscore: "<<maxScore<<endl;
+    //     unique_ptr<Command> ptr_command (new Defend (deftest));
+    //     cout<<"par ici"<<endl;
+    //   }
+    // }
+    // cout<<"Defend"<<endl;
+
     for (int o=0;o<(int)engine.getTurn().getTeams()[teamNumber]->getItems().size();o++){
       for (int c=0;c<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();c++){
         UseObject testUseObject(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[c],o,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
@@ -119,8 +149,10 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
         }
       }
     }
+    cout<<"UseObject"<<endl;
+
     for(int p=0;p<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();p++){
-      for(int s=0;s<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getListSkill().size();s++){
+      for(int s=0;s<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getSkillList().size();s++){
         UseSkill testUseSkill(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[p],s,0);
 			  if(testUseSkill.validate(engine.getTurn())){
 				      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
@@ -131,8 +163,25 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
         }
       }
     }
+    cout<<"UseSkill"<<endl;
+
     if(ptr_command->validate(engine.getTurn())){
       engine.addCommand(move(ptr_command));
+      if (ptr_command->commandType==Attackcmd){
+				cout << "->attack instruction added " << endl;
+      }
+      else if (ptr_command->commandType==Movecmd){
+        cout << "->move instruction added " << endl;
+      }
+      else if (ptr_command->commandType==Defendcmd){
+        cout << "->defend instruction added " << endl;
+      }
+      else if (ptr_command->commandType==UseSkillcmd){
+        cout << "->useskill instruction added " << endl;
+      }
+      else if (ptr_command->commandType==UseObjectcmd){
+        cout << "->useobject instruction added " << endl;
+      }
       k++;
     }
     else{
@@ -141,6 +190,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
 				unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
 				engine.addCommand(move(ptr_endturntest));
 				k=engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();
+        cout << "->endturn instruction added " << endl;
       }
     }
   }
