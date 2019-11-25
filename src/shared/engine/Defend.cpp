@@ -9,7 +9,7 @@ bool Defend::action(state::Turn& turn){
 }
 
 bool Defend::validate(state::Turn& turn){
-  if(character.getStatus()==Available){
+  if((character.getStatus()==Available) || (character.getStatus()==Moving) ){
     character.setStatus(Defending);
     return true;
   }

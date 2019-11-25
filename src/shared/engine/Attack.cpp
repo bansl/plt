@@ -13,7 +13,7 @@ bool Attack::validate (state::Turn& turn){
   // std::vector<std::vector<state::Tile>> map=turn.getMap();
   // Tile tile=map[x][y];
   // height=tile.getHeight();
-  if (attacker.getStatus()==Available){
+  if ((attacker.getStatus()==Available) || (attacker.getStatus()==Moving)){
     if(attacker.getJob().getJob()==Pugilist||attacker.getJob().getJob()==Swordman){
       if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())==1){
         // cout<<"attacker pos"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;

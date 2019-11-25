@@ -320,6 +320,15 @@ int main(int argc,char* argv[])
                                     cout << "->[SUCCESS]move instruction added " << endl;
                                 }
                                 else cout << "->[FAILED]no move instruction added" << endl;
+
+                                cout << "[COMMAND]character blue attempts to ATTACK red character, SHOULD SUCCEED" << endl;
+                                Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
+                                if(attacktest.validate(testEngine.getTurn())){
+                                    unique_ptr<Command> ptr_attacktest (new Attack (attacktest));
+                                    testEngine.addCommand(move(ptr_attacktest));
+                                    cout << "->[SUCCESS]attack instruction added " << endl;
+                                }
+                                else cout << "->[FAILED]no attack instruction added" << endl;
                             }
                             testEngine.updateDisplay(window);
                         }

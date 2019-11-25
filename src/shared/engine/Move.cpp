@@ -104,7 +104,6 @@ bool Move::action(state::Turn& turn){
 }
 
 bool Move::finish(state::Turn& turn){
-    character.setStatus(Used);
     return true;
 }
 

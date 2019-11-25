@@ -205,9 +205,9 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         tileheight +=-1;
         int tv=0; //idle anim
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
-        if(status==Attacking) tv=3*(facing)+2;
-        if(status==UsingObj) tv=3*(facing)+0;
-        if(status==Moving) tv=3*(facing)+1;
+        if(status==Attacking) tv=3*(facing)+2;//, cout << "status=attacking"<<endl;
+        if(status==UsingObj) tv=3*(facing)+0;//, cout << "status=usingObj"<<endl;
+        if(status==Moving) tv=3*(facing)+1;//, cout << "status=moving"<<endl;
         else tv=3*(facing)+0;
 
                                 // xpos=(j-i)*(tileDims[0]/2);

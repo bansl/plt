@@ -57,7 +57,6 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 				unique_ptr<Command> ptr_movetest (new Move (movetest));
 				engine.addCommand(move(ptr_movetest));
 				cout << "->[SUCCESS]move instruction added " << endl;
-				k++;
 			}
 			// else cout << "->[FAILED]no move instruction added" << endl;
 			break;
