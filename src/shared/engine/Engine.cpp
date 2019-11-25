@@ -62,7 +62,9 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 
 			commands[i]->action(turn);
 			if (commands[i]->commandType==Movecmd){
-				
+				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+				state::StatusList tempStatus=pM->getCharacter().getStatus();
+				pM->getCharacter().setStatus(Moving);
 				// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
 				// for(size_t j=0;j<pM->getPathToDest().size();j++){
 				// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
@@ -70,6 +72,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 			 	// }
 				// commands[i]->action(turn);
 				turn.notifyObservers(turn, window,fullRender);
+				pM->getCharacter().setStatus(tempStatus);
 			}
 			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);

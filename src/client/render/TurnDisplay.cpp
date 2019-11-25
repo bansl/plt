@@ -212,7 +212,7 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype){
 	initRender(turn,rendertype);
-        sf::Time t_anim = sf::seconds(0.2f);
+        sf::Time t_anim = sf::seconds(0.1f);
         for (size_t k = 0; k < 6; k++)
         {
                 display(window,k);

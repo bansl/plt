@@ -13,7 +13,7 @@ bool Attack::validate (state::Turn& turn){
   // std::vector<std::vector<state::Tile>> map=turn.getMap();
   // Tile tile=map[x][y];
   // height=tile.getHeight();
-  if (attacker.getStatus()==Available){
+  if ((attacker.getStatus()==Available) || (attacker.getStatus()==Moving)){
     if(attacker.getJob().getJob()==Pugilist||attacker.getJob().getJob()==Swordman){
       if(attacker.getPosition().distanceBetween(attacker.getPosition(),target.getPosition())==1){
         // cout<<"attacker pos"<<attacker.getPosition().getX()<<"|"<< attacker.getPosition().getY() <<endl;
@@ -39,10 +39,10 @@ bool Attack::validate (state::Turn& turn){
       bool firstpos=true, notfound=true;
       int iter=0;
       while(notfound && (iter<40)){
-          currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
-          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
-          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
-          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
+          if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
+          if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
+          if( (pathToDest.back().getY()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
+          if( (pathToDest.back().getY()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
           firstpos=true;
           while(!neighbors.empty()){
               currentPosition.setPos(neighbors.back().getX(),neighbors.back().getY());bool newpos=true;
