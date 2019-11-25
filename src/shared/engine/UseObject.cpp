@@ -35,7 +35,7 @@ bool UseObject::finish(state::Turn& turn){
 }
 
 engine::Stats& UseObject::stats(){
-  Stats cstats(usedCharacter,character);
+  Stats cstats(usedCharacter,character,object);
   Stats & addrcstats = cstats;
   return addrcstats;
 }

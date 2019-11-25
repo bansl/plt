@@ -65,6 +65,6 @@ bool UseSkill::finish(state::Turn& turn){
 }
 
 engine::Stats& UseSkill::stats(){
-  Stats cstats(character,targetList);  
+  Stats cstats(character,targetList,skillNumber);  
   return cstats;
 }

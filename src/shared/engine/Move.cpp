@@ -123,7 +123,7 @@ std::vector<state::Position>& Move::getPathToDest(){
 }
 
 engine::Stats& Move::stats(){
-  Stats cstats(character);  
+  Stats cstats(character,newPosition);  
   Stats & addrcstats = cstats;
   return addrcstats;
 }
