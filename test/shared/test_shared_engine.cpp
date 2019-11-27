@@ -139,6 +139,7 @@ testTurn.initMap(6,6,"g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g
 testTurn.initTeams();
 testTurn.getTeams()[0]->addCharacter();
 testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
+testTurn.initCursor();
 
 Engine testEngine(testTurn);
 testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
