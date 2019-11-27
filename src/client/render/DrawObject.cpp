@@ -16,6 +16,7 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
           imagePath.push_back("../../../res/maptile2x129.png");
           imagePath.push_back("../../../res/char1.png");
           imagePath.push_back("../../../res/char2.png");
+          imagePath.push_back("../../../res/cursor.png");
           tileset.setImagePath(imagePath);
           if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
@@ -78,6 +79,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
     imagePath.push_back("../../../res/maptile2x129.png");
     imagePath.push_back("../../../res/char1.png");
     imagePath.push_back("../../../res/char2.png");
+    imagePath.push_back("../../../res/cursor.png");
     tileset.setImagePath(imagePath);
     if (!texture.loadFromFile(tileset.getImagePath()[0])){
       return false;
@@ -166,6 +168,7 @@ bool DrawObject::renderCursor(state::Turn& turn, render::TileSet tileset, std::v
           imagePath.push_back("../../../res/maptile2x129.png");
           imagePath.push_back("../../../res/char1.png");
           imagePath.push_back("../../../res/char2.png");
+          imagePath.push_back("../../../res/cursor.png");
           tileset.setImagePath(imagePath);
           if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
@@ -216,6 +219,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
           imagePath.push_back("../../../res/maptile2x129.png");
           imagePath.push_back("../../../res/char1.png");
           imagePath.push_back("../../../res/char2.png");
+          imagePath.push_back("../../../res/cursor.png");
           tileset.setImagePath(imagePath);
           if (!texture.loadFromFile(tileset.getImagePath()[playerId])){
             return false;
