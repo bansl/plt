@@ -619,7 +619,7 @@ int main(int argc,char* argv[])
 
         else if(strcmp(argv[1],"heuristic_ai") == 0){
 
-            cout<<"Heuristic AI Test"<<endl<<endl;
+            cout<<"Heuristic AI Test"<<endl<<"Heuristic AI = Blue Team"<<endl<<"Random AI = Red Team"<<endl<<endl;
             cout<<"Controls:"<<endl;
             cout << "-Press P key to Pause" << endl;
             cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
@@ -628,19 +628,20 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(8,8); //squares only
+            testTurn.initMap(14,14); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-
+            testTurn.getTeams()[0]->addCharacter();
+            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,1);
             testTurn.initTeams();
             testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
+            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,5);
             testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
-            testTurn.initCursor(); 
+            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(6,3);
+            
+            testTurn.initCursor();
+            testTurn.initBuffer();
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -648,7 +649,8 @@ int main(int argc,char* argv[])
             testEngine.getTurn().getTeams()[0]->addItem(testItem);
             testEngine.getTurn().getTeams()[1]->addItem(testItem);
             // === Init AI ===
-            HeuristicAI testAI(testEngine);
+            HeuristicAI testHeuristicAI(testEngine);
+            RandomAI testRandomAI(testEngine);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -703,37 +705,38 @@ int main(int argc,char* argv[])
                   }
                   if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
-                                layer.display(window,k);
-                                k=(k+1)%6;
-                                last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                                    view1.move(40, 40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                                    view1.move(-40, -40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                                    view1.move(-40, +40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                                    view1.move(+40, -40),window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-                                    // right key is pressed: rotate map
-                                    testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
-                                    layer.initRender(testEngine.getTurn(),fullRender);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
-                                    // left key is pressed: rotate map to other side
-                                    testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
-                                    layer.initRender(testEngine.getTurn(),fullRender);
-                                }
+                    layer.display(window,k);
+                    k=(k+1)%6;
+                    last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                        view1.move(40, 40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                        view1.move(-40, -40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                        view1.move(-40, +40), window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                        view1.move(+40, -40),window.setView(view1);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                        // right key is pressed: rotate map
+                        testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
+                        layer.initRender(testEngine.getTurn(),fullRender);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                        // left key is pressed: rotate map to other side
+                        testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
+                        layer.initRender(testEngine.getTurn(),fullRender);
+                    }
                   }
 
 
                   if(testEngine.turnCheckIn()){
-                                     testEngine.updateDisplay(window);
-                                     testAI.runAI();
+                        testEngine.updateDisplay(window);
+                        if(testEngine.getTurn().getTurn()%2==0) testHeuristicAI.runAI();
+                        else testRandomAI.runAI();
                   }
                   testEngine.updateDisplay(window);
                   sf::Time t1 = sf::seconds(0.1f);

@@ -24,6 +24,7 @@ UseSkill::UseSkill(state::Character& usedCharacter,state::Character& targetChara
 }
 
 bool UseSkill::validate(state::Turn& turn){
+  if (targetList.getStatus()==Dead) return false;
   if((character.getStatus()==Available) || (character.getStatus()==Moving)){
     //cout<<"Character is availible"<<endl;
     if((int)character.getSkillList().size()>skillNumber){

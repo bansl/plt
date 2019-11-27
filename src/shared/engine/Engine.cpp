@@ -160,9 +160,9 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 		}
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) view.move(+40, -40),window.setView(view);	
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) view.move(-40, -40), window.setView(view);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) view.move(-40, +40), window.setView(view);
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(40, 40), window.setView(view);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) view.move(-40, -40), window.setView(view);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) view.move(-40, +40), window.setView(view);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(40, 40), window.setView(view);
 
 		// update moved cursor
 		if (posXupdate != 0 || posYupdate !=0){

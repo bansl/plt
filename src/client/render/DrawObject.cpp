@@ -267,19 +267,32 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         float isoPosY=(charPosX+charPosY)*((129.f/155.f)/4.03) - tileheight/6.f +1.f/6.f;
         // cursor for current vertex
         sf::Vertex* quad = &vertexarray[i * 4];
+        if(status!=Dead){
+                // vextex pos
+                quad[0].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f       , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
+                quad[1].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
+                quad[2].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
+                quad[3].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f        , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
 
-        // vextex pos
-        quad[0].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f       , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
-        quad[1].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , isoPosY * (float)tileYsize - (float)tileYsize/2.f);
-        quad[2].position = sf::Vector2f((isoPosX + 1) * (float)tileXsize - (float)tileXsize/2.f  , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
-        quad[3].position = sf::Vector2f(isoPosX * (float)tileXsize - (float)tileXsize/2.f        , (isoPosY + 1) * (float)tileYsize - (float)tileYsize/2.f);
+                // texture
+                quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);
+                quad[1].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb     , tv * tileYsize + margin);
+                quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
+                quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
+        }
+        else{
+                // vextex pos
+                quad[0].position = sf::Vector2f(0, 0);
+                quad[1].position = sf::Vector2f(0, 0);
+                quad[2].position = sf::Vector2f(0, 0);
+                quad[3].position = sf::Vector2f(0, 0);
 
-        // texture
-        quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);
-        quad[1].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb     , tv * tileYsize + margin);
-        quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
-        quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
-
+                // texture
+                quad[0].texCoords = sf::Vector2f(0, 0);
+                quad[1].texCoords = sf::Vector2f(0, 0);
+                quad[2].texCoords = sf::Vector2f(0, 0);
+                quad[3].texCoords = sf::Vector2f(0, 0);
+        }
         if( (turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus()==Used) || (turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus()==Defending) ) shaders=1;
         else shaders=0;
 	return true;
@@ -293,15 +306,17 @@ void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYs
           facing=(facing+1)%4;
         }
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
-        if(status==Attacking) tv=3*(facing)+2;
-        if(status==UsingObj) tv=3*(facing)+0;
-        if(status==Moving) tv=3*(facing)+1;
-        else tv=3*(facing)+0;
-        sf::Vertex* quad = &vertexarray[0];
-        quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);
-        quad[1].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb     , tv * tileYsize + margin);
-        quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
-        quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
+        if(status!=Dead){ 
+                if(status==Attacking) tv=3*(facing)+2;
+                if(status==UsingObj) tv=3*(facing)+0;
+                if(status==Moving) tv=3*(facing)+1;
+                else tv=3*(facing)+0;
+                sf::Vertex* quad = &vertexarray[0];
+                quad[0].texCoords = sf::Vector2f(spriteNb * tileXsize + spriteNb           , tv * tileYsize + margin);
+                quad[1].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb     , tv * tileYsize + margin);
+                quad[2].texCoords = sf::Vector2f((spriteNb + 1) * tileXsize + spriteNb      , (tv + 1) * tileYsize + margin);
+                quad[3].texCoords = sf::Vector2f(spriteNb * tileXsize  + spriteNb       , (tv + 1) * tileYsize + margin);
+        }
 }
 
 

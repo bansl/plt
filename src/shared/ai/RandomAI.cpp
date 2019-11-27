@@ -125,6 +125,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 }
 
 void RandomAI::runAI(){
+	cout << "Random AI is playing" << endl;
 	randomCommandList(engine,engine.getCurrentPlayerID());
 }
 

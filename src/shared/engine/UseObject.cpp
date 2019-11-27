@@ -19,6 +19,7 @@ bool UseObject::action(state::Turn& turn){
 
 
 bool UseObject::validate(state::Turn& turn){
+  if(character.getStatus()==Dead) return false;
   if((usedCharacter.getStatus()==Available) || (usedCharacter.getStatus()==Moving)){
     if(turn.getTeams()[teamNumber]->getItems()[object]->getQuantity()>0){
       usedCharacter.setStatus(UsingObj);

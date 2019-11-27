@@ -122,15 +122,15 @@ int HeuristicAI::computeScore(engine::Command& command){
         else{
           score+=3;
         }
-        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=9)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
+        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
           if(onlyOne){
-            score+=12-(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
+            score+=4+(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
             onlyOne=false;
           }
         }
-        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=6)&&(pM->getCharacter().getJob().getJob()==Swordman||pM->getCharacter().getJob().getJob()==Pugilist)){
+        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=1)&&(pM->getCharacter().getJob().getJob()==Swordman||pM->getCharacter().getJob().getJob()==Pugilist)){
           if(onlyOne){
-            score+=9-(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
+            score+=5;
             onlyOne=false;
           }
         }
@@ -181,14 +181,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -199,14 +199,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -220,14 +220,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -238,14 +238,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -264,14 +264,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -282,14 +282,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -303,14 +303,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -321,14 +321,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                     Position dest;
                     dest.setPos(x,y);
                     Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                    // cout<<"x : "<<x<<";y :"<<y<<endl;
+                    // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                     if(movetest.validate(engine.getTurn())){
                       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                      engine.getTurn().getBuffer().pop_back();
                       if(maxScore<computeScore(movetest)){
                         maxScore=computeScore(movetest);
                         // cout<<"New MaxScore: "<<maxScore<<endl;
                         ptr_command.reset(new Move (movetest));
-                        engine.getTurn().getBuffer().pop_back();
                       }
                     }
                   }
@@ -350,14 +350,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -368,14 +368,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -389,14 +389,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -407,14 +407,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -433,14 +433,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -451,14 +451,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -472,14 +472,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }
@@ -490,14 +490,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
                   Position dest;
                   dest.setPos(x,y);
                   Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-                  // cout<<"x : "<<x<<";y :"<<y<<endl;
+                  // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
                   if(movetest.validate(engine.getTurn())){
                     engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+                    engine.getTurn().getBuffer().pop_back();
                     if(maxScore<computeScore(movetest)){
                       maxScore=computeScore(movetest);
                       // cout<<"New MaxScore: "<<maxScore<<endl;
                       ptr_command.reset(new Move (movetest));
-                      engine.getTurn().getBuffer().pop_back();
                     }
                   }
                 }

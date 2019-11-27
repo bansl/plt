@@ -1,5 +1,5 @@
 #include "../state.h"
-
+#include <iostream>
 using namespace state;
 using namespace std;
 
@@ -28,15 +28,15 @@ bool Entity::isFree (state::Turn& turn,state::Position tilePos){
     {
         for (size_t j = 0; j < turn.getTeams()[i]->getListCharacter().size(); j++)
         {
-            if(tilePos.distanceBetween(turn.getTeams()[i]->getListCharacter()[j]->getPosition(),tilePos)==0){
+            if((tilePos.distanceBetween(turn.getTeams()[i]->getListCharacter()[j]->getPosition(),tilePos)==0) && (turn.getTeams()[i]->getListCharacter()[j]->getStatus()!=Dead)){
                 return false;
             };
         }
 
     }
-    for (size_t k=0;k>turn.getBuffer().size();k++){
-      Position * pos=turn.getBuffer()[k].get();
-      if(tilePos.distanceBetween(*pos,tilePos)==0){
+    for (size_t k=0;k<turn.getBuffer().size();k++){
+      Position pos=*turn.getBuffer()[k];
+      if(tilePos.distanceBetween(pos,tilePos)==0){
           return false;
       };
     }
