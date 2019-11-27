@@ -173,12 +173,8 @@ bool DrawObject::renderCursor(state::Turn& turn, render::TileSet tileset, std::v
 	}
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(4);
-        cout << "esfsef" << endl;
-        int tempPosX=0;// todo
-        int tempPosY=0;// todo
-        
-        cout << "tempPosX:"<< tempPosX << endl;
-        cout << "tempPosY:"<< tempPosY << endl;
+        int tempPosX=turn.getCursor()->getPosition().getX();
+        int tempPosY=turn.getCursor()->getPosition().getY();
         int temp=0;
         for (int q=0; q<turn.rotation; q++){
           temp=tempPosX;

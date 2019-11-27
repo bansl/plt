@@ -126,7 +126,7 @@ int Engine::getCurrentPlayerID(){
 	return currentPlayerId;
 }
 
-void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window){
+void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::View& view){
 
 	RenderType cursorRefresh(cursorRender);	
 	if(newEvent.type==sf::Event::KeyPressed ){
@@ -135,24 +135,29 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window){
 		size_t posXcurs=turn.getCursor()->getPosition().getX();
 		size_t posYcurs=turn.getCursor()->getPosition().getY();
 		size_t mapsize=turn.getMap().size();
-
+		std::vector<sf::Keyboard::Key> direction_keys={sf::Keyboard::Up,sf::Keyboard::Left,sf::Keyboard::Down,sf::Keyboard::Right};
 		// direction input
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-			if(posXcurs!=mapsize-1) posXupdate = 1;
-			else posXupdate = -posXcurs;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+		if (sf::Keyboard::isKeyPressed(direction_keys[turn.rotation%4])){
 			if(posXcurs!=0) posXupdate = -1;
-			else posXupdate = mapsize-1 -posXcurs;
+			// else posXupdate = mapsize-1 -posXcurs;	
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-			if(posYcurs!=0) posYupdate = -1;
-			else posYupdate = mapsize-1 -posYcurs;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+3)%4])){
 			if(posYcurs!=mapsize-1) posYupdate = 1;
-			else posYupdate = -posYcurs;
+			// else posYupdate = -posYcurs;
 		}
+		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+2)%4])){
+			if(posXcurs!=mapsize-1) posXupdate = 1;
+			// else posXupdate = -posXcurs;	
+		}
+		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+1)%4])){
+			if(posYcurs!=0) posYupdate = -1;
+			// else posYupdate = mapsize-1 -posYcurs;
+		}
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) view.move(+40, -40),window.setView(view);	
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) view.move(-40, -40), window.setView(view);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) view.move(-40, +40), window.setView(view);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(40, 40), window.setView(view);
 
 		// update moved cursor
 		if (posXupdate != 0 || posYupdate !=0){

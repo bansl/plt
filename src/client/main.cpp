@@ -50,12 +50,13 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(10,10); //squares only
+            testTurn.initMap(60,60); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
+            testTurn.initCursor(); 
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -104,6 +105,7 @@ int main(int argc,char* argv[])
                         window.setView(view1);
                         resume=true;
                     }
+                    
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                     window.clear();
@@ -197,6 +199,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
+            testTurn.initCursor(); 
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -254,6 +257,9 @@ int main(int argc,char* argv[])
                         sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
                     }
+                    if (event.type==sf::Event::KeyPressed){
+							testEngine.userInteraction(event, window, view1);
+					}
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
 
@@ -263,20 +269,6 @@ int main(int argc,char* argv[])
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
-
-
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                        view1.move(40, 40), window.setView(view1);
-                    }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                        view1.move(-40, -40), window.setView(view1);
-                    }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                        view1.move(-40, +40), window.setView(view1);
-                    }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                        view1.move(+40, -40),window.setView(view1);
-                    }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
                         // right key is pressed: rotate map
                         testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
@@ -498,7 +490,7 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(8,8); //squares only
+            testTurn.initMap(40,40); //squares only
             testTurn.initTeams();
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
@@ -510,6 +502,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
+            testTurn.initCursor(); 
             // === Init Engine ===
             Engine testEngine(testTurn);
 
