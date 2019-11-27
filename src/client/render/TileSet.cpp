@@ -22,6 +22,12 @@ TileSet::TileSet(TileSetType id){
 		imagePath.push_back("res/char2.png");
 
 	}
+	else if (type==CursorSprite){
+		sizeX=129;
+		sizeY=129;
+		margin=0;
+		imagePath.push_back("res/cursor.png");
+	}
 }
 
 const vector<std::string> TileSet::getImagePath (){

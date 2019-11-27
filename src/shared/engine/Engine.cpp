@@ -125,3 +125,45 @@ Engine::Engine(state::Turn& turn):turn(turn){
 int Engine::getCurrentPlayerID(){
 	return currentPlayerId;
 }
+
+void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window){
+
+	RenderType cursorRefresh(cursorRender);	
+	if(newEvent.type==sf::Event::KeyPressed ){
+		
+		int posXupdate = 0, posYupdate = 0;
+		size_t posXcurs=turn.getCursor()->getPosition().getX();
+		size_t posYcurs=turn.getCursor()->getPosition().getY();
+		size_t mapsize=turn.getMap().size();
+
+		// direction input
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+			if(posXcurs!=mapsize-1) posXupdate = 1;
+			else posXupdate = -posXcurs;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+			if(posXcurs!=0) posXupdate = -1;
+			else posXupdate = mapsize-1 -posXcurs;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+			if(posYcurs!=0) posYupdate = -1;
+			else posYupdate = mapsize-1 -posYcurs;
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+			if(posYcurs!=mapsize-1) posYupdate = 1;
+			else posYupdate = -posYcurs;
+		}
+
+		// update moved cursor
+		if (posXupdate != 0 || posYupdate !=0){
+			Position nextPosCurs;
+			nextPosCurs.setPos(posXcurs+posXupdate, posYcurs+posYupdate);
+			turn.getCursor()->cursorMove(nextPosCurs);
+			turn.notifyObservers(turn, window,cursorRefresh);			
+			posXupdate = 0, posYupdate = 0;
+		}
+
+
+
+	}
+}

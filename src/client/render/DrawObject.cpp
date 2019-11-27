@@ -20,7 +20,7 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
           if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
           }
-	       }
+	}
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(mapDims[0] * mapDims[1] * 4);
 
@@ -160,7 +160,57 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
 
 }
 
+bool DrawObject::renderCursor(state::Turn& turn, render::TileSet tileset, std::vector<int> mapDims, std::vector<int> tileDims){
+        if (!texture.loadFromFile(tileset.getImagePath()[0])){
+          std::vector<std::string> imagePath;
+          imagePath.push_back("../../../res/maptile2x129.png");
+          imagePath.push_back("../../../res/char1.png");
+          imagePath.push_back("../../../res/char2.png");
+          tileset.setImagePath(imagePath);
+          if (!texture.loadFromFile(tileset.getImagePath()[0])){
+            return false;
+          }
+	}
+        vertexarray.setPrimitiveType(sf::Quads);
+        vertexarray.resize(4);
+        cout << "esfsef" << endl;
+        int tempPosX=0;// todo
+        int tempPosY=0;// todo
+        
+        cout << "tempPosX:"<< tempPosX << endl;
+        cout << "tempPosY:"<< tempPosY << endl;
+        int temp=0;
+        for (int q=0; q<turn.rotation; q++){
+          temp=tempPosX;
+          tempPosX=turn.getMap().size()-tempPosY-1;
+          tempPosY=temp;
+        }
 
+        float cursPosX= (float) tempPosX;
+        float cursPosY= (float) tempPosY;
+        float tileheight= (float) (turn.getMap()[turn.getCursor()->getPosition().getX()][turn.getCursor()->getPosition().getY()].getHeight());
+        tileheight +=-1;
+
+        // cursor for current vertex
+        sf::Vertex* quad = &vertexarray[0];
+
+        // vextex pos
+        int xpos,ypos;
+        xpos=(cursPosY-cursPosX)*(tileDims[0]/2);
+        ypos=(cursPosY+cursPosX-tileheight)*(tileDims[1]/4);
+        quad[0].position = sf::Vector2f(xpos + tileDims[0]/2   , ypos + tileDims[1]/2     );
+        quad[1].position = sf::Vector2f(xpos + tileDims[0]     , ypos + 3*(tileDims[1]/4) );
+        quad[2].position = sf::Vector2f(xpos + tileDims[0]/2   , ypos + tileDims[1]       );
+        quad[3].position = sf::Vector2f(xpos                   , ypos + 3*(tileDims[1]/4) );
+
+        //texture
+        quad[0].texCoords = sf::Vector2f(0           , 0           );
+        quad[1].texCoords = sf::Vector2f(tileDims[0] , 0           );
+        quad[2].texCoords = sf::Vector2f(tileDims[0] , tileDims[1] );
+        quad[3].texCoords = sf::Vector2f(0           , tileDims[1] );
+
+        return true;
+}
 
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
 
@@ -192,6 +242,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
+        
         for (int q=0; q<turn.rotation; q++){
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;

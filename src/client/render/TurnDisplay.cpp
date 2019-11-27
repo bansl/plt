@@ -15,14 +15,21 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
         TileSet tilesetPersonnages(CharaSpritesheet);
 	std::unique_ptr<TileSet> ptr_tilesetPersonnages (new TileSet(tilesetPersonnages));
 	tilesets.push_back(move(ptr_tilesetPersonnages));
+
+        TileSet theCursor(CursorSprite);
+	std::unique_ptr<TileSet> ptr_theCursor (new TileSet(theCursor));
+	tilesets.push_back(move(ptr_theCursor));
 }
 
 void TurnDisplay::initRender(){
         while (!drawchars.empty()){
-        drawchars.pop_back();
+                drawchars.pop_back();
         }
         while (!drawmaps.empty()){
-        drawmaps.pop_back();
+                drawmaps.pop_back();
+        }
+        while (!drawcursor.empty()){
+                drawcursor.pop_back();
         }
         std::vector<std::vector<state::Tile>> rotateMapVector(turnDisplay.getMap());
         DrawObject RotMap;
@@ -102,6 +109,13 @@ void TurnDisplay::initRender(){
                         drawchars.push_back(move(charframe));
                 }
         }
+        DrawObject DrawCursor;
+        if(DrawCursor.renderCursor(turnDisplay, *tilesets[2], 
+                                        {(int)turnDisplay.getMap().size(), (int) turnDisplay.getMap()[0].size()},
+                                        {tilesets[0]->getXsize(), tilesets[0]->getYsize()})){
+                std::unique_ptr<DrawObject> ptr_drawCursor (new DrawObject(DrawCursor));
+                drawcursor.push_back(move(ptr_drawCursor));
+        }
 }
 
 void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
@@ -173,6 +187,20 @@ void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
                   }
           }
         }
+
+        if((rendertype==fullRender) || rendertype==cursorRender){
+                while (!drawcursor.empty()){
+                        drawcursor.pop_back();
+                }
+                DrawObject DrawCursor;
+                if(DrawCursor.renderCursor(turn, *tilesets[2], 
+                                           {(int)turn.getMap().size(), (int) turn.getMap()[0].size()},
+                                           {tilesets[0]->getXsize(), tilesets[0]->getYsize()})){
+                        std::unique_ptr<DrawObject> ptr_drawCursor (new DrawObject(DrawCursor));
+                        drawcursor.push_back(move(ptr_drawCursor));
+                }
+                                  
+        }
         for (size_t player = 0; player < turn.getTeams().size(); player++){
                 for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
@@ -238,6 +266,7 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame){
                         j++;
                 }
         }
+        window.draw(*drawcursor[0]);
         // cout << drawchars.size() <<"====="<< endl;
 	window.display();
 }
