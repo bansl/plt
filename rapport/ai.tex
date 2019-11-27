@@ -2,7 +2,7 @@
 
 \section{Stratégies}
 
-\subsection{Inteligence Aléatoire}
+\subsection{Intelligence Aléatoire}
 
 L’ IA contrôle une liste de personnages appartenant au joueur actuel,
 elle va les sélectionner les uns après les autres lors de son tour 
@@ -53,30 +53,57 @@ du joueur actuel ont une action, alors cela fini ainsi la liste des
 commandes, les commandes sont exécutées dans l'ordre de la liste. 
 Puis c'est au tour de l'adversaire.
 \\
+
+\subsection{Intelligence Heuristique}
+
+L'IA heuristique va lister les actions possibles par personnages 
+de son équipe et calculer un score pour chacune de ces actions.
+Le score est calculé en fonction de la pertinence des actions.
+\\\\
+Concrètement, un personnage peut se déplacer puis effectuer une action ou
+seulement effectuer une action.
+Il privilégiera des déplacements où les personnages adverses ne peuvent
+pas l'atteindre après déplacement ou bien s'il peut attaquer un ennemi
+avec un minimum d'attaque subit le tour suivant.
+\\\\
+Une attaque est privilégiée si l'ennemi est tué en conséquence de
+l'action. Elle est priviligié si le personnage ne peut subir que peu 
+d'attaques au prochain tour, sinon l'IA privilégie la défense qui réduit
+grandement les dégats subits au prochain tour adverse.
+\\\\
+Un objet de soin n'est utilisé que lorsque celui-ci est nécessaire 
+(vie<20\% ou mana<20\%) afin qu'il ne soit pas utilisé sur des cibles qui 
+n'ont pas perdu des points de vie ou des points de mana comme pourrait le 
+faire l'IA aléatoire.
+\\
+
+
+
 \section{Conception Logiciel}
 Le diagramme des classes UML C++ pour l'intelligence artificielle est
 visible en Figure 5.1.
-On divise l'intelligence artificielle en 2 classes.
+On divise l'intelligence artificielle en 3 classes.
 
 \begin{itemize}
 
 \item \textbf{AI :} C'est la classe principale, elle définie les 
-méthodes qui serviront lors du polymorphisme lorsque les différentes 
-IA seront appelées.
-
+méthodes qui serviront lors du polymorphisme lorsque les 
+différentes IA seront appelées.
+\\
 \item \textbf{RandomAI :} C'est la classe représentant l'IA 
-aléatoire, elle a une fonction pour determiner la liste des actions 
+aléatoire, elle a une fonction pour determiner la liste des actions \\
 des personnages controllé par l'IA (randomCommandList) et une 
 fonction pour executer lancer l'IA (runAI).
-
-
+\\
+\item \textbf{HeuristicAI :} C'est la classe dédiée à l'IA heurisitique. Elle comporte une fonction computeScore qui renvoie le score calculé pour l'action donnée en entrée, une fonction heuristicCommandList pour déterminer la liste des actions à partir des scores et une fonction runAI pour lancer l'IA.
 
 \end{itemize}
 
+
 \begin{figure}[H]
-\includegraphics[width=\linewidth]{images/random_ai_dia.png}
+\includegraphics[width=\linewidth]{images/heuristic_ai_dia.png}
 \centering
-\caption{Aperçu de ai.dia avec randomAI}
+\caption{Aperçu de ai.dia avec HeuristicAI}
 \label{fig:img3}
 \end{figure}
 \newpage
