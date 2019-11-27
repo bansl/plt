@@ -56,7 +56,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
             testTurn.getTeams()[0]->addCharacter();
             testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
-            testTurn.initCursor(); 
+            testTurn.initCursor();
             // === Display Turn ===
             TurnDisplay layer(testTurn);
 
@@ -105,7 +105,7 @@ int main(int argc,char* argv[])
                         window.setView(view1);
                         resume=true;
                     }
-                    
+
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                     window.clear();
@@ -199,7 +199,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
-            testTurn.initCursor(); 
+            testTurn.initCursor();
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -502,7 +502,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
-            testTurn.initCursor(); 
+            testTurn.initCursor();
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -640,6 +640,7 @@ int main(int argc,char* argv[])
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
+            testTurn.initCursor(); 
             // === Init Engine ===
             Engine testEngine(testTurn);
 

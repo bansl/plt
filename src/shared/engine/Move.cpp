@@ -21,7 +21,7 @@ bool Move::validate (state::Turn& turn){
             return false;
         }
 
-        if(newPosition.distanceBetween(newPosition,character.getPosition())>10){
+        if(newPosition.distanceBetween(newPosition,character.getPosition())>5){
             return false;
             // character.getPosition().setPos(newPosition.getX(),newPosition.getY());
         }
@@ -31,7 +31,7 @@ bool Move::validate (state::Turn& turn){
         vector<Position> neighbors;
         pathToDest={currentPosition};
         bool firstpos=true;
-        while(pathToDest.size()<10){
+        while(pathToDest.size()<5){
             // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
             if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
             if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
@@ -76,6 +76,8 @@ bool Move::validate (state::Turn& turn){
                     // }
                     // cout << "path found!" << endl;
                     character.setStatus(Moving);
+                    std::unique_ptr<Position> addrnewPosition(new state::Position(newPosition));
+                    turn.addToBuffer(move(addrnewPosition));
                     return true;
                 }
             }

@@ -118,3 +118,18 @@ void Turn::skipTurn(){
 bool Turn::getIsSkipped(){
   return isTurnSkipped;
 }
+
+std::vector<std::unique_ptr<state::Position>>& Turn::getBuffer(){
+  std::vector<std::unique_ptr<state::Position>> & addrBuff=bufferPosition;
+  return addrBuff;
+}
+
+void Turn::initBuffer(){
+  while (!bufferPosition.empty()){
+          bufferPosition.pop_back();
+  }
+}
+
+void Turn::addToBuffer(std::unique_ptr<state::Position> pos){
+  bufferPosition.push_back(move(pos));
+}

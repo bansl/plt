@@ -1,7 +1,7 @@
 #include "../ai.h"
 #include "../engine.h"
-#include <random>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 using namespace ai;
 using namespace engine;
@@ -10,8 +10,6 @@ using namespace state;
 int HeuristicAI::computeScore(engine::Command& command){
     int score=0;
     if (command.commandType==Attackcmd){
-       //engine::Attack *pA=dynamic_cast<engine::Attack*>(command.get());
-
       Command * pC=&command;
       engine::Attack *pA=dynamic_cast<engine::Attack*>(pC);
       if((pA->getDefender().getCurrentHP()-pA->getAttacker().getAttackPower()+pA->getDefender().getDefense())<=0){
@@ -114,6 +112,7 @@ int HeuristicAI::computeScore(engine::Command& command){
     else if (command.commandType==Movecmd){
       Command * pC=&command;
       engine::Move *pM=dynamic_cast<engine::Move*>(pC);
+      bool onlyOne=true;
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())==1)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
           score+=-2;
@@ -125,10 +124,16 @@ int HeuristicAI::computeScore(engine::Command& command){
           score+=3;
         }
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
-          score+=3;
+          if(onlyOne){
+            score+=3;
+            onlyOne=false;
+          }
         }
         else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())==1)&&(pM->getCharacter().getJob().getJob()==Swordman||pM->getCharacter().getJob().getJob()==Pugilist)){
-          score+=3;
+          if(onlyOne){
+            score+=3;
+            onlyOne=false;
+          }
         }
         else{
           score--;
@@ -142,6 +147,7 @@ int HeuristicAI::computeScore(engine::Command& command){
 void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
   cout<<"Team Number "<<teamNumber<<" is playing"<<endl;
   int k=0;
+  bool hasNotMoved=true;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     cout<<"Character Number "<<k<<" is playing"<<endl;
     int maxScore=-500;
@@ -162,24 +168,27 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
     }
     cout<<"End Attack scoring"<<endl;
 
-    cout<<"Start Move scoring"<<endl;
-    for(int x=0;x<(int)engine.getTurn().getMap().size();x++){
-      for(int y=0;y<(int)engine.getTurn().getMap().size();y++){
-        Position dest;
-        dest.setPos(x,y);
-        Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
-        // cout<<"x : "<<x<<";y :"<<y<<endl;
-        if(movetest.validate(engine.getTurn())){
-          engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-          if(maxScore<computeScore(movetest)){
-            maxScore=computeScore(movetest);
-            cout<<"New MaxScore: "<<maxScore<<endl;
-            ptr_command.reset(new Move (movetest));
+    if(hasNotMoved){
+      cout<<"Start Move scoring"<<endl;
+      for(int x=max(0,engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5);x<min((int)engine.getTurn().getMap().size(),engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5);x++){
+        for(int y=max(0,engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getMap()[0].size(),engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5);y++){
+          Position dest;
+          dest.setPos(x,y);
+          Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
+          // cout<<"x : "<<x<<";y :"<<y<<endl;
+          if(movetest.validate(engine.getTurn())){
+            engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
+            if(maxScore<computeScore(movetest)){
+              maxScore=computeScore(movetest);
+              cout<<"New MaxScore: "<<maxScore<<endl;
+              ptr_command.reset(new Move (movetest));
+              engine.getTurn().getBuffer().pop_back();
+            }
           }
         }
       }
+      cout<<"End Move scoring"<<endl;
     }
-    cout<<"End Move scoring"<<endl;
 
     cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
@@ -241,8 +250,14 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
       else if (ptr_command->commandType==UseObjectcmd){
         cout << "->useobject instruction added " << endl;
       }
+      if (not(ptr_command->commandType==Movecmd)){
+        hasNotMoved=true;
+        k++;
+      }
+      else{
+        hasNotMoved=false;
+      }
       engine.addCommand(move(ptr_command));
-      k++;
     }
     else{
       EndTurn endturntest(teamNumber);

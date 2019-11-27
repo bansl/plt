@@ -24,6 +24,7 @@ bool Engine::turnCheckOut(){
 		cout << "GAME OVER" << endl;
 		return false;
 	}
+	turn.initBuffer();
 	turn.nextTurn();
 	return true;
 }
@@ -57,7 +58,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
 	}
 	if(updateisTurnFinished){
-		
+
 		for(size_t i=0; i<commands.size();i++){
 
 			commands[i]->action(turn);
@@ -85,7 +86,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	teamlabel[0]="Blue", teamlabel[1]="Red";
 	cout << "###########################" << endl << "# CURRENT STATUS" << endl;
 	for (size_t k = 0; k < getTurn().getTeams().size(); k++)
-	{	
+	{
 		for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
 		{
 			int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
@@ -94,9 +95,9 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 			int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
 			cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << endl;
 		}
-		
+
 	}
-	cout << "###########################" << endl;	
+	cout << "###########################" << endl;
 	if(turnCheckOut()) isTurnFinished=true;
 	}
 }
@@ -128,9 +129,9 @@ int Engine::getCurrentPlayerID(){
 
 void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::View& view){
 
-	RenderType cursorRefresh(cursorRender);	
+	RenderType cursorRefresh(cursorRender);
 	if(newEvent.type==sf::Event::KeyPressed ){
-		
+
 		int posXupdate = 0, posYupdate = 0;
 		size_t posXcurs=turn.getCursor()->getPosition().getX();
 		size_t posYcurs=turn.getCursor()->getPosition().getY();
@@ -164,7 +165,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 			Position nextPosCurs;
 			nextPosCurs.setPos(posXcurs+posXupdate, posYcurs+posYupdate);
 			turn.getCursor()->cursorMove(nextPosCurs);
-			turn.notifyObservers(turn, window,cursorRefresh);			
+			turn.notifyObservers(turn, window,cursorRefresh);
 			posXupdate = 0, posYupdate = 0;
 		}
 

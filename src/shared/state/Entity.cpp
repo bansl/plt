@@ -1,6 +1,6 @@
 #include "../state.h"
 
-using namespace state; 
+using namespace state;
 using namespace std;
 
 void Entity::initEntity(){
@@ -32,7 +32,13 @@ bool Entity::isFree (state::Turn& turn,state::Position tilePos){
                 return false;
             };
         }
-        
+
+    }
+    for (size_t k=0;k>turn.getBuffer().size();k++){
+      Position * pos=turn.getBuffer()[k].get();
+      if(tilePos.distanceBetween(*pos,tilePos)==0){
+          return false;
+      };
     }
     return true;
 }
