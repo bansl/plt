@@ -214,7 +214,7 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,
                                                     (600)),
                                                     "Engine");
-            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
             window.setView(view1);
@@ -520,7 +520,7 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,
                                                     (600)),
                                                     "Random AI");
-            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
             window.setView(view1);
@@ -657,7 +657,7 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,
                                                   (600)),
                                                   "Heuristic AI");
-            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
             window.setView(view1);

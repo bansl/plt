@@ -154,22 +154,22 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
     unique_ptr<Command> ptr_command (new UseSkill(commandnull));
 
-    cout<<"Start Attack scoring"<<endl;
+    // cout<<"Start Attack scoring"<<endl;
     for(int i=0;i<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();i++){
       Attack attacktest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[i]);
       if(attacktest.validate(engine.getTurn())){
         engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
         if(maxScore<computeScore(attacktest)){
           maxScore=computeScore(attacktest);
-          cout<<"New MaxScore: "<<maxScore<<endl;
+          // cout<<"New MaxScore: "<<maxScore<<endl;
           ptr_command.reset(new Attack(attacktest));
         }
       }
     }
-    cout<<"End Attack scoring"<<endl;
+    // cout<<"End Attack scoring"<<endl;
 
     if(hasNotMoved){
-      cout<<"Start Move scoring"<<endl;
+      // cout<<"Start Move scoring"<<endl;
       for(int x=max(0,engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5);x<min((int)engine.getTurn().getMap().size(),engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5);x++){
         for(int y=max(0,engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getMap()[0].size(),engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5);y++){
           Position dest;
@@ -180,29 +180,29 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
             engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
             if(maxScore<computeScore(movetest)){
               maxScore=computeScore(movetest);
-              cout<<"New MaxScore: "<<maxScore<<endl;
+              // cout<<"New MaxScore: "<<maxScore<<endl;
               ptr_command.reset(new Move (movetest));
               engine.getTurn().getBuffer().pop_back();
             }
           }
         }
       }
-      cout<<"End Move scoring"<<endl;
+      // cout<<"End Move scoring"<<endl;
     }
 
-    cout<<"Start Defend scoring"<<endl;
+    // cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
     if(deftest.validate(engine.getTurn())){
       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
       if(maxScore<computeScore(deftest)){
         maxScore=computeScore(deftest);
-        cout<<"New MaxScore: "<<maxScore<<endl;
+        // cout<<"New MaxScore: "<<maxScore<<endl;
         ptr_command.reset(new Defend (deftest));
       }
     }
-    cout<<"End Defend scoring"<<endl;
+    // cout<<"End Defend scoring"<<endl;
 
-    cout<<"Start UseObject scoring"<<endl;
+    // cout<<"Start UseObject scoring"<<endl;
     for (int o=0;o<(int)engine.getTurn().getTeams()[teamNumber]->getItems().size();o++){
       for (int c=0;c<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();c++){
         UseObject testUseObject(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[c],o,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
@@ -210,15 +210,15 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
           engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
           if(maxScore<computeScore(testUseObject)){
             maxScore=computeScore(testUseObject);
-            cout<<"New MaxScore: "<<maxScore<<endl;
+            // cout<<"New MaxScore: "<<maxScore<<endl;
   				  ptr_command.reset(new UseObject(testUseObject));
           }
         }
       }
     }
-    cout<<"End UseObject scoring"<<endl;
+    // cout<<"End UseObject scoring"<<endl;
 
-    cout<<"Start UseSkill scoring"<<endl;
+    // cout<<"Start UseSkill scoring"<<endl;
     for(int p=0;p<(int)engine.getTurn().getTeams()[1-teamNumber]->getListCharacter().size();p++){
       for(int s=0;s<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getSkillList().size();s++){
         UseSkill testUseSkill(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[p],s,0);
@@ -226,13 +226,13 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
 				      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
               if(maxScore<computeScore(testUseSkill)){
                 maxScore=computeScore(testUseSkill);
-                cout<<"New MaxScore: "<<maxScore<<endl;
+                // cout<<"New MaxScore: "<<maxScore<<endl;
                 ptr_command.reset(new UseSkill(testUseSkill));
               }
         }
       }
     }
-    cout<<"End UseSkill scoring"<<endl;
+    // cout<<"End UseSkill scoring"<<endl;
 
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
