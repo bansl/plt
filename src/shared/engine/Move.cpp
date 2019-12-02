@@ -75,9 +75,10 @@ bool Move::validate (state::Turn& turn){
                     //     cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
                     // }
                     // cout << "path found!" << endl;
+                    character.getPosition().setPos(newPosition.getX(),newPosition.getY());
                     character.setStatus(Moving);
-                    std::unique_ptr<Position> addrnewPosition(new state::Position(newPosition));
-                    turn.addToBuffer(move(addrnewPosition));
+                    std::unique_ptr<Position> addrOldPosition(new state::Position(character.getPosition()));
+                    turn.addToBuffer(move(addrOldPosition));
                     return true;
                 }
             }
