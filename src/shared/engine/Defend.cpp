@@ -28,3 +28,7 @@ state::Character& Defend::getCharacter(){
 bool Defend::finish(state::Turn& turn){
   return true;
 }
+
+bool Defend::revert(state::Turn& turn){
+  return true;
+}

@@ -27,3 +27,11 @@ bool EndTurn::finish(state::Turn& turn){
   }
   return true;
 }
+
+bool EndTurn::revert(state::Turn& turn){
+  return true;
+  for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
+  {
+    turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Available);
+  }
+}

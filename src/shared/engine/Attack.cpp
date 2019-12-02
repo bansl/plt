@@ -120,3 +120,9 @@ state::Character& Attack::getDefender(){
   Character & addrCharacter = target;
   return addrCharacter;
 }
+
+bool Attack::revert(state::Turn& turn){
+  attacker.setStatus(Available);
+  target.setCurrentHP(+attacker.getAttackPower()-target.getDefense());
+  return true;
+}

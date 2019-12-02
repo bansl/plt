@@ -128,3 +128,7 @@ std::vector<state::Position>& Move::getPathToDest(){
   std::vector<state::Position>& addrPath = pathToDest;
   return addrPath;
 }
+
+bool Move::revert(state::Turn& turn){
+  return true;
+}

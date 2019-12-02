@@ -78,3 +78,12 @@ state::Character& UseSkill::getTargetCharacter(){
 int UseSkill::getSkillNumber(){
   return skillNumber;
 }
+
+bool UseSkill::revert(state::Turn& turn){
+  int damage=character.getSkillList()[skillNumber]->getDamage();
+  int heal=character.getSkillList()[skillNumber]->getHeal();
+  targetList.setCurrentHP(+damage);
+  targetList.setCurrentHP(-heal);
+
+  return true;
+}
