@@ -16,14 +16,20 @@ DeepAI::DeepAI(engine::Engine& engine):engine(engine){
 }
 
 int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter, bool hasNotMoved){
+	engine.showStatus=false;
 	HeuristicAI haitest(engine);
   sf::RenderWindow wt;
 	sf::RenderWindow& windowtest=wt;
+	haitest.showText=false;
+	engine.updateDisplay(wt);
 	haitest.runAI(numberNextCharacter,hasNotMoved);
+	engine.updateDisplay(wt);
 	engine.updateDisplay(wt);
   haitest.runAI();
 	engine.updateDisplay(wt);
+	engine.updateDisplay(wt);
 	haitest.runAI();
+	engine.updateDisplay(wt);
 	engine.updateDisplay(wt);
 	haitest.runAI();
 	engine.updateDisplay(wt);
@@ -42,7 +48,8 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
   engine.revertTurn(windowtest);
   engine.revertTurn(windowtest);
 	engine.revertTurn(windowtest);
-  return score;
+	engine.showStatus=true;
+	return score;
 }
 
 void DeepAI::deepCommandList(Engine& engine,int teamNumber){

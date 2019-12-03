@@ -161,7 +161,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
   bool hNM=hasNotMoved;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     if(hasNotMoved){
-      cout<<"Character Number "<<k<<" is playing"<<endl;
+      if(showText) cout<<"Character Number "<<k<<" is playing"<<endl;
     }
     int maxScore=-500;
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
@@ -252,19 +252,19 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
 
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
-        cout << "->attack instruction added " << endl;
+        if(showText) cout << "->attack instruction added " << endl;
       }
       else if (ptr_command->commandType==Movecmd){
-        cout << "->move instruction added " << endl;
+        if(showText) cout << "->move instruction added " << endl;
       }
       else if (ptr_command->commandType==Defendcmd){
-        cout << "->defend instruction added " << endl;
+        if(showText) cout << "->defend instruction added " << endl;
       }
       else if (ptr_command->commandType==UseSkillcmd){
-        cout << "->useskill instruction added " << endl;
+        if(showText) cout << "->useskill instruction added " << endl;
       }
       else if (ptr_command->commandType==UseObjectcmd){
-        cout << "->useobject instruction added " << endl;
+        if(showText) cout << "->useobject instruction added " << endl;
       }
       if (not(ptr_command->commandType==Movecmd)){
         hNM=true;
@@ -281,7 +281,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
         unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
         engine.addCommand(move(ptr_endturntest));
         k=engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();
-        cout << "->endturn instruction added " << endl;
+        if(showText) cout << "->endturn instruction added " << endl;
       }
     }
   }

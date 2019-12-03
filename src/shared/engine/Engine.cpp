@@ -85,27 +85,29 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 			command_history.push_back(move(commands.back()));
 			command_history_nb.back()++;
 			commands.pop_back();
-		}
-	vector<string> teamlabel(2);
-	teamlabel[0]="Blue", teamlabel[1]="Red";
-	cout << "###########################" << endl << "# CURRENT STATUS" << endl;
-	std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
-	std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
-	for (size_t k = 0; k < getTurn().getTeams().size(); k++)
-	{
-		for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
-		{
-			int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
-			int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
-			int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
-			int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
-			JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
-			RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
-			cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
-		}
-
 	}
-	cout << "###########################" << endl;
+	if(showStatus){
+		vector<string> teamlabel(2);
+		teamlabel[0]="Blue", teamlabel[1]="Red";
+		cout << "###########################" << endl << "# CURRENT STATUS" << endl;
+		std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
+		std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
+		for (size_t k = 0; k < getTurn().getTeams().size(); k++)
+		{
+			for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
+			{
+				int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
+				int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
+				int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
+				int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
+				JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
+				RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
+				cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
+			}
+
+		}
+		cout << "###########################" << endl;
+	}
 	if(turnCheckOut()) isTurnFinished=true;
 	}
 }
@@ -148,7 +150,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 		// direction input
 		if (sf::Keyboard::isKeyPressed(direction_keys[turn.rotation%4])){
 			if(posXcurs!=0) posXupdate = -1;
-			// else posXupdate = mapsize-1 -posXcurs;	
+			// else posXupdate = mapsize-1 -posXcurs;
 		}
 		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+3)%4])){
 			if(posYcurs!=mapsize-1) posYupdate = 1;
@@ -156,14 +158,14 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 		}
 		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+2)%4])){
 			if(posXcurs!=mapsize-1) posXupdate = 1;
-			// else posXupdate = -posXcurs;	
+			// else posXupdate = -posXcurs;
 		}
 		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+1)%4])){
 			if(posYcurs!=0) posYupdate = -1;
 			// else posYupdate = mapsize-1 -posYcurs;
 		}
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) view.move(+40, -40),window.setView(view);	
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) view.move(+40, -40),window.setView(view);
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) view.move(-40, -40), window.setView(view);
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) view.move(-40, +40), window.setView(view);
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(40, 40), window.setView(view);
@@ -197,27 +199,28 @@ bool Engine::revertTurn(sf::RenderWindow& window){
 			}
 		command_history_nb.pop_back();
 		turn.notifyObservers(turn, window,fullRender);
-
-		vector<string> teamlabel(2);
-		teamlabel[0]="Blue", teamlabel[1]="Red";
-		cout << "###########################" << endl << "# CURRENT STATUS" << endl;
-		std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
-		std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
-		for (size_t k = 0; k < getTurn().getTeams().size(); k++)
-		{
-			for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
+		if(showStatus){
+			vector<string> teamlabel(2);
+			teamlabel[0]="Blue", teamlabel[1]="Red";
+			cout << "###########################" << endl << "# CURRENT STATUS" << endl;
+			std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
+			std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
+			for (size_t k = 0; k < getTurn().getTeams().size(); k++)
 			{
-				int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
-				int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
-				int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
-				int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
-				JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
-				RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
-				cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
-			}
+				for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
+				{
+					int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
+					int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
+					int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
+					int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
+					JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
+					RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
+					cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
+				}
 
+			}
+			cout << "###########################" << endl;
 		}
-		cout << "###########################" << endl;
 		return true;
 	}
 	return false;
