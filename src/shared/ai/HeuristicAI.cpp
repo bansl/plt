@@ -181,11 +181,12 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
     }
     // cout<<"End Attack scoring"<<endl;
 
+    // cout<<"Start Move scoring"<<endl;
     if(hNM){
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
-        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());x++){
-          for(int y=max(0,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());y++){
+        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,1);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size()-1);x++){
+          for(int y=max(1,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size()-1);y++){
             Position dest;
             dest.setPos(x,y);
             Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
@@ -203,6 +204,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
           }
         }
       }
+      // cout<<"End Move scoring"<<endl;
 
     // cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
