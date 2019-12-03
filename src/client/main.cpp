@@ -934,7 +934,7 @@ int main(int argc,char* argv[])
             			      testEngine.getTurn().registerObserver(ptr_layer);
                         sf::RenderWindow window(sf::VideoMode(  800,
                                                               (600)),
-                                                              "Heuristic AI");
+                                                              "Deep AI");
                         sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
                         sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
                         view1.zoom(3.f);
