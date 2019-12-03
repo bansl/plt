@@ -19,11 +19,15 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
 	HeuristicAI haitest(engine);
   sf::RenderWindow wt;
 	sf::RenderWindow& windowtest=wt;
-	haitest.finishWithHeuristic(engine,teamNumber,numberNextCharacter,hasNotMoved);
+	haitest.runAI(numberNextCharacter,hasNotMoved);
+	engine.updateDisplay(wt);
   haitest.runAI();
-  haitest.runAI();
-  haitest.runAI();
-  int score=0;
+	engine.updateDisplay(wt);
+	haitest.runAI();
+	engine.updateDisplay(wt);
+	haitest.runAI();
+	engine.updateDisplay(wt);
+	int score=0;
   for(int i=0;i<(int)engine.getTurn().getTeams().size();i++){
     for(int j=0;j<(int)engine.getTurn().getTeams()[i]->getListCharacter().size();j++){
       if(i==teamNumber){
@@ -45,8 +49,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
   cout<<"Team Number "<<teamNumber<<" is playing"<<endl;
   int k=0;
   bool hasNotMoved=true;
-  sf::RenderWindow wt;
-  sf::RenderWindow& windowtest=wt;
 	std::vector<std::unique_ptr<Command>> commandsTemp;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     if(hasNotMoved){
