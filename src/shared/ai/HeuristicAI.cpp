@@ -109,11 +109,8 @@ int HeuristicAI::computeScore(engine::Command& command){
       }
     }
     else if (command.commandType==Movecmd){
-      cout<<1;
       Command * pC=&command;
-      cout<<2;
       engine::Move *pM=dynamic_cast<engine::Move*>(pC);
-      cout<<3;
       bool onlyOne=true;
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=6)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
@@ -125,7 +122,6 @@ int HeuristicAI::computeScore(engine::Command& command){
         else{
           score+=1;
         }
-      cout<<i;
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
           if(onlyOne){
             score+=6+(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
@@ -139,7 +135,7 @@ int HeuristicAI::computeScore(engine::Command& command){
           }
         }
       }
-      cout<<"endscoreMove"<<endl;
+      // cout<<"endscoreMove"<<endl;
     }
     return score;
 }
