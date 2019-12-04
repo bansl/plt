@@ -14,6 +14,10 @@ void Turn::nextTurn (){
     turnNumber+=1;
 }
 
+void Turn::revertTurn (){
+    turnNumber-=2;
+}
+
 int Turn::getTurn (){
     return turnNumber;
 }

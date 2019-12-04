@@ -207,6 +207,7 @@ bool Engine::revertTurn(sf::RenderWindow& window){
 				command_history.back()->revert(turn);
 				command_history.pop_back();
 			}
+		turn.revertTurn();
 		command_history_nb.pop_back();
 		turn.notifyObservers(turn, window,fullRender);
 		if(showStatus){
