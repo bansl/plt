@@ -30,5 +30,6 @@ bool Defend::finish(state::Turn& turn){
 }
 
 bool Defend::revert(state::Turn& turn){
+  character.setStatus(Available);
   return true;
 }

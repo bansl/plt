@@ -84,6 +84,6 @@ bool UseSkill::revert(state::Turn& turn){
   int heal=character.getSkillList()[skillNumber]->getHeal();
   targetList.setCurrentHP(+damage);
   targetList.setCurrentHP(-heal);
-
+  character.setStatus(Available);
   return true;
 }

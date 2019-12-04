@@ -130,5 +130,6 @@ std::vector<state::Position>& Move::getPathToDest(){
 }
 
 bool Move::revert(state::Turn& turn){
+  character.setStatus(Available); 
   return true;
 }
