@@ -76,6 +76,11 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 				pM->getCharacter().setStatus(tempStatus);
 				position_history.push_back(pM->getPathToDest()[0]);
 			}
+			
+			else if (commands[i]->commandType==Attackcmd){
+				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
+				defending_history.push_back(pA->getDefender().getStatus()==Defending);
+			}
 			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender);
 			commands[i]->finish(turn);
 			turn.notifyObservers(turn, window,charRender);
@@ -193,6 +198,11 @@ bool Engine::revertTurn(sf::RenderWindow& window){
 					engine::Move *pM=dynamic_cast<engine::Move*>(command_history.back().get());
 					pM->getCharacter().getPosition().setPos(position_history.back().getX(),position_history.back().getY());
 					position_history.pop_back();
+				}
+				else if(command_history.back()->commandType==Attackcmd) {
+					engine::Attack *pA=dynamic_cast<engine::Attack*>(command_history.back().get());
+					if (defending_history.back()) pA->getDefender().setStatus(Defending);
+					defending_history.pop_back();
 				}
 				command_history.back()->revert(turn);
 				command_history.pop_back();
