@@ -21,6 +21,7 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
   sf::RenderWindow wt;
 	sf::RenderWindow& windowtest=wt;
 	haitest.showText=false;
+	int tempTurnNumber=engine.getTurn().getTurn();
 	engine.updateDisplay(wt);
 	haitest.runAI(numberNextCharacter,hasNotMoved);
 	engine.updateDisplay(wt);
@@ -44,10 +45,10 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
       }
     }
   }
-  engine.revertTurn(windowtest);
-  engine.revertTurn(windowtest);
-  engine.revertTurn(windowtest);
-	engine.revertTurn(windowtest);
+	int tempEndTurn=engine.getTurn().getTurn();
+	for(int i=tempTurnNumber;i<tempEndTurn;i++){
+		engine.revertTurn(windowtest);
+	}
 	engine.showStatus=true;
 	return score;
 }
