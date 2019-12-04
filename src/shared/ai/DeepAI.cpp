@@ -53,7 +53,7 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
 }
 
 void DeepAI::deepCommandList(Engine& engine,int teamNumber){
-  cout<<"Team Number "<<teamNumber<<" is playing"<<endl;
+  cout<<"DeepAi: Team Number "<<teamNumber<<" is playing"<<endl;
   int k=0;
   bool hasNotMoved=true;
 	std::vector<std::unique_ptr<Command>> commandsTemp;
@@ -173,7 +173,9 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
 	      }
 	    }
     // cout<<"End UseSkill scoring"<<endl;
-
+		for (int i=0;i<(int)commandsTemp.size();i++){
+			commandsTemp[i]->validate(engine.getTurn());
+		}
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
 				cout << "->attack instruction added " << endl;

@@ -17,5 +17,7 @@ add_custom_test(shared_tile)
 add_custom_test(shared_item)
 add_custom_test(shared_engine)
 add_custom_test(shared_drawobject)
-# add_custom_test(shared_random_ai)
+#add_custom_test(shared_random_ai)
+#add_custom_test(shared_deep_ai)
+#add_custom_test(heuristic_ai)
 # vim: set sw=2 sts=2 et:
