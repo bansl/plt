@@ -92,6 +92,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     }
     // cout<<"End Attack scoring"<<endl;
 
+		// cout<<"Start Move scoring"<<endl;
     if(hasNotMoved){
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
@@ -122,6 +123,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
           }
         }
       }
+			// cout<<"End Move scoring"<<endl;
 
     // cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);

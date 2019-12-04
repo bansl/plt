@@ -34,6 +34,12 @@ bool Entity::isFree (state::Turn& turn,state::Position tilePos){
         }
 
     }
+    for (size_t i = 0; i < turn.getBuffer().size(); i++){
+      Position * pos=turn.getBuffer()[i].get();
+      if(tilePos.distanceBetween(*pos,tilePos)==0){
+          return false;
+      };
+    }
     return true;
 }
 

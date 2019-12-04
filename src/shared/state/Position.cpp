@@ -1,6 +1,6 @@
 #include "../state.h"
 
-using namespace state; 
+using namespace state;
 using namespace std;
 
 void Position::setX(int newX){

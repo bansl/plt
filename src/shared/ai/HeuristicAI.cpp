@@ -109,8 +109,11 @@ int HeuristicAI::computeScore(engine::Command& command){
       }
     }
     else if (command.commandType==Movecmd){
+      cout<<1;
       Command * pC=&command;
+      cout<<2;
       engine::Move *pM=dynamic_cast<engine::Move*>(pC);
+      cout<<3;
       bool onlyOne=true;
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=6)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
@@ -122,6 +125,7 @@ int HeuristicAI::computeScore(engine::Command& command){
         else{
           score+=1;
         }
+      cout<<i;
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
           if(onlyOne){
             score+=6+(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
@@ -135,6 +139,7 @@ int HeuristicAI::computeScore(engine::Command& command){
           }
         }
       }
+      cout<<"endscoreMove"<<endl;
     }
     return score;
 }
@@ -159,6 +164,7 @@ HeuristicAI::HeuristicAI(engine::Engine& engine):engine(engine){
 void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int numberNextCharacter, bool hasNotMoved){
   int k=numberNextCharacter;
   bool hNM=hasNotMoved;
+  cout<<"Heuristic AI : Team Number "<<teamNumber<<" is playing"<<endl;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     if(hasNotMoved){
       if(showText) cout<<"Character Number "<<k<<" is playing"<<endl;
@@ -195,8 +201,9 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
               engine.getTurn().getBuffer().pop_back();
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().setPos(tempX,tempY);
-              if(maxScore<computeScore(movetest)){
-                maxScore=computeScore(movetest);
+              int tempScore=computeScore(movetest);
+              if(maxScore<tempScore){
+                maxScore=tempScore;
                 // cout<<"New MaxScore: "<<maxScore<<endl;
                 ptr_command.reset(new Move (movetest));
               }

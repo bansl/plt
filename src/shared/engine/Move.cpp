@@ -31,7 +31,7 @@ bool Move::validate (state::Turn& turn){
         vector<Position> neighbors;
         pathToDest={currentPosition};
         bool firstpos=true;
-        while(pathToDest.size()<5){
+        while(pathToDest.size()<=5){
             // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
             if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
             if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
@@ -77,8 +77,8 @@ bool Move::validate (state::Turn& turn){
                     // cout << "path found!" << endl;
                     character.getPosition().setPos(newPosition.getX(),newPosition.getY());
                     character.setStatus(Moving);
-                    std::unique_ptr<Position> addrOldPosition(new state::Position(character.getPosition()));
-                    turn.addToBuffer(move(addrOldPosition));
+                    std::unique_ptr<Position> addrNewPosition(new state::Position(newPosition));
+                    turn.addToBuffer(move(addrNewPosition));
                     return true;
                 }
             }
