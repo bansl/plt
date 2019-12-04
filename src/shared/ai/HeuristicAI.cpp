@@ -181,7 +181,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
     }
     // cout<<"End Attack scoring"<<endl;
 
-    // cout<<"Start Move scoring"<<endl;
+    cout<<"Start Move scoring"<<endl;
     if(hNM){
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
@@ -204,7 +204,7 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
           }
         }
       }
-      // cout<<"End Move scoring"<<endl;
+      cout<<"End Move scoring"<<endl;
 
     // cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);

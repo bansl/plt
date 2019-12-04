@@ -192,6 +192,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 bool Engine::revertTurn(sf::RenderWindow& window){
 	if (!command_history.empty())
 	{
+		turn.revertTurn();
 		for (int i = 0; i < command_history_nb.back(); i++)
 			{
 				if(command_history.back()->commandType==Movecmd) {
@@ -207,7 +208,6 @@ bool Engine::revertTurn(sf::RenderWindow& window){
 				command_history.back()->revert(turn);
 				command_history.pop_back();
 			}
-		turn.revertTurn();
 		command_history_nb.pop_back();
 		turn.notifyObservers(turn, window,fullRender);
 		if(showStatus){

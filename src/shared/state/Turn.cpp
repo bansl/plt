@@ -15,7 +15,7 @@ void Turn::nextTurn (){
 }
 
 void Turn::revertTurn (){
-    turnNumber-=2;
+    turnNumber-=1;
 }
 
 int Turn::getTurn (){
