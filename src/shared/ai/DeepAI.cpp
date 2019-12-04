@@ -80,6 +80,10 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
               // cout<<"New MaxScore: "<<maxScore<<endl;
               ptr_command.reset(new Attack(attacktest));
             }
+						for (int i=0;i<(int)commandsTemp.size();i++){
+							commandsTemp[i]->validate(engine.getTurn());
+							engine.addCommand(move(commandsTemp[i]));
+						}
 
           }
         }
@@ -108,6 +112,10 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                 // cout<<"New MaxScore: "<<maxScore<<endl;
                 ptr_command.reset(new Move (movetest));
               }
+							for (int i=0;i<(int)commandsTemp.size();i++){
+								commandsTemp[i]->validate(engine.getTurn());
+								engine.addCommand(move(commandsTemp[i]));
+							}
 
             }
           }
@@ -126,6 +134,10 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         // cout<<"New MaxScore: "<<maxScore<<endl;
         ptr_command.reset(new Defend (deftest));
       }
+			for (int i=0;i<(int)commandsTemp.size();i++){
+				commandsTemp[i]->validate(engine.getTurn());
+				engine.addCommand(move(commandsTemp[i]));
+			}
 
     }
     // cout<<"End Defend scoring"<<endl;
@@ -144,6 +156,10 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
             // cout<<"New MaxScore: "<<maxScore<<endl;
   				  ptr_command.reset(new UseObject(testUseObject));
           }
+					for (int i=0;i<(int)commandsTemp.size();i++){
+						commandsTemp[i]->validate(engine.getTurn());
+						engine.addCommand(move(commandsTemp[i]));
+					}
 
         }
       }
@@ -166,16 +182,18 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                     // cout<<"New MaxScore: "<<maxScore<<endl;
                     ptr_command.reset(new UseSkill(testUseSkill));
                   }
+									for (int i=0;i<(int)commandsTemp.size();i++){
+										commandsTemp[i]->validate(engine.getTurn());
+										engine.addCommand(move(commandsTemp[i]));
+									}
 
 	            }
 	          }
 	        }
 	      }
 	    }
-    // cout<<"End UseSkill scoring"<<endl;
-		for (int i=0;i<(int)commandsTemp.size();i++){
-			commandsTemp[i]->validate(engine.getTurn());
-		}
+			// cout<<"End UseSkill scoring"<<endl;
+
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
 				cout << "->attack instruction added " << endl;
@@ -200,9 +218,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         hasNotMoved=false;
       }
 			commandsTemp.push_back(move(ptr_command));
-			for (int i=0;i<(int)commandsTemp.size();i++){
-	      engine.addCommand(move(commandsTemp[i]));
-			}
+	    engine.addCommand(move(commandsTemp[commandsTemp.size()-1]));
     }
     else{
       EndTurn endturntest(teamNumber);
