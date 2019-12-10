@@ -174,8 +174,9 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
       Attack attacktest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[i]);
       if(attacktest.validate(engine.getTurn())){
         engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-        if(maxScore<computeScore(attacktest)){
-          maxScore=computeScore(attacktest);
+        int tempScore=computeScore(attacktest);
+        if(maxScore<tempScore){
+          maxScore=tempScore;
           // cout<<"New MaxScore: "<<maxScore<<endl;
           ptr_command.reset(new Attack(attacktest));
         }
@@ -213,8 +214,9 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
     if(deftest.validate(engine.getTurn())){
       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-      if(maxScore<computeScore(deftest)){
-        maxScore=computeScore(deftest);
+      int tempScore=computeScore(deftest);
+      if(maxScore<tempScore){
+        maxScore=tempScore;
         // cout<<"New MaxScore: "<<maxScore<<endl;
         ptr_command.reset(new Defend (deftest));
       }
@@ -227,8 +229,9 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
         UseObject testUseObject(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[c],o,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
         if(testUseObject.validate(engine.getTurn())){
           engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-          if(maxScore<computeScore(testUseObject)){
-            maxScore=computeScore(testUseObject);
+          int tempScore=computeScore(testUseObject);
+          if(maxScore<tempScore){
+            maxScore=tempScore;
             // cout<<"New MaxScore: "<<maxScore<<endl;
             ptr_command.reset(new UseObject(testUseObject));
           }
@@ -243,8 +246,9 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
         UseSkill testUseSkill(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[1-teamNumber]->getListCharacter()[p],s,0);
         if(testUseSkill.validate(engine.getTurn())){
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
-              if(maxScore<computeScore(testUseSkill)){
-                maxScore=computeScore(testUseSkill);
+              int tempScore=computeScore(testUseSkill);
+              if(maxScore<tempScore){
+                maxScore=tempScore;
                 // cout<<"New MaxScore: "<<maxScore<<endl;
                 ptr_command.reset(new UseSkill(testUseSkill));
               }
