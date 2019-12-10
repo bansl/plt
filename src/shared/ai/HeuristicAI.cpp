@@ -160,7 +160,7 @@ HeuristicAI::HeuristicAI(engine::Engine& engine):engine(engine){
 void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int numberNextCharacter, bool hasNotMoved){
   int k=numberNextCharacter;
   bool hNM=hasNotMoved;
-  cout<<"Heuristic AI : Team Number "<<teamNumber<<" is playing"<<endl;
+  // cout<<"Heuristic AI : Team Number "<<teamNumber<<" is playing"<<endl;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     if(hasNotMoved){
       if(showText) cout<<"Character Number "<<k<<" is playing"<<endl;

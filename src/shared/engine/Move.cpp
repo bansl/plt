@@ -31,7 +31,9 @@ bool Move::validate (state::Turn& turn){
         vector<Position> neighbors;
         pathToDest={currentPosition};
         bool firstpos=true;
-        while(pathToDest.size()<=5){
+        int iter=0;
+        while((pathToDest.size()<=5) && (iter<=250)){
+            iter++;
             // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
             if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
             if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);

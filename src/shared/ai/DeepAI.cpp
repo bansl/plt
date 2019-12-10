@@ -66,7 +66,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
     unique_ptr<Command> ptr_command (new UseSkill(commandnull));
 
-    // cout<<"Start Attack scoring"<<endl;
+    cout<<"Start Attack scoring"<<endl;
     for(int t=0;t<(int)engine.getTurn().getTeams().size();t++){
       if(t!=teamNumber){
         for(int i=0;i<(int)engine.getTurn().getTeams()[t]->getListCharacter().size();i++){
@@ -90,14 +90,15 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         }
       }
     }
-    // cout<<"End Attack scoring"<<endl;
+    cout<<"End Attack scoring"<<endl;
 
-		// cout<<"Start Move scoring"<<endl;
+		cout<<"Start Move scoring"<<endl;
     if(hasNotMoved){
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
-        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());x++){
-          for(int y=max(0,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());y++){
+        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());x+=2){
+          for(int y=max(0,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());y+=2){
+            cout<< "x: " << x << ", y: " << y << endl;
             Position dest;
             dest.setPos(x,y);
             Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
@@ -123,9 +124,9 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
           }
         }
       }
-			// cout<<"End Move scoring"<<endl;
+			cout<<"End Move scoring"<<endl;
 
-    // cout<<"Start Defend scoring"<<endl;
+    cout<<"Start Defend scoring"<<endl;
     Defend deftest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
     if(deftest.validate(engine.getTurn())){
       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
@@ -143,9 +144,9 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
 			}
 
     }
-    // cout<<"End Defend scoring"<<endl;
+    cout<<"End Defend scoring"<<endl;
 
-    // cout<<"Start UseObject scoring"<<endl;
+    cout<<"Start UseObject scoring"<<endl;
     for (int o=0;o<(int)engine.getTurn().getTeams()[teamNumber]->getItems().size();o++){
       for (int c=0;c<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size();c++){
         UseObject testUseObject(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[c],o,teamNumber,*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]);
@@ -167,9 +168,9 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         }
       }
     }
-    // cout<<"End UseObject scoring"<<endl;
+    cout<<"End UseObject scoring"<<endl;
 
-    // cout<<"Start UseSkill scoring"<<endl;
+    cout<<"Start UseSkill scoring"<<endl;
     for(int t=0;t<(int)engine.getTurn().getTeams().size();t++){
       if(t!=teamNumber){
         for(int p=0;p<(int)engine.getTurn().getTeams()[t]->getListCharacter().size();p++){
@@ -195,7 +196,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
 	        }
 	      }
 	    }
-			// cout<<"End UseSkill scoring"<<endl;
+			cout<<"End UseSkill scoring"<<endl;
 
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
