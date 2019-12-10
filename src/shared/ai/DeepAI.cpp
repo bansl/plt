@@ -94,6 +94,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
 
 		cout<<"Start Move scoring"<<endl;
     if(hasNotMoved){
+			HeuristicAI hai(engine);
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
         for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());x+=2){
@@ -104,12 +105,13 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
             Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
             // cout<<"Position: x : "<<x<<";y :"<<y<<endl;
             if(movetest.validate(engine.getTurn())){
+							int minMaxScore=hai.computeScore(movetest);
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
               engine.getTurn().getBuffer().pop_back();
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().setPos(tempX,tempY);
               unique_ptr<Command> ptr_testcommand (new Move(movetest));
               engine.addCommand(move(ptr_testcommand));
-              int minMaxScore=minMax(engine,teamNumber,k,false);
+							//int minMaxScore=minMax(engine,teamNumber,k,false);
               if(maxScore<minMaxScore){
                 maxScore=minMaxScore;
                 // cout<<"New MaxScore: "<<maxScore<<endl;
