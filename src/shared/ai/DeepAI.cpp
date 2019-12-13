@@ -124,6 +124,7 @@ void DeepAI::deepCommandList(int teamNumber){
                 Movequeue.push(movetest);
                 InstructionAdded[1]=true;
               }
+							cout<<"Move in the buffer "<<engine.getTurn().getBuffer().size()<<endl;
             }
           }
         }
