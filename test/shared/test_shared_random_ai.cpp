@@ -43,14 +43,8 @@ RandomAI testAI(testEngine);
 // === Display Turn ===
 TurnDisplay layer(testTurn);
 
-TurnDisplay* ptr_layer=&layer;
-testEngine.getTurn().registerObserver(ptr_layer);
-
-sf::RenderWindow window;
-
 bool checktestAI=false;
   if(testEngine.turnCheckIn()){
-      testEngine.updateDisplay(window);
       testAI.runAI();
       checktestAI=true;
     }

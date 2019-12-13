@@ -9,7 +9,7 @@ using namespace render;
 
 BOOST_AUTO_TEST_CASE(TestEngine)
 {
-  for(int i=0;i<5;i++){
+  for(int i=0;i<5;i++){ //on execute la boucle plusieurs fois pour regarder si cela fonctionne pour toutes les classes et races
   Turn testTurn{};
   testTurn.initMap(6,6,"g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g1,g2,g3,g2,g1,g3");
   testTurn.initTeams();

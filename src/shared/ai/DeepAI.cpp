@@ -81,8 +81,9 @@ void DeepAI::deepCommandList(int teamNumber){
             int minMaxScore=minMax(teamNumber,k+1,true);
             if(maxScore<minMaxScore){
               maxScore=minMaxScore;
-              // cout<<"New MaxScore: "<<maxScore<<endl;
+              cout<<"New MaxScore: "<<maxScore<<endl;
               ptr_command.reset(new Attack(attacktest));
+							updateQueue();
               Attackqueue.push(attacktest);
               InstructionAdded[0]=true;
             }
@@ -118,7 +119,7 @@ void DeepAI::deepCommandList(int teamNumber){
 							//int minMaxScore=minMax(teamNumber,k,false);
               if(maxScore<minMaxScore){
                 maxScore=minMaxScore;
-                // cout<<"New MaxScore: "<<maxScore<<endl;
+                cout<<"New MaxScore: "<<maxScore<<endl;
                 ptr_command.reset(new Move (movetest));
                 updateQueue();
                 Movequeue.push(movetest);
@@ -140,7 +141,7 @@ void DeepAI::deepCommandList(int teamNumber){
       int minMaxScore=minMax(teamNumber,k+1,true);
       if(maxScore<minMaxScore){
         maxScore=minMaxScore;
-        // cout<<"New MaxScore: "<<maxScore<<endl;
+        cout<<"New MaxScore: "<<maxScore<<endl;
         ptr_command.reset(new Defend (deftest));
         updateQueue();
         Defendqueue.push(deftest);
@@ -160,7 +161,7 @@ void DeepAI::deepCommandList(int teamNumber){
           int minMaxScore=minMax(teamNumber,k+1,true);
           if(maxScore<minMaxScore){
             maxScore=minMaxScore;
-            // cout<<"New MaxScore: "<<maxScore<<endl;
+            cout<<"New MaxScore: "<<maxScore<<endl;
   				  ptr_command.reset(new UseObject(testUseObject));
             updateQueue();
             UseObjectqueue.push(testUseObject);
@@ -184,7 +185,7 @@ void DeepAI::deepCommandList(int teamNumber){
                   int minMaxScore=minMax(teamNumber,k+1,true);
                   if(maxScore<minMaxScore){
                     maxScore=minMaxScore;
-                    // cout<<"New MaxScore: "<<maxScore<<endl;
+                    cout<<"New MaxScore: "<<maxScore<<endl;
                     ptr_command.reset(new UseSkill(testUseSkill));
                     updateQueue();
                     UseSkillqueue.push(testUseSkill);

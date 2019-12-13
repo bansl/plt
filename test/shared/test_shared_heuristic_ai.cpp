@@ -26,10 +26,6 @@ BOOST_AUTO_TEST_CASE(testHeuristicAI)
   testTurn.initTeams();
   testTurn.getTeams()[1]->addCharacter();
   testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
-  testTurn.getTeams()[1]->addCharacter();
-  testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
-  testTurn.getTeams()[1]->addCharacter();
-  testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
   // === Init Engine ===
   Engine testEngine(testTurn);
 
@@ -39,16 +35,9 @@ BOOST_AUTO_TEST_CASE(testHeuristicAI)
   // === Init AI ===
   HeuristicAI testAI(testEngine);
   // === Display Turn ===
-  TurnDisplay layer(testTurn);
-
-  TurnDisplay* ptr_layer=&layer;
-  testEngine.getTurn().registerObserver(ptr_layer);
-
-  sf::RenderWindow window;
 
   bool checktestAI=false;
     if(testEngine.turnCheckIn()){
-        testEngine.updateDisplay(window);
         testAI.runAI();
         checktestAI=true;
       }
