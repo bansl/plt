@@ -56,25 +56,42 @@ Puis c'est au tour de l'adversaire.
 
 \subsection{Intelligence Heuristique}
 
-L'IA heuristique va lister les actions possibles par personnages 
-de son équipe et calculer un score pour chacune de ces actions.
+L'IA heuristique fonctionne sur un système de point calculé pour 
+chaque action possible.
+L'IA va lister les actions possibles par personnages de son équipe et 
+calculer un score pour chacune de ces actions.
 Le score est calculé en fonction de la pertinence des actions.
 \\\\
-Concrètement, un personnage peut se déplacer puis effectuer une action 
-ou seulement effectuer une action.
-Il privilégiera des déplacements où les personnages adverses ne peuvent
-pas l'atteindre après déplacement ou bien s'il peut attaquer un ennemi
-avec un minimum d'attaque subit le tour suivant.
+Concrètement, un personnage peut se déplacer puis effectuer une 
+action ou seulement effectuer une action.
+Il privilégiera des déplacements où les personnages adverses ne 
+peuvent pas l'atteindre après déplacement ou bien s'il peut attaquer 
+un unique ennemi avec un minimum d'attaque subit le tour suivant. 
+C'est-à-dire en termes de point, plus il y a d'ennemis qui pourront 
+l'attaquer au tour suivant plus il va perdre de point pour cette 
+action, s'il y a un unique ennemi qu'il peut attaquer après son 
+action de déplacement il va gagner des points. De plus il gagne des 
+points suplémentaires s'il est hors de porté d'attaque et de 
+déplacement puis attaque.
 \\\\
 Une attaque est privilégiée si l'ennemi est tué en conséquence de
 l'action. Elle est priviligié si le personnage ne peut subir que peu 
 d'attaques au prochain tour, sinon l'IA privilégie la défense qui réduit
 grandement les dégats subits au prochain tour adverse.
+En termes de point, une attaque rapporte plus de point qu'une action 
+classique puisque le but du jeu est de tué les personnages adverses. 
+Si une attaque tue un adversaire alors l'action rapporte encore plus 
+de points.
 \\\\
 Un objet de soin n'est utilisé que lorsque celui-ci est nécessaire 
 (vie<20\% ou mana<20\%) afin qu'il ne soit pas utilisé sur des cibles 
 qui n'ont pas perdu des points de vie ou des points de mana comme 
 pourrait le faire l'IA aléatoire.
+En termes de point l'action perds des points si le personnage à son 
+maximum de vie ou de mana, il gagne plus de point si les points de 
+vie ou de mana sont sous le seuil critique (20\%).
+\\\\
+En terme de point une action défensive gagne de plus en plus de point plus il y a de personnages de l'adversaire qui pourront l'attaquer au prochain tour.
 \\
 \subsection{Intelligence Profonde}
 
@@ -89,13 +106,20 @@ l'IA Heuristique.
 Le score est calculé après 2 tours de chaque équipe en considérant que
 ces tours sont exécutés par l'intelligence heuristique, c'est-à-dire que
 les tours sont réalisés dans l'optique d'obtenir les meilleures actions
-possibles pour le tour.
+possibles pour le tour en prédisant les coups de l'adversaire.
 \\\\
 On calcule le score en fonction des dégâts subis par l'équipe du joueur
 et ceux subis par l'adversaire.
 \\\\
 Après le calcul du score on exécute les tours ainsi effectués dans le
-sens inverse pour revenir au tour initial.
+sens inverse pour revenir au tour initial grâce au rollback implémenté.
+La fonction revertTurn de Engine se charge de lancer les actions réciproques 
+des actions exécutés durant un tour pour retourner au tour précédent et on 
+décrémente le nombre de tours passés.
+On s'évite ainsi de cloner l'objet turn.
+\\\\
+Après être revenu au tour actuel de jeu, on recharge la file d'actions retenues 
+par l'IA profonde pour le tour en cours.
 \\\\
 Cette boucle est ainsi exécutée jusqu'à ce que plus aucun personnage ne 
 puisse effectué d'actions. On exécute alors la liste des commandes
@@ -125,9 +149,13 @@ runAI pour lancer l'IA.
 \\
 \item \textbf{DeepAI :} C'est la classe de l'IA profonde. Elle comporte 
 une fonction minMax qui renvoie le score en considérant le meilleur tour
-de l'adversaire puis le meilleur tour du joueur (2 fois). Elle comporte 
-aussi une fonction deepCommandList pour déterminer la liste des actions 
-à partir des scores et une fonction runAI pour lancer l'IA. 
+de l'adversaire puis le meilleur tour du joueur (2 fois). 
+Elle comporte aussi une fonction deepCommandList pour déterminer la liste des actions 
+à partir des scores, une fonction runAI pour lancer l'IA.
+Elle comporte également une fonction restoreCommandlist pour restorer 
+la liste des actions en cours de construction après avoir fait deux tours 
+de simulation et être retourné à l'état de tour actuel. La fonction updateQueue 
+se charge de tenir à jour la file d'actions retenues par la deepIA.
 
 \end{itemize}
 
