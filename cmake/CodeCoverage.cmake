@@ -282,6 +282,7 @@ function(SETUP_TARGET_FOR_COVERAGE_GCOVR_HTML)
         list(APPEND GCOVR_EXCLUDES "-e")
         list(APPEND GCOVR_EXCLUDES "${EXCLUDE_REPLACED}")
     endforeach()
+	list(APPEND GCOVR_EXCLUDES "-e" "src/mainc.cpp")
 
     add_custom_target(${Coverage_NAME}
         # Run tests

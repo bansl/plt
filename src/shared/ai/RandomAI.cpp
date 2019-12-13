@@ -7,10 +7,11 @@ using namespace ai;
 using namespace engine;
 using namespace state;
 
-void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
+void RandomAI::randomCommandList(int teamNumber){
 	size_t k=0;
-	cout << "team playing:" << teamNumber << endl;
+	cout << "Random AI : Team number "<<teamNumber<<" is playing"<< endl;
 	while(k<engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
+		cout<<"Character Number "<<k<<" is playing"<<endl;
 		std::random_device dev;
   		std::mt19937 rng(dev());
   		std::uniform_int_distribution<std::mt19937::result_type> distribution(1,6);
@@ -125,8 +126,7 @@ void RandomAI::randomCommandList(engine::Engine& engine, int teamNumber){
 }
 
 void RandomAI::runAI(){
-	cout << "Random AI is playing" << endl;
-	randomCommandList(engine,engine.getCurrentPlayerID());
+	randomCommandList(engine.getCurrentPlayerID());
 }
 
 RandomAI::RandomAI(engine::Engine& engine):engine(engine){

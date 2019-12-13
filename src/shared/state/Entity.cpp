@@ -28,7 +28,8 @@ bool Entity::isFree (state::Turn& turn,state::Position tilePos){
     {
         for (size_t j = 0; j < turn.getTeams()[i]->getListCharacter().size(); j++)
         {
-            if((tilePos.distanceBetween(turn.getTeams()[i]->getListCharacter()[j]->getPosition(),tilePos)==0) && (turn.getTeams()[i]->getListCharacter()[j]->getStatus()!=Dead)){
+            if((tilePos.distanceBetween(turn.getTeams()[i]->getListCharacter()[j]->getPosition(),tilePos)==0) &&
+                (turn.getTeams()[i]->getListCharacter()[j]->getStatus()!=Dead)){
                 return false;
             };
         }

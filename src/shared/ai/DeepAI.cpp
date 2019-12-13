@@ -9,14 +9,14 @@ using namespace state;
 
 
 void DeepAI::runAI(){
-	deepCommandList(engine,engine.getCurrentPlayerID());
+	deepCommandList(engine.getCurrentPlayerID());
 }
 
 DeepAI::DeepAI(engine::Engine& engine):engine(engine){
 
 }
 
-int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter, bool hasNotMoved){
+int DeepAI::minMax(int teamNumber,int numberNextCharacter, bool hasNotMoved){
 	engine.showStatus=false;
 	HeuristicAI haitest(engine);
   sf::RenderWindow wt;
@@ -55,12 +55,11 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
 	return score;
 }
 
-void DeepAI::deepCommandList(Engine& engine,int teamNumber){
-  cout<<"DeepAi: Team Number "<<teamNumber<<" is playing"<<endl;
+void DeepAI::deepCommandList(int teamNumber){
+  cout<<"Deep AI: Team Number "<<teamNumber<<" is playing"<<endl;
   int k=0;
   bool hasNotMoved=true;
 
-  std::vector<CommandList> CommandtypeTemp;
   while(k<(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter().size()){
     for (size_t k = 0; k < 5; k++) InstructionAdded[k]=false;
     if(hasNotMoved){
@@ -69,8 +68,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     int maxScore=-500;
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
     unique_ptr<Command> ptr_command (new UseSkill(commandnull));
-    CommandtypeTemp.push_back({});
-
 
     cout<<"Start Attack scoring"<<endl;
     for(int t=0;t<(int)engine.getTurn().getTeams().size();t++){
@@ -81,15 +78,13 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
             engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
             unique_ptr<Command> ptr_testcommand (new Attack(attacktest));
             engine.addCommand(move(ptr_testcommand));
-            int minMaxScore=minMax(engine,teamNumber,k+1,true);
+            int minMaxScore=minMax(teamNumber,k+1,true);
             if(maxScore<minMaxScore){
               maxScore=minMaxScore;
               // cout<<"New MaxScore: "<<maxScore<<endl;
               ptr_command.reset(new Attack(attacktest));
               Attackqueue.push(attacktest);
               InstructionAdded[0]=true;
-              CommandtypeTemp.back()=Attackcmd;
-
             }
           }
         }
@@ -120,7 +115,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
               engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().setPos(tempX,tempY);
               unique_ptr<Command> ptr_testcommand (new Move(movetest));
               engine.addCommand(move(ptr_testcommand));
-							//int minMaxScore=minMax(engine,teamNumber,k,false);
+							//int minMaxScore=minMax(teamNumber,k,false);
               if(maxScore<minMaxScore){
                 maxScore=minMaxScore;
                 // cout<<"New MaxScore: "<<maxScore<<endl;
@@ -128,7 +123,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                 updateQueue();
                 Movequeue.push(movetest);
                 InstructionAdded[1]=true;
-                CommandtypeTemp.back()=Movecmd;
               }
             }
           }
@@ -142,7 +136,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
       engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
       unique_ptr<Command> ptr_testcommand (new Defend(deftest));
       engine.addCommand(move(ptr_testcommand));
-      int minMaxScore=minMax(engine,teamNumber,k+1,true);
+      int minMaxScore=minMax(teamNumber,k+1,true);
       if(maxScore<minMaxScore){
         maxScore=minMaxScore;
         // cout<<"New MaxScore: "<<maxScore<<endl;
@@ -150,7 +144,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         updateQueue();
         Defendqueue.push(deftest);
         InstructionAdded[2]=true;
-        CommandtypeTemp.back()=Defendcmd;
       }
     }
     cout<<"End Defend scoring"<<endl;
@@ -163,7 +156,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
           engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
           unique_ptr<Command> ptr_testcommand (new UseObject(testUseObject));
           engine.addCommand(move(ptr_testcommand));
-          int minMaxScore=minMax(engine,teamNumber,k+1,true);
+          int minMaxScore=minMax(teamNumber,k+1,true);
           if(maxScore<minMaxScore){
             maxScore=minMaxScore;
             // cout<<"New MaxScore: "<<maxScore<<endl;
@@ -171,7 +164,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
             updateQueue();
             UseObjectqueue.push(testUseObject);
             InstructionAdded[3]=true;
-            CommandtypeTemp.back()=UseObjectcmd;
           }
         }
       }
@@ -188,7 +180,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     				      engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->setStatus(Available);
                   unique_ptr<Command> ptr_testcommand (new UseSkill(testUseSkill));
                   engine.addCommand(move(ptr_testcommand));
-                  int minMaxScore=minMax(engine,teamNumber,k+1,true);
+                  int minMaxScore=minMax(teamNumber,k+1,true);
                   if(maxScore<minMaxScore){
                     maxScore=minMaxScore;
                     // cout<<"New MaxScore: "<<maxScore<<endl;
@@ -196,7 +188,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                     updateQueue();
                     UseSkillqueue.push(testUseSkill);
                     InstructionAdded[4]=true;
-                    CommandtypeTemp.back()=UseSkillcmd;
                   }
 	            }
 	          }

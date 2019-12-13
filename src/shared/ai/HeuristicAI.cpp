@@ -18,13 +18,17 @@ int HeuristicAI::computeScore(engine::Command& command){
         score+=5;
       }
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pA->getAttacker().getPosition())<=6){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+        if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                            pA->getAttacker().getPosition())<=6){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
             score--;
           }
         }
-        else if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pA->getAttacker().getPosition())<=9){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+        else if(pA->getAttacker().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                                pA->getAttacker().getPosition())<=9){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
             score--;
           }
         }
@@ -34,25 +38,33 @@ int HeuristicAI::computeScore(engine::Command& command){
       Command * pC=&command;
       engine::Defend *pD=dynamic_cast<engine::Defend*>(pC);
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())<=6){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                            pD->getCharacter().getPosition())<=6){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
             score+=2;
           }
         }
-        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())<=9){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                                  pD->getCharacter().getPosition())<=9){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
             score+=2;
           }
         }
       }
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())<=6){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+        if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                            pD->getCharacter().getPosition())<=6){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
             score--;
           }
         }
-        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pD->getCharacter().getPosition())<=9){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+        else if(pD->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                                pD->getCharacter().getPosition())<=9){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
             score--;
           }
         }
@@ -61,26 +73,39 @@ int HeuristicAI::computeScore(engine::Command& command){
     else if (command.commandType==UseObjectcmd){
       Command * pC=&command;
       engine::UseObject *pUO=dynamic_cast<engine::UseObject*>(pC);
-      if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentHP()/5)&&(pUO->getTargetCharacter().getCurrentHP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>=pUO->getTargetCharacter().getCurrentHP()/5)){
+      if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentHP()/5)&&
+          (pUO->getTargetCharacter().getCurrentHP()+
+          engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>=
+            pUO->getTargetCharacter().getCurrentHP()/5)){
         score+=5;
       }
-      else if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentMP()/5)&&(pUO->getTargetCharacter().getCurrentMP()+engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>=pUO->getTargetCharacter().getCurrentMP()/5)){
+      else if((pUO->getTargetCharacter().getCurrentHP()<(int)pUO->getTargetCharacter().getCurrentMP()/5)&&
+              (pUO->getTargetCharacter().getCurrentMP()+
+              engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>=
+              pUO->getTargetCharacter().getCurrentMP()/5)){
         score+=3;
       }
-      else if((pUO->getTargetCharacter().getCurrentHP()==pUO->getTargetCharacter().getMaxHP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>0)||(pUO->getTargetCharacter().getCurrentMP()==pUO->getTargetCharacter().getMaxMP()&&engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>0)){
+      else if((pUO->getTargetCharacter().getCurrentHP()==pUO->getTargetCharacter().getMaxHP()&&
+              engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getHealth()>0)||
+              (pUO->getTargetCharacter().getCurrentMP()==pUO->getTargetCharacter().getMaxMP()&&
+              engine.getTurn().getTeams()[engine.getCurrentPlayerID()]->getItems()[pUO->getNumberObject()]->getConsumable().getMana()>0)){
         score+=-5;
       }
       else{
         score++;
       }
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUO->getCharacter().getPosition())<=6){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+        if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                            pUO->getCharacter().getPosition())<=6){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
             score--;
           }
         }
-        else if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUO->getCharacter().getPosition())<=9){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+        else if(pUO->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                                  pUO->getCharacter().getPosition())<=9){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
             score--;
           }
         }
@@ -96,13 +121,17 @@ int HeuristicAI::computeScore(engine::Command& command){
         score+=2;
       }
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUS->getCharacter().getPosition())<=6){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
+        if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                            pUS->getCharacter().getPosition())<=6){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman){
             score--;
           }
         }
-        else if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pUS->getCharacter().getPosition())<=9){
-          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
+        else if(pUS->getCharacter().getPosition().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),
+                                                                  pUS->getCharacter().getPosition())<=9){
+          if(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+            engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer){
             score--;
           }
         }
@@ -113,22 +142,30 @@ int HeuristicAI::computeScore(engine::Command& command){
       engine::Move *pM=dynamic_cast<engine::Move*>(pC);
       bool onlyOne=true;
       for(int i=0;i<(int)engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter().size();i++){
-        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=6)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
+        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=6)&&
+        (engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Pugilist||
+        engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Swordman)){
           score+=-1;
         }
-        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=9)&&(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
+        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=9)&&
+        (engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Magician||
+        engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getJob().getJob()==Archer)){
           score+=-1;
         }
         else{
           score+=1;
         }
-        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&(pM->getCharacter().getJob().getJob()==Magician||pM->getCharacter().getJob().getJob()==Archer)){
+        if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&
+        (pM->getCharacter().getJob().getJob()==Magician||
+        pM->getCharacter().getJob().getJob()==Archer)){
           if(onlyOne){
             score+=6+(pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()));
             onlyOne=false;
           }
         }
-        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=1)&&(pM->getCharacter().getJob().getJob()==Swordman||pM->getCharacter().getJob().getJob()==Pugilist)){
+        else if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=1)&&
+        (pM->getCharacter().getJob().getJob()==Swordman||
+        pM->getCharacter().getJob().getJob()==Pugilist)){
           if(onlyOne){
             score+=7;
             onlyOne=false;
@@ -140,24 +177,19 @@ int HeuristicAI::computeScore(engine::Command& command){
     return score;
 }
 
-
-void HeuristicAI::heuristicCommandList(engine::Engine& engine, int teamNumber){
-  heuristicCommandList(engine,teamNumber,0,true);
-}
-
 void HeuristicAI::runAI(){
-	heuristicCommandList(engine,engine.getCurrentPlayerID());
+	heuristicCommandList(engine.getCurrentPlayerID(),0,true);
 }
 
 void HeuristicAI::runAI(int numberNextCharacter, bool hasNotMoved){
-  heuristicCommandList(engine,engine.getCurrentPlayerID(),numberNextCharacter,hasNotMoved);
+  heuristicCommandList(engine.getCurrentPlayerID(),numberNextCharacter,hasNotMoved);
 }
 
 HeuristicAI::HeuristicAI(engine::Engine& engine):engine(engine){
 
 }
 
-void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int numberNextCharacter, bool hasNotMoved){
+void HeuristicAI::heuristicCommandList(int teamNumber,int numberNextCharacter, bool hasNotMoved){
   int k=numberNextCharacter;
   bool hNM=hasNotMoved;
   if(showText) cout<<"Heuristic AI : Team Number "<<teamNumber<<" is playing"<<endl;
@@ -188,8 +220,12 @@ void HeuristicAI::heuristicCommandList(engine::Engine& engine,int teamNumber,int
     if(hNM){
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
-        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,1);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size()-1);x++){
-          for(int y=max(1,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size()-1);y++){
+			int xmin=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);
+			int xmax=min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());
+			int ymin=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5,0);
+			int ymax=min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());
+        for(int x=xmin;x<xmax;x++){
+          for(int y=ymin;y<ymax;y++){
             Position dest;
             dest.setPos(x,y);
             Move movetest(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k], dest);
