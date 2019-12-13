@@ -51,6 +51,7 @@ int DeepAI::minMax(engine::Engine& engine,int teamNumber,int numberNextCharacter
 		engine.revertTurn(windowtest);
 	}
 	engine.showStatus=true;
+	restoreCommandList();
 	return score;
 }
 
@@ -69,7 +70,7 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     UseSkill commandnull(*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],*engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k],500,0);
     unique_ptr<Command> ptr_command (new UseSkill(commandnull));
     CommandtypeTemp.push_back({});
-    
+
 
     cout<<"Start Attack scoring"<<endl;
     for(int t=0;t<(int)engine.getTurn().getTeams().size();t++){
@@ -90,7 +91,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
               CommandtypeTemp.back()=Attackcmd;
 
             }
-						restoreCommandList();
           }
         }
       }
@@ -102,8 +102,12 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
 			HeuristicAI hai(engine);
       int tempX=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX();
       int tempY=engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY();
-        for(int x=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);x<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());x+=2){
-          for(int y=max(0,(int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5);y<min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());y+=2){
+			int xmin=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()-5,0);
+			int xmax=min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getX()+5,(int)engine.getTurn().getMap().size());
+			int ymin=max((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()-5,0);
+			int ymax=min((int)engine.getTurn().getTeams()[teamNumber]->getListCharacter()[k]->getPosition().getY()+5,(int)engine.getTurn().getMap().size());
+        for(int x=xmin;x<xmax;x++){
+          for(int y=ymin;y<ymax;y++){
             // cout<< "x: " << x << ", y: " << y << endl;
             Position dest;
             dest.setPos(x,y);
@@ -126,8 +130,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                 InstructionAdded[1]=true;
                 CommandtypeTemp.back()=Movecmd;
               }
-							restoreCommandList();
-
             }
           }
         }
@@ -150,8 +152,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
         InstructionAdded[2]=true;
         CommandtypeTemp.back()=Defendcmd;
       }
-			restoreCommandList();
-
     }
     cout<<"End Defend scoring"<<endl;
 
@@ -173,8 +173,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
             InstructionAdded[3]=true;
             CommandtypeTemp.back()=UseObjectcmd;
           }
-					restoreCommandList();
-
         }
       }
     }
@@ -200,8 +198,6 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
                     InstructionAdded[4]=true;
                     CommandtypeTemp.back()=UseSkillcmd;
                   }
-									restoreCommandList();
-
 	            }
 	          }
 	        }
@@ -212,19 +208,23 @@ void DeepAI::deepCommandList(Engine& engine,int teamNumber){
     if(ptr_command->validate(engine.getTurn())){
       if (ptr_command->commandType==Attackcmd){
 				cout << "->attack instruction added " << endl;
-        
+				CommandtypeList.push_back(Attackcmd);
       }
       else if (ptr_command->commandType==Movecmd){
         cout << "->move instruction added " << endl;
+				CommandtypeList.push_back(Movecmd);
       }
       else if (ptr_command->commandType==Defendcmd){
         cout << "->defend instruction added " << endl;
+				CommandtypeList.push_back(Defendcmd);
       }
       else if (ptr_command->commandType==UseSkillcmd){
         cout << "->useskill instruction added " << endl;
+				CommandtypeList.push_back(UseSkillcmd);
       }
       else if (ptr_command->commandType==UseObjectcmd){
         cout << "->useobject instruction added " << endl;
+				CommandtypeList.push_back(UseObjectcmd);
       }
       if (not(ptr_command->commandType==Movecmd)){
         hasNotMoved=true;
