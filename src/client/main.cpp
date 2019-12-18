@@ -50,23 +50,10 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init turn ===
             Turn testTurn;
-            testTurn.initMap(60,60); //squares only
-            testTurn.initTeams();
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(2,5);
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(2,8);
-            testTurn.initCursor();
+            testTurn.initTurn(10,2,3);
             // === Display Turn ===
             TurnDisplay layer(testTurn);
-
-            // cout << "check map : " << testTurn.getMap().size() << endl;
-            // cout << "check map : " << testTurn.getMap()[0].size() << endl;
-            // int screensizeWidth=testTurn.getMap().size()*layer.getTilesets()[0]->getYsize();
-            // int screensizeHeight=testTurn.getMap()[0].size()*layer.getTilesets()[0]->getYsize();
-            sf::RenderWindow window(sf::VideoMode(  800,
-                                                    (600)),
-                                                    "Render");
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Render");
             sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
@@ -187,19 +174,13 @@ int main(int argc,char* argv[])
             cout << "-Press T key to rotate map clockwise " << endl<< endl;
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(8,8,"g1d2g2g1g1g1g3g1g1g1d3g1g1g2g2g1g1s1s1s2s2g1d1g1g2g1g1g1g1g1g2g2g1g1p1g1w1g2g3g2g2g3g1g1w1g3g1g1g1w1w1w1g1s1g1g1p1g1g1g1r1g1g1g1"); //squares only
-            testTurn.initTeams();
-            testTurn.getTeams()[0]->addCharacter();
+            testTurn.initTurn(8,2,1,"g1d2g2g1g1g1g3g1g1g1d3g1g1g2g2g1g1s1s1s2s2g1d1g1g2g1g1g1g1g1g2g2g1g1p1g1w1g2g3g2g2g3g1g1w1g3g1g1g1w1w1w1g1s1g1g1p1g1g1g1r1g1g1g1"); //squares only
             testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-
-            testTurn.initTeams();
-            testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
             testTurn.getTeams()[1]->addCharacter();
             testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
-            testTurn.initCursor();
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -211,9 +192,7 @@ int main(int argc,char* argv[])
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
 
-            sf::RenderWindow window(sf::VideoMode(  800,
-                                                    (600)),
-                                                    "Engine");
+            sf::RenderWindow window(sf::VideoMode(  800, 600),"Engine");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
@@ -490,19 +469,7 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(40,40); //squares only
-            testTurn.initTeams();
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-
-            testTurn.initTeams();
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,1);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(4,5);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[2]->getPosition().setPos(3,5);
-            testTurn.initCursor();
+            testTurn.initTurn(20,2,2);
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -517,9 +484,7 @@ int main(int argc,char* argv[])
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
 
-            sf::RenderWindow window(sf::VideoMode(  800,
-                                                    (600)),
-                                                    "Random AI");
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Random AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
@@ -628,20 +593,8 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(14,14); //squares only
-            testTurn.initTeams();
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,1);
-            testTurn.initTeams();
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,5);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(6,3);
-
-            testTurn.initCursor();
-            testTurn.initBuffer();
+            testTurn.initTurn(14,2,2); //squares only
+            
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -656,9 +609,7 @@ int main(int argc,char* argv[])
 
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
-            sf::RenderWindow window(sf::VideoMode(  800,
-                                                  (600)),
-                                                  "Heuristic AI");
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Heuristic AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
@@ -766,20 +717,7 @@ int main(int argc,char* argv[])
 
             // === Init Turn ===
             Turn testTurn;
-            testTurn.initMap(14,14); //squares only
-            testTurn.initTeams();
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-            testTurn.getTeams()[0]->addCharacter();
-            testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,1);
-            testTurn.initTeams();
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,5);
-            testTurn.getTeams()[1]->addCharacter();
-            testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(6,3);
-
-            testTurn.initCursor();
-            testTurn.initBuffer();
+            testTurn.initTurn(14,2,2);
             // === Init Engine ===
             Engine testEngine(testTurn);
 
@@ -794,9 +732,7 @@ int main(int argc,char* argv[])
 
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
-            sf::RenderWindow window(sf::VideoMode(  800,
-                                                  (600)),
-                                                  "Rollback");
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Rollback");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.zoom(3.f);
@@ -886,148 +822,132 @@ int main(int argc,char* argv[])
 
                 }
 
-            }
-                //=====================================================================================================
-                //
-                //                                             Deep AI TEST
-                //
-                //=====================================================================================================
+        }
+        //=====================================================================================================
+        //
+        //                                             Deep AI TEST
+        //
+        //=====================================================================================================
 
-                    else if(strcmp(argv[1],"deep_ai") == 0){
+            else if(strcmp(argv[1],"deep_ai") == 0){
 
-                        cout<<"Deep AI Test"<<endl<<"Deep AI = Blue Team"<<endl<<"Heuristic AI = Red Team"<<endl<<endl;
-                        cout<<"Controls:"<<endl;
-                        cout << "-Press P key to Pause" << endl;
-                        cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
-                        cout << "-Press R key to rotate map anti-clockwise " << endl;
-                        cout << "-Press T key to rotate map clockwise " << endl<< endl;
+                cout<<"Deep AI Test"<<endl<<"Deep AI = Blue Team"<<endl<<"Heuristic AI = Red Team"<<endl<<endl;
+                cout<<"Controls:"<<endl;
+                cout << "-Press P key to Pause" << endl;
+                cout << "-Press Up, Down, Right or Left key to move around the map " << endl;
+                cout << "-Press R key to rotate map anti-clockwise " << endl;
+                cout << "-Press T key to rotate map clockwise " << endl<< endl;
 
-                        // === Init Turn ===
-                        Turn testTurn;
-                        testTurn.initMap(14,14); //squares only
-                        testTurn.initTeams();
-                        testTurn.getTeams()[0]->addCharacter();
-                        testTurn.getTeams()[0]->getListCharacter()[0]->getPosition().setPos(3,2);
-                        testTurn.getTeams()[0]->addCharacter();
-                        testTurn.getTeams()[0]->getListCharacter()[1]->getPosition().setPos(5,1);
-                        testTurn.initTeams();
-                        testTurn.getTeams()[1]->addCharacter();
-                        testTurn.getTeams()[1]->getListCharacter()[0]->getPosition().setPos(3,5);
-                        testTurn.getTeams()[1]->addCharacter();
-                        testTurn.getTeams()[1]->getListCharacter()[1]->getPosition().setPos(6,3);
+                // === Init Turn ===
+                Turn testTurn;
+                testTurn.initTurn(14,2,2);
+                // === Init Engine ===
+                Engine testEngine(testTurn);
 
-                        testTurn.initCursor();
-                        testTurn.initBuffer();
-                        // === Init Engine ===
-                        Engine testEngine(testTurn);
+                Item testItem("TestHeal",10,0,3) ;
+                testEngine.getTurn().getTeams()[0]->addItem(testItem);
+                testEngine.getTurn().getTeams()[1]->addItem(testItem);
+                // === Init AI ===
+                HeuristicAI testHeuristicAI(testEngine);
+                DeepAI testDeepAI(testEngine);
+                // === Display Turn ===
+                TurnDisplay layer(testTurn);
 
-                        Item testItem("TestHeal",10,0,3) ;
-                        testEngine.getTurn().getTeams()[0]->addItem(testItem);
-                        testEngine.getTurn().getTeams()[1]->addItem(testItem);
-                        // === Init AI ===
-                        HeuristicAI testHeuristicAI(testEngine);
-                        DeepAI testDeepAI(testEngine);
-                        // === Display Turn ===
-                        TurnDisplay layer(testTurn);
+                TurnDisplay* ptr_layer=&layer;
+                        testEngine.getTurn().registerObserver(ptr_layer);
+                sf::RenderWindow window(sf::VideoMode(  800,600), "Deep AI");
+                sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+                sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                view1.zoom(3.f);
+                window.setView(view1);
+                cout << "Render begin." << endl;
+                layer.initRender();
+                cout << "Render done." << endl;
 
-                        TurnDisplay* ptr_layer=&layer;
-            			      testEngine.getTurn().registerObserver(ptr_layer);
-                        sf::RenderWindow window(sf::VideoMode(  800,
-                                                              (600)),
-                                                              "Deep AI");
-                        sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
-                        sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-                        view1.zoom(3.f);
+                sf::Text message;
+                sf::Font font;
+                font.loadFromFile("res/COURG___.TTF");
+                message.setFont(font);
+                message.setColor(sf::Color::White);
+                message.setStyle(sf::Text::Bold);
+                message.setCharacterSize(25);
+                message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
+
+                int k=0;
+                milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+                milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+                last_ms+=(milliseconds) 60;
+                bool resume=true;
+                while (window.isOpen()){
+                    sf::Event event;
+                    while (window.pollEvent(event)){
+                    if (event.type == sf::Event::Closed){
+                        window.close();
+                    }
+                    if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
+                        resume=false;
+                        window.setView(view2);
+                        window.draw(message);
+                        window.display();
+                        sf::Time t1 = sf::seconds(0.2f);
+                        sf::sleep(t1);
+                    }
+                    if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
+                        window.clear();
                         window.setView(view1);
-                        cout << "Render begin." << endl;
-                        layer.initRender();
-                        cout << "Render done." << endl;
+                        resume=true;
+                        sf::Time t1 = sf::seconds(0.2f);
+                        sf::sleep(t1);
+                    }
+                    }
+                    if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
-                        sf::Text message;
-                        sf::Font font;
-                        font.loadFromFile("res/COURG___.TTF");
-                        message.setFont(font);
-                        message.setColor(sf::Color::White);
-                        message.setStyle(sf::Text::Bold);
-                        message.setCharacterSize(25);
-                        message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
-
-                        int k=0;
-                        milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-                        milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-                        last_ms+=(milliseconds) 60;
-                        bool resume=true;
-                        while (window.isOpen()){
-                              sf::Event event;
-                              while (window.pollEvent(event)){
-                                if (event.type == sf::Event::Closed){
-                                  window.close();
-                                }
-                                if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
-                                  resume=false;
-                                  window.setView(view2);
-                                  window.draw(message);
-                                  window.display();
-                                  sf::Time t1 = sf::seconds(0.2f);
-                                  sf::sleep(t1);
-                                }
-                                if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
-                                  window.clear();
-                                  window.setView(view1);
-                                  resume=true;
-                                  sf::Time t1 = sf::seconds(0.2f);
-                                  sf::sleep(t1);
-                                }
-                              }
-                              if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
-
-                                layer.display(window,k);
-                                k=(k+1)%6;
-                                last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                                    view1.move(40, 40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                                    view1.move(-40, -40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                                    view1.move(-40, +40), window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                                    view1.move(+40, -40),window.setView(view1);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-                                    // right key is pressed: rotate map
-                                    testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
-                                    layer.initRender(testEngine.getTurn(),fullRender);
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
-                                    // left key is pressed: rotate map to other side
-                                    testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
-                                    layer.initRender(testEngine.getTurn(),fullRender);
-                                }
-                              }
-
-
-                              if(testEngine.turnCheckIn()){
-                                    testEngine.updateDisplay(window);
-                                    if(testEngine.getTurn().getTurn()%2==0) testDeepAI.runAI();
-                                    else testHeuristicAI.runAI();
-                              }
-                              testEngine.updateDisplay(window);
-                              sf::Time t1 = sf::seconds(0.1f);
-                              sf::sleep(t1);
-
-                            }
-
+                        layer.display(window,k);
+                        k=(k+1)%6;
+                        last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                            view1.move(40, 40), window.setView(view1);
                         }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                            view1.move(-40, -40), window.setView(view1);
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                            view1.move(-40, +40), window.setView(view1);
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                            view1.move(+40, -40),window.setView(view1);
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+                            // right key is pressed: rotate map
+                            testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
+                            layer.initRender(testEngine.getTurn(),fullRender);
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+                            // left key is pressed: rotate map to other side
+                            testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
+                            layer.initRender(testEngine.getTurn(),fullRender);
+                        }
+                    }
 
-          else{
+
+                    if(testEngine.turnCheckIn()){
+                        testEngine.updateDisplay(window);
+                        if(testEngine.getTurn().getTurn()%2==0) testDeepAI.runAI();
+                        else testHeuristicAI.runAI();
+                    }
+                    testEngine.updateDisplay(window);
+                    sf::Time t1 = sf::seconds(0.1f);
+                    sf::sleep(t1);
+
+                }
+
+            }
+            else{
               cout << "Type hello to get welcome message.\nType render to get render test.\nType engine to get engine test.\nType random_ai to get random AI test.\nType heuristic_ai to get heuristic AI test.\nType rollback to get rollback test.\nType deep_ai to get deep AI test" << endl;
-          }
-      }
-      else{
-        cout << "Type hello to get welcome message.\nType render to get render test.\nType engine to get engine test.\nType random_ai to get random AI test.\nType heuristic_ai to get heuristic AI test.\nType rollback to get rollback test.\nType deep_ai to get deep AI test" << endl;
-          }
+            }
+        }
+        else{
+            cout << "Type hello to get welcome message.\nType render to get render test.\nType engine to get engine test.\nType random_ai to get random AI test.\nType heuristic_ai to get heuristic AI test.\nType rollback to get rollback test.\nType deep_ai to get deep AI test" << endl;
+        }
       return 0;
   }

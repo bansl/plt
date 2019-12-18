@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include<string>
 
-
 using namespace state;
 using namespace std;
 
@@ -136,4 +135,58 @@ void Turn::initBuffer(){
 
 void Turn::addToBuffer(std::unique_ptr<state::Position> pos){
   bufferPosition.push_back(move(pos));
+}
+
+void Turn::initTurn(int mapSize, int teamNb, int characterNb){
+  
+  vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
+                                   {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
+        
+  initMap(mapSize,mapSize);
+  for (int i = 0; i < teamNb; i++)
+  {
+    initTeams();
+    for (int j = 0; j < characterNb; j++)
+    {
+
+      teams[i]->addCharacter();
+      int tempPosX=basepos[j][0],tempPosY=basepos[j][1];
+      int temp=0;
+      for (int q=0; q<2*i; q++){
+          temp=tempPosX;
+          tempPosX=map.size()-tempPosY-1;
+          tempPosY=temp;
+      }
+      teams[i]->getListCharacter()[j]->getPosition().setPos(tempPosX,tempPosY);
+    }
+  }
+  initCursor();
+  initBuffer();
+}
+
+void Turn::initTurn (int mapSize, int teamNb, int characterNb, std::string mapSeed){
+  
+  vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
+                                   {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
+        
+  initMap(mapSize,mapSize,mapSeed);
+  for (int i = 0; i < teamNb; i++)
+  {
+    initTeams();
+    for (int j = 0; j < characterNb; j++)
+    {
+
+      teams[i]->addCharacter();
+      int tempPosX=basepos[j][0],tempPosY=basepos[j][1];
+      int temp=0;
+      for (int q=0; q<2*i; q++){
+          temp=tempPosX;
+          tempPosX=map.size()-tempPosY-1;
+          tempPosY=temp;
+      }
+      teams[i]->getListCharacter()[j]->getPosition().setPos(tempPosX,tempPosY);
+    }
+  }
+  initCursor();
+  initBuffer();
 }

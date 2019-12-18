@@ -28,6 +28,12 @@ TileSet::TileSet(TileSetType id){
 		margin=0;
 		imagePath.push_back("res/cursor.png");
 	}
+	else if (type==WindowSprite){
+		sizeX=96;
+		sizeY=96;
+		margin=0;
+		imagePath.push_back("res/windowsprites.png");
+	}
 }
 
 const vector<std::string> TileSet::getImagePath (){
