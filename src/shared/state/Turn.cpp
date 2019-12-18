@@ -137,46 +137,111 @@ void Turn::addToBuffer(std::unique_ptr<state::Position> pos){
   bufferPosition.push_back(move(pos));
 }
 
-void Turn::initTurn(int mapSize, int teamNb, int characterNb){
-  
-  vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
-                                   {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
-        
-  initMap(mapSize,mapSize);
-  for (int i = 0; i < teamNb; i++)
-  {
-    initTeams();
-    for (int j = 0; j < characterNb; j++)
-    {
-
-      teams[i]->addCharacter();
-      int tempPosX=basepos[j][0],tempPosY=basepos[j][1];
-      int temp=0;
-      for (int q=0; q<2*i; q++){
-          temp=tempPosX;
-          tempPosX=map.size()-tempPosY-1;
-          tempPosY=temp;
-      }
-      teams[i]->getListCharacter()[j]->getPosition().setPos(tempPosX,tempPosY);
+std::string Turn::seedMap(){
+  std::string seed;
+  std::vector<std::string> tileLabel (6);
+  tileLabel[0]="d",tileLabel[1]="g",tileLabel[2]="w",tileLabel[3]="s",tileLabel[4]="p",tileLabel[5]="r";
+  std::vector<std::string> tileHeight (3);
+  tileHeight[0]="1",tileHeight[1]="2",tileHeight[2]="3";
+  for(int i=0;i<(int)getMap().size();i++){
+    for(int j=0;j<(int)getMap().size();j++){
+      seed.append(tileLabel[getMap()[i][j].getTile()-1]);
+      seed.append(tileHeight[getMap()[i][j].getHeight()-1]);
     }
   }
-  initCursor();
-  initBuffer();
+  return seed;
+}
+
+std::string Turn::seedTeams(){
+  std::string seed;
+  seed.append(std::to_string(getTeams().size()));
+  std::vector<std::string> raceLabel (4);
+  raceLabel[0]="m",raceLabel[1]="b",raceLabel[2]="d",raceLabel[3]="h";
+  std::vector<std::string> jobLabel (4);
+  jobLabel[0]="p",jobLabel[1]="s",jobLabel[2]="a",jobLabel[3]="m";
+  for(int i=0;i<(int)getTeams().size();i++){
+    for(int j=0;j<(int)getTeams()[0]->getListCharacter().size();i++){
+      seed.append(raceLabel[teams[i]->getListCharacter()[j]->getRace().getRace()-1]);
+      seed.append(jobLabel[teams[i]->getListCharacter()[j]->getJob().getJob()-1]);
+    }
+  }
+  return seed;
+}
+
+void Turn::initTeams(std::string seed){
+
+  int nbChar=(seed.length()-1)/(3*std::stoi(seed.substr(0,1)));
+  for(int i=0;i<std::stoi(seed.substr(0,1));i++){
+    initTeams();
+    for(int j=0;j<nbChar;j++){
+      teams[i]->addCharacter();
+
+      char race=seed.at(1+j*2+i*nbChar);
+      if( race== (char) 'd'){
+        teams[i]->getListCharacter()[j]->getRace().setRace(Demon);
+      }
+      else if(race== (char) 'b'){
+        teams[i]->getListCharacter()[j]->getRace().setRace(Beastman);
+      }
+      else if(race== (char) 'h'){
+        teams[i]->getListCharacter()[j]->getRace().setRace(Human);
+      }
+      else if(race== (char) 'm'){
+        teams[i]->getListCharacter()[j]->getRace().setRace(Monster);
+      }
+
+      char job=seed.at(2+j*2+i*nbChar);
+      if( job== (char) 'p'){
+        teams[i]->getListCharacter()[j]->getJob().setJob(Pugilist);
+      }
+      else if(job== (char) 's'){
+        teams[i]->getListCharacter()[j]->getJob().setJob(Swordman);
+      }
+      else if(job== (char) 'a'){
+        teams[i]->getListCharacter()[j]->getJob().setJob(Archer);
+      }
+      else if(job== (char) 'm'){
+        teams[i]->getListCharacter()[j]->getJob().setJob(Magician);
+      }
+    }
+  }
+
+}
+
+void Turn::initTurn(int mapSize, std::string charSeed){
+  initTeams(charSeed);
+  initTurn(mapSize,0,0);
+}
+
+void Turn::initTurn(int mapSize, std::string charSeed, std::string mapSeed){
+  initTeams(charSeed);
+  initTurn(mapSize,0,0,mapSeed);
+}
+
+void Turn::initTurn(int mapSize, int teamNb, int characterNb){
+
+  initMap(mapSize,mapSize);
+  initTurn(mapSize,teamNb,characterNb,seedMap());
 }
 
 void Turn::initTurn (int mapSize, int teamNb, int characterNb, std::string mapSeed){
-  
+
   vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
                                    {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
-        
+
   initMap(mapSize,mapSize,mapSeed);
   for (int i = 0; i < teamNb; i++)
   {
     initTeams();
     for (int j = 0; j < characterNb; j++)
     {
-
       teams[i]->addCharacter();
+    }
+  }
+  for (int i = 0; i <(int) getTeams().size(); i++)
+  {
+    for (int j = 0; j <(int) teams[i]->getListCharacter().size(); j++)
+    {
       int tempPosX=basepos[j][0],tempPosY=basepos[j][1];
       int temp=0;
       for (int q=0; q<2*i; q++){
