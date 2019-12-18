@@ -21,20 +21,30 @@ int DeepAI::minMax(int teamNumber,int numberNextCharacter, bool hasNotMoved){
 	HeuristicAI haitest(engine);
   sf::RenderWindow wt;
 	sf::RenderWindow& windowtest=wt;
+  std::vector<sf::View> views;
+  sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 560));
+  view1.zoom(1.4f);
+  sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+  view1.setViewport(sf::FloatRect(0, 0, 1, 0.8f));
+  sf::View viewInfobanner (sf::Vector2f(-800, -800), sf::Vector2f(800, 140));
+  viewInfobanner.setViewport(sf::FloatRect(0, 0.8f, 1, 1));
+  views.push_back(view1);
+  views.push_back(view2);
+  views.push_back(viewInfobanner);
 	haitest.showText=false;
 	int tempTurnNumber=engine.getTurn().getTurn();
-	engine.updateDisplay(wt);
+	engine.updateDisplay(wt,views);
 	haitest.runAI(numberNextCharacter,hasNotMoved);
-	engine.updateDisplay(wt);
-	engine.updateDisplay(wt);
+	engine.updateDisplay(wt,views);
+	engine.updateDisplay(wt,views);
   haitest.runAI();
-	engine.updateDisplay(wt);
-	engine.updateDisplay(wt);
+	engine.updateDisplay(wt,views);
+	engine.updateDisplay(wt,views);
 	haitest.runAI();
-	engine.updateDisplay(wt);
-	engine.updateDisplay(wt);
+	engine.updateDisplay(wt,views);
+	engine.updateDisplay(wt,views);
 	haitest.runAI();
-	engine.updateDisplay(wt);
+	engine.updateDisplay(wt,views);
 	int score=0;
   for(int i=0;i<(int)engine.getTurn().getTeams().size();i++){
     for(int j=0;j<(int)engine.getTurn().getTeams()[i]->getListCharacter().size();j++){
@@ -48,7 +58,7 @@ int DeepAI::minMax(int teamNumber,int numberNextCharacter, bool hasNotMoved){
   }
 	int tempEndTurn=engine.getTurn().getTurn();
 	for(int i=tempTurnNumber;i<tempEndTurn;i++){
-		engine.revertTurn(windowtest);
+		engine.revertTurn(windowtest,views);
 	}
 	engine.showStatus=true;
 	restoreCommandList();

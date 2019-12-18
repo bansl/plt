@@ -52,14 +52,23 @@ int main(int argc,char* argv[])
             Turn testTurn;
             testTurn.initTurn(10,2,3);
             // === Display Turn ===
+            vector<sf::View> views;
             TurnDisplay layer(testTurn);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Render");
-            sf::View view1(sf::Vector2f(350, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(3.f);
-            window.setView(view1);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            views.push_back(view1);
+            views.push_back(view2);
+            views.push_back(viewInfobanner);
+            window.setView(views[0]);
+            window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
+            layer.initWindowRender();
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -84,12 +93,12 @@ int main(int argc,char* argv[])
                     }
                     if (event.type == sf::Event::LostFocus){
                         resume=false;
-                        window.setView(view2);
+                        window.setView(views[1]);
                         window.draw(message);
                         window.display();
                     }
                     if (event.type == sf::Event::GainedFocus){
-                        window.setView(view1);
+                        window.setView(views[0]);
                         resume=true;
                     }
 
@@ -97,23 +106,23 @@ int main(int argc,char* argv[])
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
                     window.clear();
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                        view1.move(40, 40);
-                        window.setView(view1);
+                        views[0].move(40, 40);
+                        window.setView(views[0]);
 
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                        view1.move(-40, -40);
-                        window.setView(view1);
+                        views[0].move(-40, -40);
+                        window.setView(views[0]);
 
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                        view1.move(-40, +40);
-                        window.setView(view1);
+                        views[0].move(-40, +40);
+                        window.setView(views[0]);
 
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                        view1.move(+40, -40);
-                        window.setView(view1);
+                        views[0].move(+40, -40);
+                        window.setView(views[0]);
 
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
@@ -147,7 +156,7 @@ int main(int argc,char* argv[])
                         layer.initRender();
                     }
                     // Draw map(roofs and walls)
-                    layer.display(window,k);
+                    layer.display(window,k,views);
 
 
                         k=(k+1)%6;
@@ -187,20 +196,27 @@ int main(int argc,char* argv[])
             Item testItem("TestHeal",10,0,3) ;
             testEngine.getTurn().getTeams()[0]->addItem(testItem);
             // === Display Turn ===
+            vector<sf::View> views;
             TurnDisplay layer(testTurn);
-
             TurnDisplay* ptr_layer=&layer;
-			      testEngine.getTurn().registerObserver(ptr_layer);
-
-            sf::RenderWindow window(sf::VideoMode(  800, 600),"Engine");
-            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+			testEngine.getTurn().registerObserver(ptr_layer);
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Engine");
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(3.f);
-            window.setView(view1);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            views.push_back(view1);
+            views.push_back(view2);
+            views.push_back(viewInfobanner);
+            window.setView(views[0]);
+            window.setView(views[2]);
+            window.setFramerateLimit(60);
             cout << "Render begin." << endl;
             layer.initRender();
+            layer.initWindowRender();
             cout << "Render done." << endl;
-
             sf::Text message;
             sf::Font font;
             font.loadFromFile("res/COURG___.TTF");
@@ -209,11 +225,10 @@ int main(int argc,char* argv[])
             message.setStyle(sf::Text::Bold);
             message.setCharacterSize(25);
             message.setString("PAUSED\n\n Controls: \n -Press E key to launch 1 turn of \n   Engine Simulation Scenario \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
-
+          
             int k=0, Epressed=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
-            window.setFramerateLimit(60);
             bool resume=true;
             while (window.isOpen()){
                 sf::Event event;
@@ -223,7 +238,7 @@ int main(int argc,char* argv[])
                     }
                     if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         resume=false;
-                        window.setView(view2);
+                        window.setView(views[1]);
                         window.draw(message);
                         window.display();
                         sf::Time t1 = sf::seconds(0.2f);
@@ -231,19 +246,18 @@ int main(int argc,char* argv[])
                     }
                     if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         window.clear();
-                        window.setView(view1);
+                        window.setView(views[0]);
                         resume=true;
                         sf::Time t1 = sf::seconds(0.2f);
                         sf::sleep(t1);
                     }
                     if (event.type==sf::Event::KeyPressed){
-							testEngine.userInteraction(event, window, view1);
+							testEngine.userInteraction(event, window, views);
 					}
                 }
                 if((duration_cast< milliseconds >(system_clock::now().time_since_epoch())) >= (last_ms) && resume){
 
-
-                    layer.display(window,k);
+                    layer.display(window,k,views);
 
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
@@ -266,7 +280,7 @@ int main(int argc,char* argv[])
 
                         if (Epressed==1){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 EndTurn endturntest(1);
                                 if(endturntest.validate(testEngine.getTurn())){
                                     unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
@@ -275,12 +289,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if (Epressed==2){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 Position dest;
                                 dest.setPos(2,5);
                                 cout << "[COMMAND]character blue at 2,2 attempts to MOVE to 2,5, SHOULD SUCCEED" << endl;
@@ -301,12 +315,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no attack instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if (Epressed==3){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 cout << "[COMMAND]character blue attempts to ATTACK during red team turn, SHOULD FAIL" << endl;
                                 Attack attacktest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],*testEngine.getTurn().getTeams()[1]->getListCharacter()[0]);
                                 if(attacktest.validate(testEngine.getTurn())){
@@ -347,12 +361,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if(Epressed==4){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 cout << "[COMMAND]character blue attempts to DEFEND, SHOULD SUCCEED" << endl;
                                 Defend deftest(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                                 if(deftest.validate(testEngine.getTurn())){
@@ -362,12 +376,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no defend instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if(Epressed==5){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 cout << "[COMMAND]character red at 3,5 attempts to ATTACK character blue which is defending, SHOULD SUCCEED" << endl;
                                 Attack attacktest4(*testEngine.getTurn().getTeams()[1]->getListCharacter()[2],*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                                 if(attacktest4.validate(testEngine.getTurn())){
@@ -386,12 +400,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if(Epressed==6){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 cout << "[COMMAND]character blue attempts to USE HEAL POTION, SHOULD SUCCEED" << endl;
                                 UseObject testUseItem(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0],0,0,*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
                                 if(testUseItem.validate(testEngine.getTurn())){
@@ -401,12 +415,12 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no objectuse instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         if(Epressed==7){
                             if(testEngine.turnCheckIn()){
-                                testEngine.updateDisplay(window);
+                                testEngine.updateDisplay(window,views);
                                 Skill fireStrike {};
                                 fireStrike.skillName="fire strike";
                                 fireStrike.setEffect(10,0);
@@ -441,7 +455,7 @@ int main(int argc,char* argv[])
                                 }
                                 else cout << "->[FAILED]no endturn instruction added" << endl;
                             }
-                            testEngine.updateDisplay(window);
+                            testEngine.updateDisplay(window,views);
                         }
 
                         sf::Time t1 = sf::seconds(0.1f);
@@ -452,14 +466,13 @@ int main(int argc,char* argv[])
             }
         }
 
-//=====================================================================================================
-//
-//                                             RANDOM AI TEST
-//
-//=====================================================================================================
+// //=====================================================================================================
+// //
+// //                                             RANDOM AI TEST
+// //
+// //=====================================================================================================
 
         else if(strcmp(argv[1],"random_ai") == 0){
-
             cout<<"Random AI Test"<<endl<<endl;
             cout<<"Controls:"<<endl;
             cout << "-Press P key to Pause" << endl;
@@ -479,18 +492,27 @@ int main(int argc,char* argv[])
             // === Init AI ===
             RandomAI testAI(testEngine);
             // === Display Turn ===
+            vector<sf::View> views;
             TurnDisplay layer(testTurn);
 
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
 
             sf::RenderWindow window(sf::VideoMode(  800,600), "Random AI");
-            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(3.f);
-            window.setView(view1);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            views.push_back(view1);
+            views.push_back(view2);
+            views.push_back(viewInfobanner);
+            window.setView(views[0]);
+            window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
+            layer.initWindowRender();
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -533,7 +555,7 @@ int main(int argc,char* argv[])
                 if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
 
-                    layer.display(window,k);
+                    layer.display(window,k,views);
 
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
@@ -564,10 +586,10 @@ int main(int argc,char* argv[])
 
 
                     if(testEngine.turnCheckIn()){
-                         testEngine.updateDisplay(window);
+                         testEngine.updateDisplay(window,views);
                          testAI.runAI();
                     }
-                    testEngine.updateDisplay(window);
+                    testEngine.updateDisplay(window,views);
                     sf::Time t1 = sf::seconds(0.1f);
                     sf::sleep(t1);
 
@@ -576,11 +598,11 @@ int main(int argc,char* argv[])
         }
 
 
-//=====================================================================================================
-//
-//                                             Heuristic AI TEST
-//
-//=====================================================================================================
+// //=====================================================================================================
+// //
+// //                                             Heuristic AI TEST
+// //
+// //=====================================================================================================
 
         else if(strcmp(argv[1],"heuristic_ai") == 0){
 
@@ -605,17 +627,26 @@ int main(int argc,char* argv[])
             HeuristicAI testHeuristicAI(testEngine);
             RandomAI testRandomAI(testEngine);
             // === Display Turn ===
+            vector<sf::View> views;
             TurnDisplay layer(testTurn);
 
             TurnDisplay* ptr_layer=&layer;
-			      testEngine.getTurn().registerObserver(ptr_layer);
+			testEngine.getTurn().registerObserver(ptr_layer);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Heuristic AI");
-            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(3.f);
-            window.setView(view1);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            views.push_back(view1);
+            views.push_back(view2);
+            views.push_back(viewInfobanner);
+            window.setView(views[0]);
+            window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
+            layer.initWindowRender();
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -656,7 +687,7 @@ int main(int argc,char* argv[])
                   }
                   if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
-                    layer.display(window,k);
+                    layer.display(window,k, views);
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
@@ -685,11 +716,11 @@ int main(int argc,char* argv[])
 
 
                   if(testEngine.turnCheckIn()){
-                        testEngine.updateDisplay(window);
+                        testEngine.updateDisplay(window,views);
                         if(testEngine.getTurn().getTurn()%2==0) testHeuristicAI.runAI();
                         else testRandomAI.runAI();
                   }
-                  testEngine.updateDisplay(window);
+                  testEngine.updateDisplay(window,views);
                   sf::Time t1 = sf::seconds(0.1f);
                   sf::sleep(t1);
 
@@ -728,17 +759,25 @@ int main(int argc,char* argv[])
             HeuristicAI testHeuristicAI(testEngine);
             RandomAI testRandomAI(testEngine);
             // === Display Turn ===
+            vector<sf::View> views;
             TurnDisplay layer(testTurn);
-
             TurnDisplay* ptr_layer=&layer;
 			      testEngine.getTurn().registerObserver(ptr_layer);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Rollback");
-            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
             sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(3.f);
-            window.setView(view1);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            views.push_back(view1);
+            views.push_back(view2);
+            views.push_back(viewInfobanner);
+            window.setView(views[0]);
+            window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
+            layer.initWindowRender();
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -779,7 +818,7 @@ int main(int argc,char* argv[])
                   }
                   if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
-                    layer.display(window,k);
+                    layer.display(window,k,views);
                     k=(k+1)%6;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
@@ -808,15 +847,15 @@ int main(int argc,char* argv[])
 
                   if(duration_cast<milliseconds>(system_clock::now().time_since_epoch())>=rollback_trigger) {
                       cout<<"Reverting a turn"<<endl;
-                      if(!testEngine.revertTurn(window)) cout<<"No more turn to revert"<<endl;
+                      if(!testEngine.revertTurn(window,views)) cout<<"No more turn to revert"<<endl;
                   }
                   else if(testEngine.turnCheckIn()){
-                        testEngine.updateDisplay(window);
+                        testEngine.updateDisplay(window,views);
                         if(testEngine.getTurn().getTurn()%2==0) testHeuristicAI.runAI();
                         else testRandomAI.runAI();
                   }
 
-                  testEngine.updateDisplay(window);
+                  testEngine.updateDisplay(window,views);
                   sf::Time t1 = sf::seconds(0.1f);
                   sf::sleep(t1);
 
@@ -843,7 +882,6 @@ int main(int argc,char* argv[])
                 testTurn.initTurn(14,2,2);
                 // === Init Engine ===
                 Engine testEngine(testTurn);
-
                 Item testItem("TestHeal",10,0,3) ;
                 testEngine.getTurn().getTeams()[0]->addItem(testItem);
                 testEngine.getTurn().getTeams()[1]->addItem(testItem);
@@ -851,17 +889,26 @@ int main(int argc,char* argv[])
                 HeuristicAI testHeuristicAI(testEngine);
                 DeepAI testDeepAI(testEngine);
                 // === Display Turn ===
+                vector<sf::View> views;
                 TurnDisplay layer(testTurn);
 
                 TurnDisplay* ptr_layer=&layer;
                         testEngine.getTurn().registerObserver(ptr_layer);
                 sf::RenderWindow window(sf::VideoMode(  800,600), "Deep AI");
-                sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(400, 300));
+                sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
+                view1.zoom(1.4f);
                 sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-                view1.zoom(3.f);
-                window.setView(view1);
+                view1.setViewport(sf::FloatRect(0, 0, 1, 1));
+                sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
+                viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+                views.push_back(view1);
+                views.push_back(view2);
+                views.push_back(viewInfobanner);
+                window.setView(views[0]);
+                window.setView(views[2]);
                 cout << "Render begin." << endl;
                 layer.initRender();
+                layer.initWindowRender();
                 cout << "Render done." << endl;
 
                 sf::Text message;
@@ -902,7 +949,7 @@ int main(int argc,char* argv[])
                     }
                     if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
-                        layer.display(window,k);
+                        layer.display(window,k,views);
                         k=(k+1)%6;
                         last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
@@ -931,11 +978,11 @@ int main(int argc,char* argv[])
 
 
                     if(testEngine.turnCheckIn()){
-                        testEngine.updateDisplay(window);
+                        testEngine.updateDisplay(window,views);
                         if(testEngine.getTurn().getTurn()%2==0) testDeepAI.runAI();
                         else testHeuristicAI.runAI();
                     }
-                    testEngine.updateDisplay(window);
+                    testEngine.updateDisplay(window,views);
                     sf::Time t1 = sf::seconds(0.1f);
                     sf::sleep(t1);
 

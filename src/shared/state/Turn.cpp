@@ -23,7 +23,7 @@ int Turn::getTurn (){
 
 bool Turn::initCursor (){
     ptrCursor=new Cursor();
-    ptrCursor->getPosition().setPos(0,0);
+    ptrCursor->getPosition().setPos(map.size()/2,map.size()/2);
     return true;
 }
 

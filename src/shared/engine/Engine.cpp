@@ -29,7 +29,7 @@ bool Engine::turnCheckOut(){
 	return true;
 }
 
-void Engine::updateDisplay (sf::RenderWindow& window){
+void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> views){
 	isGameFinished=true;
 	bool updateisTurnFinished=true;
 	StatusList status;
@@ -54,7 +54,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 	}
 	if(isTurnBegin){
 		isTurnBegin=false;
-		turn.notifyObservers(turn, window,charRender);
+		turn.notifyObservers(turn, window,charRender, views);
 		cout << "====TURN " << turn.getTurn() << ": ====" << endl;
 	}
 	if(updateisTurnFinished){
@@ -72,7 +72,7 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 				// 	turn.notifyObservers(turn, window,fullRender);
 			 	// }
 				// commands[i]->action(turn);
-				turn.notifyObservers(turn, window,fullRender);
+				turn.notifyObservers(turn, window,fullRender, views);
 				pM->getCharacter().setStatus(tempStatus);
 				position_history.push_back(pM->getPathToDest()[0]);
 			}
@@ -81,9 +81,9 @@ void Engine::updateDisplay (sf::RenderWindow& window){
 				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
 				defending_history.push_back(pA->getDefender().getStatus()==Defending);
 			}
-			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender);
+			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender,views);
 			commands[i]->finish(turn);
-			turn.notifyObservers(turn, window,charRender);
+			turn.notifyObservers(turn, window,charRender, views);
 		}
 		command_history_nb.push_back(0);
 	while (!commands.empty()){
@@ -142,7 +142,7 @@ int Engine::getCurrentPlayerID(){
 	return currentPlayerId;
 }
 
-void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::View& view){
+void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::vector<sf::View>& views){
 
 	RenderType cursorRefresh(cursorRender);
 	if(newEvent.type==sf::Event::KeyPressed ){
@@ -170,17 +170,17 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 			// else posYupdate = mapsize-1 -posYcurs;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) view.move(+40, -40),window.setView(view);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) view.move(-40, -40), window.setView(view);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) view.move(-40, +40), window.setView(view);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(40, 40), window.setView(view);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) views[0].move(+40, -40),window.setView(views[0]);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) views[0].move(-40, -40), window.setView(views[0]);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) views[0].move(-40, +40), window.setView(views[0]);
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) views[0].move(40, 40), window.setView(views[0]);
 
 		// update moved cursor
 		if (posXupdate != 0 || posYupdate !=0){
 			Position nextPosCurs;
 			nextPosCurs.setPos(posXcurs+posXupdate, posYcurs+posYupdate);
 			turn.getCursor()->cursorMove(nextPosCurs);
-			turn.notifyObservers(turn, window,cursorRefresh);
+			turn.notifyObservers(turn, window,cursorRefresh,views);
 			posXupdate = 0, posYupdate = 0;
 		}
 
@@ -189,7 +189,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, sf::V
 	}
 }
 
-bool Engine::revertTurn(sf::RenderWindow& window){
+bool Engine::revertTurn(sf::RenderWindow& window, std::vector<sf::View> views){
 	if (!command_history.empty())
 	{
 		turn.revertTurn();
@@ -209,7 +209,7 @@ bool Engine::revertTurn(sf::RenderWindow& window){
 				command_history.pop_back();
 			}
 		command_history_nb.pop_back();
-		turn.notifyObservers(turn, window,fullRender);
+		turn.notifyObservers(turn, window,fullRender, views);
 		if(showStatus){
 			vector<string> teamlabel(2);
 			teamlabel[0]="Blue", teamlabel[1]="Red";

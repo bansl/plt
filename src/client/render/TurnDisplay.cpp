@@ -19,6 +19,10 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
         TileSet theCursor(CursorSprite);
 	std::unique_ptr<TileSet> ptr_theCursor (new TileSet(theCursor));
 	tilesets.push_back(move(ptr_theCursor));
+
+        TileSet tilesetWindow(WindowSprite);
+	std::unique_ptr<TileSet> ptr_window (new TileSet(tilesetWindow));
+	tilesets.push_back(move(ptr_window));
 }
 
 void TurnDisplay::initRender(){
@@ -238,18 +242,19 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
         return mydrawobjects;
 }
 
-void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype){
+void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype,std::vector<sf::View> views){
 	initRender(turn,rendertype);
         sf::Time t_anim = sf::seconds(0.1f);
         for (size_t k = 0; k < 6; k++)
         {
-                display(window,k);
+                display(window,k,views);
                 sf::sleep(t_anim);
         }
 }
 
-void TurnDisplay::display (sf::RenderWindow& window, int frame){
+void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::View> views){
 	window.clear();
+        window.setView(views[0]);
 	size_t j=0;
         vector< vector<int> >  indexlist=charPrintOrder();
         for (size_t i = 0; i < drawmaps.size(); i++){
@@ -268,6 +273,12 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame){
         }
         window.draw(*drawcursor[0]);
         // cout << drawchars.size() <<"====="<< endl;
+        window.setView(views[2]);
+        for (size_t i = 0; i < drawwindows.size(); i++){
+                window.draw(*drawwindows[i]);
+                
+        }
+        // window.draw(drawwindows[0]->message);
 	window.display();
 }
 
@@ -312,4 +323,16 @@ std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
     }
 
     return indexlist;
+}
+
+void TurnDisplay::initWindowRender (){
+      while (!drawwindows.empty()){
+        drawwindows.pop_back();
+      }
+      Window myWindow;
+      if(myWindow.renderWindow(infobanner, *tilesets[3], tilesets[3]->getXsize(),turnDisplay)){
+        std::unique_ptr<Window> ptr_drawWindow (new Window(myWindow));
+        drawwindows.push_back(move(ptr_drawWindow));
+      }
+
 }

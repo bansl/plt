@@ -32,6 +32,16 @@ BOOST_AUTO_TEST_CASE(TestEngine)
   testEngine.getTurn().rotation=(testEngine.getTurn().rotation+1)%4;
   BOOST_CHECK_EQUAL(testEngine.getTurn().rotation,1);
   testEngine.turnCheckIn();
+  std::vector<sf::View> views;
+  sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 560));
+  view1.zoom(1.4f);
+  sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+  view1.setViewport(sf::FloatRect(0, 0, 1, 0.8f));
+  sf::View viewInfobanner (sf::Vector2f(0, 0), sf::Vector2f(800, 140));
+  viewInfobanner.setViewport(sf::FloatRect(0, 0.8f, 1, 1));
+  views.push_back(view1);
+  views.push_back(view2);
+  views.push_back(viewInfobanner);
   sf::RenderWindow window;
   window.display();
 
@@ -127,10 +137,10 @@ BOOST_AUTO_TEST_CASE(TestEngine)
 
     testEngine.turnCheckOut();
     BOOST_CHECK(!testEngine.isTurnFinished);
-    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
-    testEngine.updateDisplay(window);
+    testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender,views);
+    testEngine.updateDisplay(window,views);
     testEngine.turnCheckIn();
-    testEngine.updateDisplay(window);
+    testEngine.updateDisplay(window,views);
     window.close();
 }
 
@@ -150,6 +160,16 @@ sf::RenderWindow window;
 
   TurnDisplay layer(testEngine.getTurn());
   TurnDisplay* ptr_layer=&layer;
+  std::vector<sf::View> views;
+  sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 560));
+  view1.zoom(1.4f);
+  sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+  view1.setViewport(sf::FloatRect(0, 0, 1, 0.8f));
+  sf::View viewInfobanner (sf::Vector2f(-800, -800), sf::Vector2f(800, 140));
+  viewInfobanner.setViewport(sf::FloatRect(0, 0.8f, 1, 1));
+  views.push_back(view1);
+  views.push_back(view2);
+  views.push_back(viewInfobanner);
   testEngine.getTurn().registerObserver(ptr_layer);
   layer.initRender(testEngine.getTurn(),fullRender);
   layer.initRender();
@@ -168,10 +188,10 @@ BOOST_CHECK(testEngine.getTurn().getTeams()[0]->getListCharacter()[0]->getStatus
 
   testEngine.turnCheckOut();
   BOOST_CHECK(!testEngine.isTurnFinished);
-  testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender);
-  testEngine.updateDisplay(window);
+  testEngine.getTurn().notifyObservers(testEngine.getTurn(), window,fullRender,views);
+  testEngine.updateDisplay(window,views);
   testEngine.turnCheckIn();
-  testEngine.updateDisplay(window);
-  layer.display(window,0);
+  testEngine.updateDisplay(window,views);
+  layer.display(window,0,views);
   window.close();
 }
