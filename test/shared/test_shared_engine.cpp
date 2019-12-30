@@ -167,9 +167,12 @@ sf::RenderWindow window;
   view1.setViewport(sf::FloatRect(0, 0, 1, 0.8f));
   sf::View viewInfobanner (sf::Vector2f(-800, -800), sf::Vector2f(800, 140));
   viewInfobanner.setViewport(sf::FloatRect(0, 0.8f, 1, 1));
+  sf::View viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+  viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
   views.push_back(view1);
   views.push_back(view2);
   views.push_back(viewInfobanner);
+  views.push_back(viewActionSelect);
   testEngine.getTurn().registerObserver(ptr_layer);
   layer.initRender(testEngine.getTurn(),fullRender);
   layer.initRender();
@@ -178,7 +181,6 @@ sf::RenderWindow window;
   layer.getDrawchars();
 
 window.display();
-
 Defend testDefend(*testEngine.getTurn().getTeams()[0]->getListCharacter()[0]);
 if(testDefend.validate(testEngine.getTurn())){
   std::unique_ptr<Defend> ptr_defend (new Defend(testDefend));

@@ -10,6 +10,7 @@ using namespace state;
 
 void DeepAI::runAI(){
 	deepCommandList(engine.getCurrentPlayerID());
+  if(engine.threaded==true) engine.notifyUpdating();
 }
 
 DeepAI::DeepAI(engine::Engine& engine):engine(engine){

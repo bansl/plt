@@ -123,9 +123,7 @@ void TurnDisplay::initRender(){
 }
 
 void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
-        while (!drawchars.empty()){
-        drawchars.pop_back();
-        }
+        
 
         if(rendertype==fullRender){
           
@@ -205,24 +203,30 @@ void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
                 }
                                   
         }
-        for (size_t player = 0; player < turn.getTeams().size(); player++){
-                for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
-                        DrawObject DrawChar;
-                        std::vector<std::unique_ptr<render::DrawObject>> charframe;
-                        
-                                DrawChar.renderCharacter(turn,*tilesets[1], turn.getMap().size(),
-                                                                                turn.getMap()[0].size(),
-                                                                                tilesets[1]->getXsize(), tilesets[1]->getYsize(),
-                                                                                tilesets[1]->getMargin(),0,k,player);
-                                std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
-                                charframe.push_back(move(ptr_drawChar));
-                        for (size_t spriteAnimNumber = 1; spriteAnimNumber < 6; spriteAnimNumber++)
-                        {
-                                DrawChar.changeCharAnimSpriteNb (spriteAnimNumber, tilesets[1]->getXsize(), tilesets[1]->getYsize(), tilesets[1]->getMargin(), turn, player, k);
-                                std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
-                                charframe.push_back(move(ptr_drawChar));
+
+        if((rendertype==fullRender) || (rendertype==charRender)){
+                while (!drawchars.empty()){
+                        drawchars.pop_back();
+                }
+                for (size_t player = 0; player < turn.getTeams().size(); player++){
+                        for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
+                                DrawObject DrawChar;
+                                std::vector<std::unique_ptr<render::DrawObject>> charframe;
+                                
+                                        DrawChar.renderCharacter(turn,*tilesets[1], turn.getMap().size(),
+                                                                                        turn.getMap()[0].size(),
+                                                                                        tilesets[1]->getXsize(), tilesets[1]->getYsize(),
+                                                                                        tilesets[1]->getMargin(),0,k,player);
+                                        std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
+                                        charframe.push_back(move(ptr_drawChar));
+                                for (size_t spriteAnimNumber = 1; spriteAnimNumber < 6; spriteAnimNumber++)
+                                {
+                                        DrawChar.changeCharAnimSpriteNb (spriteAnimNumber, tilesets[1]->getXsize(), tilesets[1]->getYsize(), tilesets[1]->getMargin(), turn, player, k);
+                                        std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
+                                        charframe.push_back(move(ptr_drawChar));
+                                }
+                                drawchars.push_back(move(charframe));
                         }
-                        drawchars.push_back(move(charframe));
                 }
         }
 }
@@ -243,7 +247,9 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 }
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype,std::vector<sf::View> views){
-	initRender(turn,rendertype);
+	if (rendertype==windowinfoRender) initWindowRender(infobanner);
+        else if (rendertype==windowactionRender) initWindowRender(actionselect);
+        else initRender(turn,rendertype);
         sf::Time t_anim = sf::seconds(0.1f);
         for (size_t k = 0; k < 6; k++)
         {
@@ -274,12 +280,54 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::
         window.draw(*drawcursor[0]);
         // cout << drawchars.size() <<"====="<< endl;
         window.setView(views[2]);
-        for (size_t i = 0; i < drawwindows.size(); i++){
-                window.draw(*drawwindows[i]);
+        if (!drawwindows.empty()){
+                window.draw(*drawwindows[0]);
+                sf::Text message;
+                sf::Font font;
+                font.loadFromFile("res/COURG___.TTF");
+                message.setFont(font);
+                message.setColor(sf::Color::White);
+                message.setStyle(sf::Text::Bold);
+                message.setCharacterSize(15);
+
+                message.setString(drawwindows[0]->getMessage().tiletype);
+                message.setPosition(10,520);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().iscrossable);
+                message.setPosition(10,540);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().isfree);
+                message.setPosition(10,560);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().team);
+                message.setPosition(410,520);
+                window.draw(message);
                 
+                message.setString(drawwindows[0]->getMessage().characterjob);
+                message.setPosition(410,540);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().characterrace);
+                message.setPosition(410,560);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().hp);
+                message.setPosition(610,520);
+                window.draw(message);
+
+                message.setString(drawwindows[0]->getMessage().mp);
+                message.setPosition(610,540);
+                window.draw(message);
         }
-        // window.draw(drawwindows[0]->message);
-	window.display();
+        window.setView(views[3]);
+        
+        for (size_t i = 1; i < drawwindows.size(); i++){
+                window.draw(*drawwindows[i]);
+        }
+        window.display();
 }
 
 std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
@@ -325,12 +373,11 @@ std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
     return indexlist;
 }
 
-void TurnDisplay::initWindowRender (){
-      while (!drawwindows.empty()){
-        drawwindows.pop_back();
-      }
+void TurnDisplay::initWindowRender (render::WindowType windowtype){
+      if( (windowtype==actionselect) && (drawwindows.size()>1) )drawwindows.pop_back();
+      else if(windowtype==infobanner) while (!drawwindows.empty()) drawwindows.pop_back();
       Window myWindow;
-      if(myWindow.renderWindow(infobanner, *tilesets[3], tilesets[3]->getXsize(),turnDisplay)){
+      if(myWindow.renderWindow(windowtype, *tilesets[3], tilesets[3]->getXsize(),turnDisplay)){
         std::unique_ptr<Window> ptr_drawWindow (new Window(myWindow));
         drawwindows.push_back(move(ptr_drawWindow));
       }

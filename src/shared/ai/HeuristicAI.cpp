@@ -1,6 +1,7 @@
 #include "../ai.h"
 #include "../engine.h"
 #include <iostream>
+
 using namespace std;
 using namespace ai;
 using namespace engine;
@@ -179,6 +180,7 @@ int HeuristicAI::computeScore(engine::Command& command){
 
 void HeuristicAI::runAI(){
 	heuristicCommandList(engine.getCurrentPlayerID(),0,true);
+  
 }
 
 void HeuristicAI::runAI(int numberNextCharacter, bool hasNotMoved){

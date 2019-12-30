@@ -2,6 +2,7 @@
 #include "../engine.h"
 #include <random>
 #include <iostream>
+
 using namespace std;
 using namespace ai;
 using namespace engine;
@@ -127,6 +128,7 @@ void RandomAI::randomCommandList(int teamNumber){
 
 void RandomAI::runAI(){
 	randomCommandList(engine.getCurrentPlayerID());
+	
 }
 
 RandomAI::RandomAI(engine::Engine& engine):engine(engine){

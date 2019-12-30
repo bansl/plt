@@ -2,6 +2,7 @@
 #include <cstring>
 #include <state.h>
 #include "render.h"
+#include "client.h"
 #include "../shared/engine.h"
 #include "../shared/ai.h"
 
@@ -10,6 +11,7 @@
 
 using namespace std;
 using namespace state;
+using namespace client;
 using namespace render;
 using namespace engine;
 using namespace ai;
@@ -34,8 +36,35 @@ int main(int argc,char* argv[])
         if( std::strcmp( argv[1], "hello") == 0 ){
             cout << "Bonjour le monde!" << endl;
         }
+//=====================================================================================================
+//
+//                                              THREAD TEST
+//
+//=====================================================================================================
 
-
+        if( std::strcmp( argv[1], "thread") == 0 ){
+            cout << "Thread Test" << endl;
+            sf::RenderWindow window(sf::VideoMode(  800,600), "Thread");
+			vector<sf::View> views;
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)), 
+                     viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                     viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                     viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+            viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+            views.push_back(view1), views.push_back(viewPause), 
+            views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+            for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+            Turn testTurn;
+			Client client(window,views,testTurn);
+			
+			while (window.isOpen()){
+				client.run();
+				sleep(2);
+				window.close();
+			}
+        }
 //=====================================================================================================
 //
 //                                              RENDER TEST
@@ -57,18 +86,18 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,600), "Render");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
-            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.setViewport(sf::FloatRect(0, 0, 1, 1));
             sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
             viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
             views.push_back(view1);
-            views.push_back(view2);
+            views.push_back(viewPause);
             views.push_back(viewInfobanner);
             window.setView(views[0]);
             window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
-            layer.initWindowRender();
+            layer.initWindowRender(infobanner);
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -203,19 +232,23 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,600), "Engine");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
-            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.setViewport(sf::FloatRect(0, 0, 1, 1));
-            sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
-            viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
+            sf::View viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600));
+            viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1));
+            sf::View viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
             views.push_back(view1);
-            views.push_back(view2);
+            views.push_back(viewPause);
             views.push_back(viewInfobanner);
+            views.push_back(viewActionSelect);
             window.setView(views[0]);
             window.setView(views[2]);
+            window.setView(views[3]);
             window.setFramerateLimit(60);
             cout << "Render begin." << endl;
             layer.initRender();
-            layer.initWindowRender();
+            layer.initWindowRender(infobanner);
             cout << "Render done." << endl;
             sf::Text message;
             sf::Font font;
@@ -225,7 +258,7 @@ int main(int argc,char* argv[])
             message.setStyle(sf::Text::Bold);
             message.setCharacterSize(25);
             message.setString("PAUSED\n\n Controls: \n -Press E key to launch 1 turn of \n   Engine Simulation Scenario \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
-          
+            
             int k=0, Epressed=0;
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 60;
@@ -501,18 +534,18 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,600), "Random AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
-            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.setViewport(sf::FloatRect(0, 0, 1, 1));
             sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
             viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
             views.push_back(view1);
-            views.push_back(view2);
+            views.push_back(viewPause);
             views.push_back(viewInfobanner);
             window.setView(views[0]);
             window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
-            layer.initWindowRender();
+            layer.initWindowRender(infobanner);
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -538,7 +571,7 @@ int main(int argc,char* argv[])
                     }
                     if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         resume=false;
-                        window.setView(view2);
+                        window.setView(viewPause);
                         window.draw(message);
                         window.display();
                         sf::Time t1 = sf::seconds(0.2f);
@@ -635,18 +668,18 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,600), "Heuristic AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
-            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.setViewport(sf::FloatRect(0, 0, 1, 1));
             sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
             viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
             views.push_back(view1);
-            views.push_back(view2);
+            views.push_back(viewPause);
             views.push_back(viewInfobanner);
             window.setView(views[0]);
             window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
-            layer.initWindowRender();
+            layer.initWindowRender(infobanner);
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -671,7 +704,7 @@ int main(int argc,char* argv[])
                     }
                     if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                       resume=false;
-                      window.setView(view2);
+                      window.setView(viewPause);
                       window.draw(message);
                       window.display();
                       sf::Time t1 = sf::seconds(0.2f);
@@ -766,18 +799,18 @@ int main(int argc,char* argv[])
             sf::RenderWindow window(sf::VideoMode(  800,600), "Rollback");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
-            sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
             view1.setViewport(sf::FloatRect(0, 0, 1, 1));
             sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
             viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
             views.push_back(view1);
-            views.push_back(view2);
+            views.push_back(viewPause);
             views.push_back(viewInfobanner);
             window.setView(views[0]);
             window.setView(views[2]);
             cout << "Render begin." << endl;
             layer.initRender();
-            layer.initWindowRender();
+            layer.initWindowRender(infobanner);
             cout << "Render done." << endl;
 
             sf::Text message;
@@ -802,7 +835,7 @@ int main(int argc,char* argv[])
                     }
                     if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                       resume=false;
-                      window.setView(view2);
+                      window.setView(viewPause);
                       window.draw(message);
                       window.display();
                       sf::Time t1 = sf::seconds(0.2f);
@@ -897,18 +930,18 @@ int main(int argc,char* argv[])
                 sf::RenderWindow window(sf::VideoMode(  800,600), "Deep AI");
                 sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
                 view1.zoom(1.4f);
-                sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                sf::View viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
                 view1.setViewport(sf::FloatRect(0, 0, 1, 1));
                 sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
                 viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
                 views.push_back(view1);
-                views.push_back(view2);
+                views.push_back(viewPause);
                 views.push_back(viewInfobanner);
                 window.setView(views[0]);
                 window.setView(views[2]);
                 cout << "Render begin." << endl;
                 layer.initRender();
-                layer.initWindowRender();
+                layer.initWindowRender(infobanner);
                 cout << "Render done." << endl;
 
                 sf::Text message;
@@ -933,7 +966,7 @@ int main(int argc,char* argv[])
                     }
                     if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
                         resume=false;
-                        window.setView(view2);
+                        window.setView(viewPause);
                         window.draw(message);
                         window.display();
                         sf::Time t1 = sf::seconds(0.2f);
