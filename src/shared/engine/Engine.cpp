@@ -326,8 +326,9 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 			char type=seed.at(i);
 			if(type==(char)'a'){
 				Attack attack(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
-											*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))]);
+											*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::atoi(seed.substr(i+1,1).c_str())]);
 				attack.validate(getTurn());
+				cout<<"charaNumber : "<<std::atoi(seed.substr(i+1,1).c_str())<<endl;
 				unique_ptr<Command> ptr_command(new Attack(attack));
 
 				addCommand(move(ptr_command));
@@ -346,10 +347,11 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 
 			else if(type==(char)'s'){
 				UseSkill useSkill(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
-													*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,i+2))],
-													std::stoi(seed.substr(i+2,i+3)),
+													*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::atoi(seed.substr(i+1,1).c_str())],
+													std::atoi(seed.substr(i+2,1).c_str()),
 													0);
 				useSkill.validate(getTurn());
+				cout<<"charaNumber : "<<std::atoi(seed.substr(i+1,1).c_str())<<endl;
 				unique_ptr<Command> ptr_command(new UseSkill(useSkill));
 				addCommand(move(ptr_command));
 				i+=3;
@@ -357,11 +359,12 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 			}
 
 			else if(type==(char)'o'){
-				UseObject useObject(*getTurn().getTeams()[teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,i+2))],
+				UseObject useObject(*getTurn().getTeams()[teamNumber]->getListCharacter()[std::atoi(seed.substr(i+1,1).c_str())],
 													0,
 													teamNumber,
 													*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber]);
 				useObject.validate(getTurn());
+				cout<<"charaNumber : "<<std::atoi(seed.substr(i+1,1).c_str())<<endl;
 				unique_ptr<Command> ptr_command(new UseObject(useObject));
 				addCommand(move(ptr_command));
 				i+=3;
@@ -380,6 +383,7 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 				int xnumber=seed.find("x",i), ynumber=seed.find("y",i);
 				int x=atoi(seed.substr(i+1,xnumber).c_str());
 				int y=atoi(seed.substr(xnumber+1,ynumber).c_str());
+				cout<<"x : "<<x<<";y : "<<y<<endl;
 				Position dest;
 				dest.setPos(x,y);
 				Move moveCommand(*turn.getTeams()[teamNumber]->getListCharacter()[charaNumber],
@@ -389,12 +393,12 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 				cout << "move validate end" << endl;
 				unique_ptr<Command> ptr_command(new Move(moveCommand));
 				addCommand(move(ptr_command));
-				
+
 				i+=ynumber;
 			}
-			
+
 		}
-		
+
 	}
 	updateDisplay(window,views);
 }
@@ -428,10 +432,10 @@ void Engine::registerGame(){
 
 void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	cout << "start Loading the game"<< endl;
-	std::ifstream file_input("replay.txt", std::ifstream::binary);
+	std::ifstream file_input("replay.txt");//, std::ifstream::binary);
 	Json::Value root;
 	file_input >> root;
-	cout << "loading Map and Characters";
+	cout << "loading Map and Characters"<<endl;
 	
 	turn.initTurn(((int)std::sqrt(root.get("mapseed","").asString().size()))/2,
 					root.get("charseed","").asString(),
