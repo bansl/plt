@@ -60,11 +60,6 @@ void Client::run (){
 		engine.loadGame(window,views);
 		loading=false;
 	}
-	if(true) {
-		cout << "Register start." << endl;
-		engine.registerGame();
-		cout << "Register done." << endl;
-	}
 	sf::Event event;
 	TurnDisplay layer(engine.getTurn());
 	cout << "Render begin." << endl;
@@ -104,7 +99,13 @@ void Client::run (){
 							else bots->runAI();
 							engine.notifyUpdating();
 							while (updating);
-
+							if(test_register && (engine.getTurn().getTurn()==3)) {
+								cout << "Register start." << endl;
+								engine.registerGame();
+								cout << "Register done." << endl;
+								test_register=false;
+							}
+							
 			}
 		}
 		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
