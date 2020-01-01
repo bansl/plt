@@ -162,7 +162,7 @@ std::string Turn::seedTeams(){
   std::vector<std::string> jobLabel (4);
   jobLabel[0]="p",jobLabel[1]="s",jobLabel[2]="a",jobLabel[3]="m";
   for(int i=0;i<(int)getTeams().size();i++){
-    for(int j=0;j<(int)getTeams()[0]->getListCharacter().size();i++){
+    for(int j=0;j<(int)getTeams()[0]->getListCharacter().size();j++){
       seed.append(raceLabel[teams[i]->getListCharacter()[j]->getRace().getRace()-1]);
       seed.append(jobLabel[teams[i]->getListCharacter()[j]->getJob().getJob()-1]);
     }

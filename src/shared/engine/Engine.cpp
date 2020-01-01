@@ -402,9 +402,12 @@ void Engine::registerGame(){
 	Json::Reader reader;
 	Json::Value root;
 	Json::StyledStreamWriter writer;
-	std::string text = "{ \"mapSeed\": \""+getTurn().seedMap()+"\", \"charSeed\": \""+getTurn().seedTeams()+"\"";
+	
+	std::string text = "{ \"mapSeed\": \""+turn.seedMap()+"\", \"charSeed\": \""+turn.seedTeams()+"\"";
 	std::ofstream outFile;
-	for (int i=1;i<getTurn().getTurn();i++){
+
+
+	for (int i=1;i<turn.getTurn();i++){
 		text=text+", \"turn"+to_string(i)+"\": \""+seedCommands(i);
 	}
 	text=text+" }";

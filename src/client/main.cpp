@@ -67,6 +67,34 @@ int main(int argc,char* argv[])
         }
 //=====================================================================================================
 //
+//                                              Register TEST
+//
+//=====================================================================================================
+            else if(strcmp(argv[1],"register") == 0){
+              cout<<"Register Test"<<endl<<endl;
+              sf::RenderWindow window(sf::VideoMode(  800,600), "Register");
+			vector<sf::View> views;
+            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                     viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                     viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                     viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+            view1.zoom(1.4f);
+            view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+            viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+            views.push_back(view1), views.push_back(viewPause),
+            views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+            for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+            Turn testTurn;
+			Client client(window,views,testTurn);
+            client.test_register=true;
+            while (window.isOpen()){
+				client.run();
+				sleep(2);
+				window.close();
+			}
+          }        
+//=====================================================================================================
+//
 //                                              RENDER TEST
 //
 //=====================================================================================================
@@ -1023,116 +1051,6 @@ int main(int argc,char* argv[])
 
             }
 
-
-//=====================================================================================================
-//
-//                                              Register TEST
-//
-//=====================================================================================================
-          //   else if(strcmp(argv[1],"register") == 0){
-          //     cout<<"Register Test"<<endl<<endl;
-          //     // === Init Turn ===
-          //     Turn testTurn;
-          //     testTurn.initTurn(14,2,2);
-          //     // === Init Engine ===
-          //     Engine testEngine(testTurn);
-          //     Item testItem("TestHeal",10,0,3) ;
-          //     testEngine.getTurn().getTeams()[0]->addItem(testItem);
-          //     testEngine.getTurn().getTeams()[1]->addItem(testItem);
-          //
-          //     // === Display Turn ===
-          //     vector<sf::View> views;
-          //     TurnDisplay layer(testTurn);
-          //
-          //     TurnDisplay* ptr_layer=&layer;
-          //             testEngine.getTurn().registerObserver(ptr_layer);
-          //     sf::RenderWindow window(sf::VideoMode(  800,600), "Deep AI");
-          //     sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
-          //     view1.zoom(1.4f);
-          //     sf::View view2(sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-          //     view1.setViewport(sf::FloatRect(0, 0, 1, 1));
-          //     sf::View viewInfobanner (sf::Vector2f(400, 45), sf::Vector2f(800, 90));
-          //     viewInfobanner.setViewport(sf::FloatRect(0, 0.85f, 1, 1));
-          //     views.push_back(view1);
-          //     views.push_back(view2);
-          //     views.push_back(viewInfobanner);
-          //     window.setView(views[0]);
-          //     window.setView(views[2]);
-          //     cout << "Render begin." << endl;
-          //     layer.initRender();
-          //     layer.initWindowRender();
-          //     cout << "Render done." << endl;
-          //
-          //     sf::Text message;
-          //     sf::Font font;
-          //     font.loadFromFile("res/COURG___.TTF");
-          //     message.setFont(font);
-          //     message.setColor(sf::Color::White);
-          //     message.setStyle(sf::Text::Bold);
-          //     message.setCharacterSize(25);
-          //     message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
-          //     testEngine.registerGame();
-          //     int k=0;
-          //     milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-          //     milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-          //     last_ms+=(milliseconds) 60;
-          //     bool resume=true;
-          //     while (window.isOpen()){
-          //         sf::Event event;
-          //         while (window.pollEvent(event)){
-          //         if (event.type == sf::Event::Closed){
-          //             window.close();
-          //         }
-          //         if ( resume && ((event.type == sf::Event::LostFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
-          //             resume=false;
-          //             window.setView(view2);
-          //             window.draw(message);
-          //             window.display();
-          //             sf::Time t1 = sf::seconds(0.2f);
-          //             sf::sleep(t1);
-          //         }
-          //         if ( !resume && ((event.type == sf::Event::GainedFocus) || (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) ) ){
-          //             window.clear();
-          //             window.setView(view1);
-          //             resume=true;
-          //             sf::Time t1 = sf::seconds(0.2f);
-          //             sf::sleep(t1);
-          //         }
-          //         }
-          //         if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
-          //
-          //             layer.display(window,k,views);
-          //             k=(k+1)%6;
-          //             last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-          //                 view1.move(40, 40), window.setView(view1);
-          //             }
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-          //                 view1.move(-40, -40), window.setView(view1);
-          //             }
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-          //                 view1.move(-40, +40), window.setView(view1);
-          //             }
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-          //                 view1.move(+40, -40),window.setView(view1);
-          //             }
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
-          //                 // right key is pressed: rotate map
-          //                 testEngine.getTurn().rotation=(testTurn.rotation+1)%4;
-          //                 layer.initRender(testEngine.getTurn(),fullRender);
-          //             }
-          //             if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
-          //                 // left key is pressed: rotate map to other side
-          //                 testEngine.getTurn().rotation=(testTurn.rotation+3)%4;
-          //                 layer.initRender(testEngine.getTurn(),fullRender);
-          //             }
-          //         }
-          //         sf::Time t1 = sf::seconds(0.1f);
-          //         sf::sleep(t1);
-          //
-          //     }
-          //
-          // }
 
             else{
               cout << "Type hello to get welcome message.\nType render to get render test.\nType engine to get engine test.\nType random_ai to get random AI test.\nType heuristic_ai to get heuristic AI test.\nType rollback to get rollback test.\nType deep_ai to get deep AI test" << endl;

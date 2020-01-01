@@ -56,7 +56,11 @@ void Client::engineUpdating (){
 }
 
 void Client::run (){
-	
+	if(true) {
+		cout << "Register start." << endl;
+		engine.registerGame();
+		cout << "Register done." << endl;
+	}
 	sf::Event event;
 	TurnDisplay layer(engine.getTurn());
 	cout << "Render begin." << endl;
