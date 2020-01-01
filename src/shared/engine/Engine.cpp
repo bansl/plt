@@ -319,24 +319,25 @@ std::string Engine::seedCommands(int turnNumber){
 
 void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& window, std::vector<sf::View> views){
 	if(turnCheckIn()){
+		updateDisplay(window,views);
 		int i=0, charaNumber=0;
 		int teamNumber=turnNumber%2;
 		while(i<(int)seed.size()){
 			char type=seed.at(i);
-
 			if(type==(char)'a'){
 				Attack attack(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
 											*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))]);
 				attack.validate(getTurn());
 				unique_ptr<Command> ptr_command(new Attack(attack));
+
 				addCommand(move(ptr_command));
 				i+=2;
 				charaNumber++;
 			}
 
 			else if(type==(char)'d'){
-				Defend defend(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber]);
-				defend.validate(getTurn());
+				Defend defend(*turn.getTeams()[teamNumber]->getListCharacter()[charaNumber]);
+				defend.validate(turn);
 				unique_ptr<Command> ptr_command(new Defend(defend));
 				addCommand(move(ptr_command));
 				i+=1;
@@ -345,8 +346,8 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 
 			else if(type==(char)'s'){
 				UseSkill useSkill(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
-													*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))],
-													std::stoi(seed.substr(i+2,1)),
+													*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,i+2))],
+													std::stoi(seed.substr(i+2,i+3)),
 													0);
 				useSkill.validate(getTurn());
 				unique_ptr<Command> ptr_command(new UseSkill(useSkill));
@@ -356,7 +357,7 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 			}
 
 			else if(type==(char)'o'){
-				UseObject useObject(*getTurn().getTeams()[teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))],
+				UseObject useObject(*getTurn().getTeams()[teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,i+2))],
 													0,
 													teamNumber,
 													*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber]);
@@ -376,27 +377,26 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 			}
 
 			else if(type==(char)'m'){
-				int xnumber=0,ynumber=0;
-				while((char)seed.at(i+1+xnumber)==(char)'x'){
-					xnumber++;
-				}
-				while((char)seed.at(i+2+xnumber+ynumber)==(char)'y'){
-					ynumber++;
-				}
-				int x=std::stoi(seed.substr(i+1,xnumber));
-				int y=std::stoi(seed.substr(i+2+xnumber,ynumber));
+				int xnumber=seed.find("x",i), ynumber=seed.find("y",i);
+				int x=atoi(seed.substr(i+1,xnumber).c_str());
+				int y=atoi(seed.substr(xnumber+1,ynumber).c_str());
 				Position dest;
 				dest.setPos(x,y);
-				Move moveCommand(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
-									dest);
-				moveCommand.validate(getTurn());
+				Move moveCommand(*turn.getTeams()[teamNumber]->getListCharacter()[charaNumber],
+								 dest);
+				cout << "move validate begin" << endl;
+				moveCommand.validate(turn);
+				cout << "move validate end" << endl;
 				unique_ptr<Command> ptr_command(new Move(moveCommand));
 				addCommand(move(ptr_command));
-				i+=3+xnumber+ynumber;
+				
+				i+=ynumber;
 			}
-			updateDisplay(window,views);
+			
 		}
+		
 	}
+	updateDisplay(window,views);
 }
 
 void Engine::registerGame(){
@@ -404,7 +404,7 @@ void Engine::registerGame(){
 	Json::Value root;
 	Json::StyledStreamWriter writer;
 
-	std::string text = "{ \"mapSeed\": \""+turn.seedMap()+"\", \"charSeed\": \""+turn.seedTeams()+"\"";
+	std::string text = "{ \"mapseed\": \""+turn.seedMap()+"\", \"charseed\": \""+turn.seedTeams()+"\"";
 	std::ofstream outFile;
 
 
@@ -427,15 +427,20 @@ void Engine::registerGame(){
 }
 
 void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
-	std::ifstream file_input("replay.txt");
-	Json::Reader reader;
+	cout << "start Loading the game"<< endl;
+	std::ifstream file_input("replay.txt", std::ifstream::binary);
 	Json::Value root;
-	if(!reader.parse(file_input, root)) {
-		std::cout << reader.getFormattedErrorMessages();
-		exit(1);
-	}
-	turn.initTurn(((int)std::sqrt(root["mapSeed"].toStyledString().size()))/2,root["charSeed"].toStyledString(),root["mapSeed"].toStyledString());
-	for(int i=1;i<(int)root.size()-1;i++){
-		loadCommands("turn"+to_string(i),i,window,views);
+	file_input >> root;
+	cout << "loading Map and Characters";
+	
+	turn.initTurn(((int)std::sqrt(root.get("mapseed","").asString().size()))/2,
+					root.get("charseed","").asString(),
+					root.get("mapSeed","").asString());
+	cout << ": done"<< endl;
+	cout << "start Loading actions"<< endl;
+	for(int i=1;i<=(int)root.size()-2;i++){
+		cout << "actions no. "<< i <<endl;
+		cout << root.get("turn"+to_string(i),"").asString() << endl;
+		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
 	}
 }

@@ -35,8 +35,6 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 }
 
 Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn):views(views), engine(turn), window(window){
-
-	engine.getTurn().initTurn(10,2,2);
 	engine.threaded = true;
 
 	bots=new HeuristicAI(engine);

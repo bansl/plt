@@ -170,7 +170,9 @@ std::string Turn::seedTeams(){
   return seed;
 }
 
-void Turn::initTeams(std::string seed){
+void Turn::initTeams(std::string seed, int mapSize){
+  vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
+                                   {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
   int nbTeams=std::stoi(seed.substr(0,1));
   int nbChar=(seed.length()-1)/(2*nbTeams);
   for(int i=0;i<nbTeams;i++){
@@ -205,18 +207,30 @@ void Turn::initTeams(std::string seed){
       else if(job== (char) 'm'){
         teams[i]->getListCharacter()[j]->getJob().setJob(Magician);
       }
+      int tempPosX=basepos[j][0],tempPosY=basepos[j][1];
+      int temp=0;
+      for (int q=0; q<2*i; q++){
+          temp=tempPosX;
+          tempPosX=map.size()-tempPosY-1;
+          tempPosY=temp;
+      }
+      teams[i]->getListCharacter()[j]->getPosition().setPos(tempPosX,tempPosY);
     }
   }
 
 }
 
 void Turn::initTurn(int mapSize, std::string charSeed){
-  initTeams(charSeed);
+  while(!teams.empty())teams.pop_back();
+
+  while(!map.empty())map.pop_back();
+  
+  initTeams(charSeed,mapSize);
   initTurn(mapSize,0,0);
 }
 
 void Turn::initTurn(int mapSize, std::string charSeed, std::string mapSeed){
-  initTeams(charSeed);
+  initTeams(charSeed,mapSize);
   initTurn(mapSize,0,0,mapSeed);
 }
 
