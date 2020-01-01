@@ -434,7 +434,7 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 		std::cout << reader.getFormattedErrorMessages();
 		exit(1);
 	}
-	turn.initTurn((int)std::sqrt(root["mapSeed"].toStyledString().size()),root["mapSeed"].toStyledString(),root["charSeed"].toStyledString());
+	turn.initTurn(((int)std::sqrt(root["mapSeed"].toStyledString().size()))/2,root["charSeed"].toStyledString(),root["mapSeed"].toStyledString());
 	for(int i=1;i<(int)root.size()-1;i++){
 		loadCommands("turn"+to_string(i),i,window,views);
 	}

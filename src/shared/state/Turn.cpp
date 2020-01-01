@@ -172,7 +172,7 @@ std::string Turn::seedTeams(){
 
 void Turn::initTeams(std::string seed){
   int nbTeams=std::stoi(seed.substr(0,1));
-  int nbChar=(seed.length()-1)/(3*nbTeams);
+  int nbChar=(seed.length()-1)/(2*nbTeams);
   for(int i=0;i<nbTeams;i++){
     initTeams();
     for(int j=0;j<nbChar;j++){
