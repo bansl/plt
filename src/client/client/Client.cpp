@@ -31,22 +31,22 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 			v1=false;
 		}
 	}
-	
+
 }
 
-Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn):window(window), views(views), engine(turn){
-	
+Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn):views(views), engine(turn), window(window){
+
 	engine.getTurn().initTurn(10,2,2);
 	engine.threaded = true;
 
 	bots=new HeuristicAI(engine);
 	engine.registerObserver(this);
-	
+
 }
- 
+
 void Client::engineUpdated (){
 	updating=false;
-	
+
 }
 
 void Client::engineUpdating (){
@@ -56,6 +56,10 @@ void Client::engineUpdating (){
 }
 
 void Client::run (){
+	if(loading){
+		engine.loadGame(window,views);
+		loading=false;
+	}
 	if(true) {
 		cout << "Register start." << endl;
 		engine.registerGame();
@@ -65,7 +69,7 @@ void Client::run (){
 	TurnDisplay layer(engine.getTurn());
 	cout << "Render begin." << endl;
 	layer.initRender(engine.getTurn(), fullRender);
-										
+
 	TurnDisplay* ptr_layer=&layer;
 	engine.getTurn().registerObserver(ptr_layer);
 	// Engine* ptr_engine=&engine;
@@ -87,7 +91,7 @@ void Client::run (){
 	milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	last_ms+=(milliseconds) 60;
 	bool resume=true;
-	std::thread th(thread_engine, &engine, &window, &views); 
+	std::thread th(thread_engine, &engine, &window, &views);
 
 	while(window.isOpen()){
 		 layer.display(window,1, views);
@@ -100,14 +104,14 @@ void Client::run (){
 							else bots->runAI();
 							engine.notifyUpdating();
 							while (updating);
-							
+
 			}
 		}
 		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
             layer.display(window,k, views);
 			k=(k+1)%6;
 			last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
-		}			
+		}
 
 		while (window.pollEvent(event)){
 			if (event.type==sf::Event::KeyPressed){

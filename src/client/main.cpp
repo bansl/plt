@@ -67,12 +67,12 @@ int main(int argc,char* argv[])
         }
 //=====================================================================================================
 //
-//                                              Register TEST
+//                                              Record TEST
 //
 //=====================================================================================================
-            else if(strcmp(argv[1],"register") == 0){
-              cout<<"Register Test"<<endl<<endl;
-              sf::RenderWindow window(sf::VideoMode(  800,600), "Register");
+            else if(strcmp(argv[1],"record") == 0){
+              cout<<"Record Test"<<endl<<endl;
+              sf::RenderWindow window(sf::VideoMode(  800,600), "Record");
 			vector<sf::View> views;
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
                      viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
@@ -92,7 +92,35 @@ int main(int argc,char* argv[])
 				sleep(2);
 				window.close();
 			}
-          }        
+          }
+          //=====================================================================================================
+          //
+          //                                              Replay TEST
+          //
+          //=====================================================================================================
+                      else if(strcmp(argv[1],"play") == 0){
+                        cout<<"Play Test"<<endl<<endl;
+                        sf::RenderWindow window(sf::VideoMode(  800,600), "Play");
+          			vector<sf::View> views;
+                      sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                               viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                               viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                               viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                      view1.zoom(1.4f);
+                      view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+                      viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+                      views.push_back(view1), views.push_back(viewPause),
+                      views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+                      for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+                      Turn testTurn;
+          			Client client(window,views,testTurn);
+                      client.loading=true;
+                      while (window.isOpen()){
+          				client.run();
+          				sleep(2);
+          				window.close();
+          			}
+                    }
 //=====================================================================================================
 //
 //                                              RENDER TEST
