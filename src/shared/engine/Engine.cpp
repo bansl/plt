@@ -32,7 +32,6 @@ bool Engine::turnCheckOut(){
 }
 
 void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> views){
-	cout << "werwr" << endl;
 
 	if(isTurnBegin){
 		isTurnBegin=false;

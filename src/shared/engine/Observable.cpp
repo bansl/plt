@@ -14,14 +14,12 @@ void const engine::Observable::registerObserver(Observer* o){
 }
 
 void const engine::Observable::notifyUpdating(){
-	cout << "notif updating ";
 	for(auto observer : observers){
 		observer->engineUpdating();
 	}
 }
 
 void const engine::Observable::notifyUpdated(){
-	cout << "notif updated ";
 	for(auto observer : observers){
 		observer->engineUpdated();
 	}

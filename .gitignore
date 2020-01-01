@@ -4,6 +4,7 @@ bin
 nbproject
 src/*/*.h
 src/*/*/*.h
+!src/shared/json/*
 .idea
 .vscode
 CMakeFiles/CMakeOutput.log
