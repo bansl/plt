@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
-#include "json/json.h"
+#include "../json/json.h"
 
 using namespace state;
 using namespace engine;
