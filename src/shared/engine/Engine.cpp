@@ -409,7 +409,7 @@ void Engine::registerGame(){
 
 
 	for (int i=1;i<turn.getTurn();i++){
-		text=text+", \"turn"+to_string(i)+"\": \""+seedCommands(i);
+		text=text+", \"turn"+to_string(i)+"\": \""+seedCommands(i)+"\"";
 	}
 	text=text+" }";
 	// Parse JSON and print errors if needed
