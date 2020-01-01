@@ -3,6 +3,7 @@
 #include <state.h>
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <fstream>
 #include "json/json.h"
 
@@ -438,7 +439,7 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	file_input >> root;
 	cout << "loading Map and Characters"<<endl;
 	
-	turn.initTurn(((int)std::sqrt(root.get("mapseed","").asString().size()))/2,
+	turn.initTurn(((int)sqrt(root.get("mapseed","").asString().size()))/2,
 					root.get("charseed","").asString(),
 					root.get("mapseed","").asString());
 	cout << ": done"<< endl;
