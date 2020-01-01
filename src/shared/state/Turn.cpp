@@ -173,10 +173,8 @@ std::string Turn::seedTeams(){
 void Turn::initTeams(std::string seed, int mapSize){
   vector<vector< int >> basepos  { {1,mapSize/2-1},{1,mapSize/2},{1,mapSize/2+1},
                                    {2,mapSize/2-1},{2,mapSize/2},{2,mapSize/2+1} };
-  int nbTeams=std::atoi(seed.substr(0,1).c_str());
-  cout<<"nbTeams : "<<nbTeams<<"|"<<seed.substr(0,1)<<endl;
+  int nbTeams=std::stoi(seed.substr(0,1));
   int nbChar=(seed.length()-1)/(2*nbTeams);
-  cout<<"nbChar : "<<nbChar<<endl;
   for(int i=0;i<nbTeams;i++){
     initTeams();
     for(int j=0;j<nbChar;j++){
@@ -226,7 +224,7 @@ void Turn::initTurn(int mapSize, std::string charSeed){
   while(!teams.empty())teams.pop_back();
 
   while(!map.empty())map.pop_back();
-
+  
   initTeams(charSeed,mapSize);
   initTurn(mapSize,0,0);
 }
