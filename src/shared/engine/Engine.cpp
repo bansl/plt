@@ -395,7 +395,7 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 					unique_ptr<Command> ptr_command(new Move(moveCommand));
 					addCommand(move(ptr_command));
 				}
-				i+=ynumber;
+				i+=ynumber+1;
 			}
 
 		}
@@ -445,9 +445,9 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	cout << "+++map tile 0 type++" << to_string( turn.getMap()[0][0].getTile())<< endl;
 	
 	cout << "start Loading actions"<< endl;
-	// for(int i=1;i<=(int)root.size()-2;i++){
-	// 	cout << "actions no. "<< i <<endl;
-	// 	cout << root.get("turn"+to_string(i),"").asString() << endl;
-	// 	loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
-	// }
+	for(int i=1;i<=(int)root.size()-2;i++){
+		cout << "actions no. "<< i <<endl;
+		cout << root.get("turn"+to_string(i),"").asString() << endl;
+		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
+	}
 }
