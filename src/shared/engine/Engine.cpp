@@ -2,6 +2,9 @@
 #include <render.h>
 #include <state.h>
 #include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include "../../../extern/jsoncpp-1.8.0/json/json.h"
 
 using namespace state;
 using namespace engine;
@@ -62,11 +65,11 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 		updateisTurnFinished=true;
 		turn.skipTurn();
 	}
-	
+
 	if(updateisTurnFinished){
 
 		for(size_t i=0; i<commands.size();i++){
-			
+
 			commands[i]->action(turn);
 			if (commands[i]->commandType==Movecmd){
 				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
@@ -82,7 +85,7 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 				pM->getCharacter().setStatus(tempStatus);
 				position_history.push_back(pM->getPathToDest()[0]);
 			}
-			
+
 			else if (commands[i]->commandType==Attackcmd){
 				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
 				defending_history.push_back(pA->getDefender().getStatus()==Defending);
@@ -118,7 +121,7 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 			}
 			cout << "###########################" << endl;
 		}
-		if(turnCheckOut()) 
+		if(turnCheckOut())
 		{
 			isTurnFinished=true;
 			notifyUpdated();
@@ -244,4 +247,192 @@ bool Engine::revertTurn(sf::RenderWindow& window, std::vector<sf::View> views){
 		return true;
 	}
 	return false;
+}
+
+std::string Engine::seedCommands(int turnNumber){
+	int offset=0;
+	std::string seed;
+	for (int i=0;i<turnNumber-1;i++){
+		offset+=command_history_nb[i];
+	}
+	for(int i=0;i<command_history_nb[turnNumber-1];i++){
+		if(command_history[i+offset]->commandType==Attackcmd){
+			seed.append("a");
+			int charaNumber=-1;
+			Command * pC=command_history[i+offset].get();
+      engine::Attack *pA=dynamic_cast<engine::Attack*>(pC);
+			for(int j=0;j<(int)getTurn().getTeams()[1-turnNumber%2]->getListCharacter().size();j++){
+				if(getTurn().getTeams()[1-turnNumber%2]->getListCharacter()[j]->idCharacter==pA->getDefender().idCharacter){
+					charaNumber=j;
+				}
+			}
+			seed.append(to_string(charaNumber));
+		}
+
+		else if(command_history[i+offset]->commandType==Movecmd){
+			seed.append("m");
+			Command * pC=command_history[i+offset].get();
+			engine::Move *pM=dynamic_cast<engine::Move*>(pC);
+			Position & pos=pM->getDest();
+			seed.append(to_string(pos.getX()));
+			seed.append("x");
+			seed.append(to_string(pos.getY()));
+			seed.append("y");
+		}
+
+		else if(command_history[i+offset]->commandType==UseObjectcmd){
+			seed.append("o");
+			int charaNumber=-1;
+			Command * pC=command_history[i+offset].get();
+			engine::UseObject *pO=dynamic_cast<engine::UseObject*>(pC);
+			for(int j=0;j<(int)getTurn().getTeams()[turnNumber%2]->getListCharacter().size();j++){
+				if(getTurn().getTeams()[turnNumber%2]->getListCharacter()[j]->idCharacter==pO->getTargetCharacter().idCharacter){
+					charaNumber=j;
+				}
+			}
+			seed.append(to_string(charaNumber));
+			seed.append(to_string(pO->getNumberObject()));
+		}
+
+		else if(command_history[i+offset]->commandType==Defendcmd){
+			seed.append("d");
+		}
+
+		else if(command_history[i+offset]->commandType==UseSkillcmd){
+			seed.append("s");
+			int charaNumber=-1;
+			Command * pC=command_history[i+offset].get();
+			engine::UseSkill *pS=dynamic_cast<engine::UseSkill*>(pC);
+			for(int j=0;j<(int)getTurn().getTeams()[1-turnNumber%2]->getListCharacter().size();j++){
+				if(getTurn().getTeams()[1-turnNumber%2]->getListCharacter()[j]->idCharacter==pS->getTargetCharacter().idCharacter){
+					charaNumber=j;
+				}
+			}
+			seed.append(to_string(charaNumber));
+			seed.append(to_string(pS->getSkillNumber()));
+		}
+
+		else if(command_history[i+offset]->commandType==EndTurncmd){
+			seed.append("e");
+		}
+	}
+	return seed;
+}
+
+void Engine::loadCommands(std::string seed, int turnNumber){
+	int i=0, charaNumber=0;
+	int teamNumber=turnNumber%2;
+	while(i<(int)seed.size()){
+		char type=seed.at(i);
+
+		if(type==(char)'a'){
+			Attack attack(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
+										*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))]);
+			attack.validate(getTurn());
+			unique_ptr<Command> ptr_command(new Attack(attack));
+			addCommand(move(ptr_command));
+			i+=2;
+			charaNumber++;
+		}
+
+		else if(type==(char)'d'){
+			Defend defend(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber]);
+			defend.validate(getTurn());
+			unique_ptr<Command> ptr_command(new Defend(defend));
+			addCommand(move(ptr_command));
+			i+=1;
+			charaNumber++;
+		}
+
+		else if(type==(char)'s'){
+			UseSkill useSkill(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
+												*getTurn().getTeams()[1-teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))],
+												std::stoi(seed.substr(i+2,1)),
+												0);
+			useSkill.validate(getTurn());
+			unique_ptr<Command> ptr_command(new UseSkill(useSkill));
+			addCommand(move(ptr_command));
+			i+=3;
+			charaNumber++;
+		}
+
+		else if(type==(char)'o'){
+			UseObject useObject(*getTurn().getTeams()[teamNumber]->getListCharacter()[std::stoi(seed.substr(i+1,1))],
+												0,
+												teamNumber,
+												*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber]);
+			useObject.validate(getTurn());
+			unique_ptr<Command> ptr_command(new UseObject(useObject));
+			addCommand(move(ptr_command));
+			i+=3;
+			charaNumber++;
+		}
+
+		else if(type==(char)'e'){
+			EndTurn endTurn(getCurrentPlayerID());
+			endTurn.validate(getTurn());
+			unique_ptr<Command> ptr_command(new EndTurn(endTurn));
+			addCommand(move(ptr_command));
+			i+=1;
+		}
+
+		else if(type==(char)'m'){
+			int xnumber=0,ynumber=0;
+			while((char)seed.at(i+1+xnumber)==(char)'x'){
+				xnumber++;
+			}
+			while((char)seed.at(i+2+xnumber+ynumber)==(char)'y'){
+				ynumber++;
+			}
+			int x=std::stoi(seed.substr(i+1,xnumber));
+			int y=std::stoi(seed.substr(i+2+xnumber,ynumber));
+			Position dest;
+			dest.setPos(x,y);
+			Move moveCommand(*getTurn().getTeams()[teamNumber]->getListCharacter()[charaNumber],
+								dest);
+			moveCommand.validate(getTurn());
+			unique_ptr<Command> ptr_command(new Move(moveCommand));
+			addCommand(move(ptr_command));
+			i+=3+xnumber+ynumber;
+		}
+
+	}
+}
+
+void Engine::registerGame(){
+	Json::Reader reader;
+	Json::Value root;
+	Json::StyledStreamWriter writer;
+	std::string text = "{ \"mapSeed\": \""+getTurn().seedMap()+"\", \"charSeed\": \""+getTurn().seedTeams()+"\"";
+	std::ofstream outFile;
+	for (int i=1;i<getTurn().getTurn();i++){
+		text=text+", \"turn"+to_string(i)+"\": \""+seedCommands(i);
+	}
+	text=text+" }";
+	// Parse JSON and print errors if needed
+	if(!reader.parse(text, root)) {
+		std::cout << reader.getFormattedErrorMessages();
+		exit(1);
+	}
+	else {
+
+		// Write the output to a file
+		outFile.open("save.json");
+		writer.write(outFile, root);
+		outFile.close();
+	}
+}
+
+void Engine::loadGame(){
+	std::ifstream file_input("save.json");
+	Json::Reader reader;
+	Json::Value root;
+	if(!reader.parse(file_input, root)) {
+		std::cout << reader.getFormattedErrorMessages();
+		exit(1);
+	}
+	turn.initTurn((int)std::sqrt(root["mapSeed"].toStyledString().size()),root["mapSeed"].toStyledString(),root["charSeed"].toStyledString());
+	for(int i=1;i<(int)root.size()-1;i++){
+		loadCommands("turn"+to_string(i),i);
+	}
 }
