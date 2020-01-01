@@ -57,7 +57,7 @@ int main(int argc,char* argv[])
             views.push_back(viewInfobanner), views.push_back(viewActionSelect);
             for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
             Turn testTurn;
-			Client client(window,views,testTurn);
+			Client client(window,views,testTurn,false);
 
 			while (window.isOpen()){
 				client.run();
@@ -85,7 +85,7 @@ int main(int argc,char* argv[])
             views.push_back(viewInfobanner), views.push_back(viewActionSelect);
             for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
             Turn testTurn;
-			Client client(window,views,testTurn);
+			Client client(window,views,testTurn,false);
             client.test_register=true;
             while (window.isOpen()){
 				client.run();
@@ -113,8 +113,7 @@ int main(int argc,char* argv[])
                       views.push_back(viewInfobanner), views.push_back(viewActionSelect);
                       for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
                       Turn testTurn;
-          		      Client client(window,views,testTurn);
-                      client.loading=true;
+          		      Client client(window,views,testTurn,true);
                       while (window.isOpen()){
           				client.run();
           				sleep(2);

@@ -34,9 +34,10 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 
 }
 
-Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn):views(views), engine(turn), window(window){
+Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn, bool isloading):views(views), engine(turn), window(window){
 	engine.threaded = true;
-
+	loading=isloading;
+	if(!loading) engine.getTurn().initTurn(10,2,2);
 	bots=new HeuristicAI(engine);
 	engine.registerObserver(this);
 
@@ -89,7 +90,7 @@ void Client::run (){
 	while(window.isOpen()){
 		 layer.display(window,1, views);
 		 if(!updating){
-			cout << "finished updagtin"<< endl;
+			cout << "finished updating"<< endl;
 			if(engine.turnCheckIn() ){
 							engine.notifyUpdating();
 							while (updating);
