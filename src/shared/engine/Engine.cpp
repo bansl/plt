@@ -390,7 +390,6 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 				Move moveCommand(*turn.getTeams()[teamNumber]->getListCharacter()[charaNumber],
 								 dest);
 				cout << "move validate begin" << endl;
-				cout << "+++map size++" << to_string( turn.getMap()[0][0].getTile())<< endl;
 				if(moveCommand.validate(turn)){
 					cout << "move validate end" << endl;
 					unique_ptr<Command> ptr_command(new Move(moveCommand));
@@ -439,11 +438,10 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	file_input >> root;
 	cout << "loading Map and Characters"<<endl;
 	
-	turn.initTurn(((int)sqrt(root.get("mapseed","").asString().size()))/2,
+	turn.initTurn(((int)sqrt(root.get("mapseed","").asString().size()/2)),
 					root.get("charseed","").asString(),
 					root.get("mapseed","").asString());
 	cout << ": done"<< endl;
-	cout << "+++map tile 0 type++" << to_string( turn.getMap()[0][0].getTile())<< endl;
 	
 	cout << "start Loading actions"<< endl;
 	for(int i=1;i<=(int)root.size()-2;i++){

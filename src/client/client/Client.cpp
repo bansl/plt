@@ -61,7 +61,6 @@ void Client::run (){
 	}
 	sf::Event event;
 	TurnDisplay layer(engine.getTurn());
-	cout << "+++map tile 0 type++" << to_string( engine.getTurn().getMap()[0][0].getTile())<< endl;
 	cout << "Render begin." << endl;
 	layer.initRender(engine.getTurn(), fullRender);
 
