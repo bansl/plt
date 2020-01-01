@@ -11,7 +11,6 @@ using namespace std;
 bool Move::validate (state::Turn& turn){
     
     if (character.getStatus()==Available){
-        cout << " tst";
         Entity tilecheck{};
         // cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,newPosition) << endl ;
         // cout << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[newPosition.getX()][newPosition.getY()]) << endl ;
@@ -27,67 +26,66 @@ bool Move::validate (state::Turn& turn){
             return false;
             // character.getPosition().setPos(newPosition.getX(),newPosition.getY());
         }
-        cout << " tst";
         //Find Path
-        // Position currentPosition(character.getPosition());
-        // vector<Position> neighbors;
-        // pathToDest={currentPosition};
-        // bool firstpos=true;
-        // int iter=0;
-        // while((pathToDest.size()<=5) && (iter<=250)){
-        //     iter++;
-        //     // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
-        //     if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
-        //     if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
-        //     if( (pathToDest.back().getY()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
-        //     if( (pathToDest.back().getY()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
-        //     firstpos=true;
-        //     while(!neighbors.empty()){
-        //         currentPosition.setPos(neighbors.back().getX(),neighbors.back().getY());
-        //         // cout << "------" << endl ;
-        //         // cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,currentPosition) <<  " | " << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) << endl ;
-        //         // cout << "posX:" << currentPosition.getX() <<  " | " << "posY:" << currentPosition.getY() << endl ;
-        //         bool newpos=true;
-        //         for (size_t q = 0; q < pathToDest.size(); q++)
-        //           {
-        //               if((pathToDest[q].getX()==currentPosition.getX()) && (pathToDest[q].getY()==currentPosition.getY())) newpos=false;
-        //           }
-        //         if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition) && newpos){
+        Position currentPosition(character.getPosition());
+        vector<Position> neighbors;
+        pathToDest={currentPosition};
+        bool firstpos=true;
+        int iter=0;
+        while((pathToDest.size()<=5) && (iter<=250)){
+            iter++;
+            // cout << "CURRENT POS:" << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
+            if( (pathToDest.back().getX()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()+1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
+            if( (pathToDest.back().getX()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()-1,pathToDest.back().getY()  ), neighbors.push_back(currentPosition);
+            if( (pathToDest.back().getY()+1< (int) turn.getMap().size()) ) currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()+1), neighbors.push_back(currentPosition);
+            if( (pathToDest.back().getY()-1>=0) )                          currentPosition.setPos(pathToDest.back().getX()  ,pathToDest.back().getY()-1), neighbors.push_back(currentPosition);
+            firstpos=true;
+            while(!neighbors.empty()){
+                currentPosition.setPos(neighbors.back().getX(),neighbors.back().getY());
+                // cout << "------" << endl ;
+                // cout << "is dest Tile free: " << std::boolalpha << tilecheck.isFree(turn,currentPosition) <<  " | " << "is dest Tile crossable: " << std::boolalpha << tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) << endl ;
+                // cout << "posX:" << currentPosition.getX() <<  " | " << "posY:" << currentPosition.getY() << endl ;
+                bool newpos=true;
+                for (size_t q = 0; q < pathToDest.size(); q++)
+                  {
+                      if((pathToDest[q].getX()==currentPosition.getX()) && (pathToDest[q].getY()==currentPosition.getY())) newpos=false;
+                  }
+                if(tilecheck.isCrossable(turn.getMap()[currentPosition.getX()][currentPosition.getY()]) && tilecheck.isFree(turn,currentPosition) && newpos){
 
-        //             if(firstpos){
-        //                 pathToDest.push_back(currentPosition);
-        //                 // cout << "--first path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
-        //                 firstpos=false;
-        //             }
-        //             else if (currentPosition.distanceBetween(currentPosition,newPosition)<currentPosition.distanceBetween(pathToDest.back(),newPosition)){
-        //                 pathToDest.pop_back();
-        //                 pathToDest.push_back(currentPosition);
-        //                 // cout << "--better path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
-        //             }
-        //             else{
-        //                 // cout << "--kept last path " << endl;
-        //             }
-        //         }
-        //         // cout << "trying next neighbor" << endl;
-        //         neighbors.pop_back();
+                    if(firstpos){
+                        pathToDest.push_back(currentPosition);
+                        // cout << "--first path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
+                        firstpos=false;
+                    }
+                    else if (currentPosition.distanceBetween(currentPosition,newPosition)<currentPosition.distanceBetween(pathToDest.back(),newPosition)){
+                        pathToDest.pop_back();
+                        pathToDest.push_back(currentPosition);
+                        // cout << "--better path: " << pathToDest.back().getX() << " | " << pathToDest.back().getY() << endl ;
+                    }
+                    else{
+                        // cout << "--kept last path " << endl;
+                    }
+                }
+                // cout << "trying next neighbor" << endl;
+                neighbors.pop_back();
 
-        //         if(currentPosition.distanceBetween(pathToDest.back(),newPosition)==0){
-        //             // cout << "final path: ";
-        //             // for (size_t i = 0; i < pathToDest.size(); i++)
-        //             // {
+                if(currentPosition.distanceBetween(pathToDest.back(),newPosition)==0){
+                    // cout << "final path: ";
+                    // for (size_t i = 0; i < pathToDest.size(); i++)
+                    // {
 
-        //             //     cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
-        //             // }
-        //             // cout << "path found!" << endl;
-        //             character.getPosition().setPos(newPosition.getX(),newPosition.getY());
-        //             character.setStatus(Moving);
-        //             std::unique_ptr<Position> addrNewPosition(new state::Position(newPosition));
-        //             turn.addToBuffer(move(addrNewPosition));
-        //             return true;
-        //         }
-        //     }
-        //     // cout << "MOVING TO NEXT TILE" << endl;
-        // }
+                    //     cout << pathToDest[i].getX() << "|" << pathToDest[i].getY() << " -- ";
+                    // }
+                    // cout << "path found!" << endl;
+                    character.getPosition().setPos(newPosition.getX(),newPosition.getY());
+                    character.setStatus(Moving);
+                    std::unique_ptr<Position> addrNewPosition(new state::Position(newPosition));
+                    turn.addToBuffer(move(addrNewPosition));
+                    return true;
+                }
+            }
+            // cout << "MOVING TO NEXT TILE" << endl;
+        }
         // for (size_t i = 0; i < pathToDest.size(); i++)
         //             {
 
