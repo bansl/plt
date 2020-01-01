@@ -154,7 +154,7 @@ int HeuristicAI::computeScore(engine::Command& command){
           score+=-1;
         }
         else{
-          score+=1;
+          score+=max(100-pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest()),5);
         }
         if((pM->getDest().distanceBetween(engine.getTurn().getTeams()[1-engine.getCurrentPlayerID()]->getListCharacter()[i]->getPosition(),pM->getDest())<=4)&&
         (pM->getCharacter().getJob().getJob()==Magician||
@@ -180,7 +180,7 @@ int HeuristicAI::computeScore(engine::Command& command){
 
 void HeuristicAI::runAI(){
 	heuristicCommandList(engine.getCurrentPlayerID(),0,true);
-  
+
 }
 
 void HeuristicAI::runAI(int numberNextCharacter, bool hasNotMoved){
