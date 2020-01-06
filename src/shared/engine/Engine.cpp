@@ -251,14 +251,14 @@ bool Engine::revertTurn(sf::RenderWindow& window, std::vector<sf::View> views){
 std::string Engine::seedCommands(int turnNumber){
 	int offset=0;
 	std::string seed;
-	for (int i=0;i<turnNumber-1;i++){
+	for (int i=0;i<turnNumber;i++){
 		offset+=command_history_nb[i];
 	}
 	for(int i=0;i<command_history_nb[turnNumber-1];i++){
-		if(command_history[i+offset]->commandType==Attackcmd){
+		if(command_history[offset-1-i]->commandType==Attackcmd){
 			seed.append("a");
 			int charaNumber=-1;
-			Command * pC=command_history[i+offset].get();
+			Command * pC=command_history[offset-1-i].get();
       engine::Attack *pA=dynamic_cast<engine::Attack*>(pC);
 			for(int j=0;j<(int)getTurn().getTeams()[1-turnNumber%2]->getListCharacter().size();j++){
 				if(getTurn().getTeams()[1-turnNumber%2]->getListCharacter()[j]->idCharacter==pA->getDefender().idCharacter){
@@ -268,9 +268,9 @@ std::string Engine::seedCommands(int turnNumber){
 			seed.append(to_string(charaNumber));
 		}
 
-		else if(command_history[i+offset]->commandType==Movecmd){
+		else if(command_history[offset-1-i]->commandType==Movecmd){
 			seed.append("m");
-			Command * pC=command_history[i+offset].get();
+			Command * pC=command_history[offset-1-i].get();
 			engine::Move *pM=dynamic_cast<engine::Move*>(pC);
 			Position & pos=pM->getDest();
 			seed.append(to_string(pos.getX()));
@@ -279,10 +279,10 @@ std::string Engine::seedCommands(int turnNumber){
 			seed.append("y");
 		}
 
-		else if(command_history[i+offset]->commandType==UseObjectcmd){
+		else if(command_history[offset-1-i]->commandType==UseObjectcmd){
 			seed.append("o");
 			int charaNumber=-1;
-			Command * pC=command_history[i+offset].get();
+			Command * pC=command_history[offset-1-i].get();
 			engine::UseObject *pO=dynamic_cast<engine::UseObject*>(pC);
 			for(int j=0;j<(int)getTurn().getTeams()[turnNumber%2]->getListCharacter().size();j++){
 				if(getTurn().getTeams()[turnNumber%2]->getListCharacter()[j]->idCharacter==pO->getTargetCharacter().idCharacter){
@@ -293,14 +293,14 @@ std::string Engine::seedCommands(int turnNumber){
 			seed.append(to_string(pO->getNumberObject()));
 		}
 
-		else if(command_history[i+offset]->commandType==Defendcmd){
+		else if(command_history[offset-1-i]->commandType==Defendcmd){
 			seed.append("d");
 		}
 
-		else if(command_history[i+offset]->commandType==UseSkillcmd){
+		else if(command_history[offset-1-i]->commandType==UseSkillcmd){
 			seed.append("s");
 			int charaNumber=-1;
-			Command * pC=command_history[i+offset].get();
+			Command * pC=command_history[offset-1-i].get();
 			engine::UseSkill *pS=dynamic_cast<engine::UseSkill*>(pC);
 			for(int j=0;j<(int)getTurn().getTeams()[1-turnNumber%2]->getListCharacter().size();j++){
 				if(getTurn().getTeams()[1-turnNumber%2]->getListCharacter()[j]->idCharacter==pS->getTargetCharacter().idCharacter){
@@ -311,7 +311,7 @@ std::string Engine::seedCommands(int turnNumber){
 			seed.append(to_string(pS->getSkillNumber()));
 		}
 
-		else if(command_history[i+offset]->commandType==EndTurncmd){
+		else if(command_history[offset-1-i]->commandType==EndTurncmd){
 			seed.append("e");
 		}
 	}
@@ -437,12 +437,12 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	Json::Value root;
 	file_input >> root;
 	cout << "loading Map and Characters"<<endl;
-	
+
 	turn.initTurn(((int)sqrt(root.get("mapseed","").asString().size()/2)),
 					root.get("charseed","").asString(),
 					root.get("mapseed","").asString());
 	cout << ": done"<< endl;
-	
+
 	cout << "start Loading actions"<< endl;
 	for(int i=1;i<=(int)root.size()-2;i++){
 		cout << "actions no. "<< i <<endl;
