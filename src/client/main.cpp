@@ -58,28 +58,20 @@ int main(int argc,char* argv[])
 			sf::Http::Request request1;
 			request1.setMethod(sf::Http::Request::Post);
 			request1.setUri("/player");
-			request1.setHttpVersion(1, 0);
 			string body="{\"req\" : \"POST\", \"name\":\"" + nom + "\", \"inlobby\":true}"; 
 			request1.setBody(body);
 			
 			sf::Http::Response response1 = http.sendRequest(request1);
-			cout<< "status : "<<response1.getStatus()<<endl;
-			cout<<"HTTP version : "<<response1.getMajorHttpVersion()<< "." <<response1.getMinorHttpVersion()<<endl;
-			cout<<"Content-type header :"<<response1.getField("Content-Type")<<endl;
-			cout<<"body :"<<response1.getBody()<<endl;
-
 			Json::Reader jsonReader;
 			Json::Value rep1;
         	if(jsonReader.parse(response1.getBody(),rep1)){
 				int playerID=rep1["id"].asInt();
 				cout<<"joined Lobby!"<<endl;
-				cout<<"Player ID is: "<<playerID<<endl;
-				cout<<""<<endl;
+				cout<<"Player ID is: "<<playerID<<endl<<endl;
 
                 sf::Http::Request request2;
                 request2.setMethod(sf::Http::Request::Get);
                 request2.setUri("/player/all");
-                request2.setHttpVersion(1, 0);
                 Json::Reader jsonReader2;
                 Json::Value rep2;
 
@@ -87,7 +79,6 @@ int main(int argc,char* argv[])
                 request3.setMethod(sf::Http::Request::Post);
                 string uri2="/player/"+ to_string(playerID);
                 request3.setUri(uri2);
-                request3.setHttpVersion(1, 0);
                 string body3="disconnect"; 
                 request3.setBody(body3);
 
@@ -106,6 +97,7 @@ int main(int argc,char* argv[])
                             
                             for (int i = 0; i < (int) rep2["players"].size(); i++)
                                 cout <<  " - Player: " << rep2["players"][i]["name"].asString() 
+                                    << " || ID: " << rep2["players"][i]["id"].asString()
                                     << " || in lobby: " << rep2["players"][i]["inlobby"].asString() <<endl;
                             
                         }

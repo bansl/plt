@@ -20,6 +20,7 @@ HttpStatus PlayerService::get (Json::Value& out, int id) const {
 HttpStatus PlayerService::getall (Json::Value& out) const {
     for (int i = 0; i < (int) game.getPlayersList().size(); i++)
     {
+        out["players"][i]["id"]=game.getPlayersList()[i]->id;
         out["players"][i]["name"]=game.getPlayersList()[i]->name;
         out["players"][i]["inlobby"]=game.getPlayersList()[i]->inlobby;
     }

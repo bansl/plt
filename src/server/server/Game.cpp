@@ -20,8 +20,10 @@ const Player* Game::getPlayer (int id) const {
 }
 
 int Game::addPlayer (std::unique_ptr<Player> player) {
-    int id = playerNb++;
+    player->id=playerNb;
+    int id=playerNb;
     players.push_back(move(player));
+    playerNb++;
     return id;
 }
 

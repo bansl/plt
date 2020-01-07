@@ -86,7 +86,6 @@ main_handler (void *cls,
     try {
 
         ServicesManager *manager = (ServicesManager*) cls;
-        cout << "querying"<< endl;
         status = manager->queryService(response,request->data,url,method);
     }
     catch(ServiceException& e) {
