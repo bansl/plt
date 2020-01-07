@@ -5,6 +5,8 @@
 #include "client.h"
 #include "../shared/engine.h"
 #include "../shared/ai.h"
+#include <SFML/Network.hpp>
+#include "json/json.h"
 
 #include <unistd.h>
 #include <chrono>
@@ -36,13 +38,97 @@ int main(int argc,char* argv[])
         if( std::strcmp( argv[1], "hello") == 0 ){
             cout << "Bonjour le monde!" << endl;
         }
+      
+//=====================================================================================================
+//
+//                                              NETWORK TEST
+//
+//=====================================================================================================
+
+        else if(strcmp(argv[1], "network") == 0){
+
+			string nom;
+			cout<<"Player Name: ";
+			cin>>nom;
+
+            milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+            last_ms+=(milliseconds) 1000;
+			sf::Http http("http://localhost/", 8080);
+			
+			sf::Http::Request request1;
+			request1.setMethod(sf::Http::Request::Post);
+			request1.setUri("/player");
+			request1.setHttpVersion(1, 0);
+			string body="{\"req\" : \"POST\", \"name\":\"" + nom + "\", \"inlobby\":true}"; 
+			request1.setBody(body);
+			
+			sf::Http::Response response1 = http.sendRequest(request1);
+			cout<< "status : "<<response1.getStatus()<<endl;
+			cout<<"HTTP version : "<<response1.getMajorHttpVersion()<< "." <<response1.getMinorHttpVersion()<<endl;
+			cout<<"Content-type header :"<<response1.getField("Content-Type")<<endl;
+			cout<<"body :"<<response1.getBody()<<endl;
+
+			Json::Reader jsonReader;
+			Json::Value rep1;
+        	if(jsonReader.parse(response1.getBody(),rep1)){
+				int playerID=rep1["id"].asInt();
+				cout<<"joined Lobby!"<<endl;
+				cout<<"Player ID is: "<<playerID<<endl;
+				cout<<""<<endl;
+
+                sf::Http::Request request2;
+                request2.setMethod(sf::Http::Request::Get);
+                request2.setUri("/player/all");
+                request2.setHttpVersion(1, 0);
+                Json::Reader jsonReader2;
+                Json::Value rep2;
+
+                sf::Http::Request request3;
+                request3.setMethod(sf::Http::Request::Post);
+                string uri2="/player/"+ to_string(playerID);
+                request3.setUri(uri2);
+                request3.setHttpVersion(1, 0);
+                string body3="disconnect"; 
+                request3.setBody(body3);
+
+                while (true)
+                {
+                    if (duration_cast< milliseconds >(system_clock::now().time_since_epoch())>last_ms)
+                    {
+                        cout<<endl<< "Players currently in lobby :"<<endl;
+                        sf::Http::Response response2 = http.sendRequest(request2);
+                        if (jsonReader.parse(response2.getBody(), rep2)){
+                            // cout<< "status : "<<response2.getStatus()<<endl;
+                            // cout<<"HTTP version : "<<response2.getMajorHttpVersion()<< "." 
+                            //                          <<response2.getMinorHttpVersion()<<endl;
+                            // cout<<"Content-type header :"<<response2.getField("Content-Type")<<endl;
+                            // cout<<"body :"<<response2.getBody()<<endl;
+                            
+                            for (int i = 0; i < (int) rep2["players"].size(); i++)
+                                cout <<  " - Player: " << rep2["players"][i]["name"].asString() 
+                                    << " || in lobby: " << rep2["players"][i]["inlobby"].asString() <<endl;
+                            
+                        }
+                        last_ms+=(milliseconds) 1000;
+                }
+                
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) break;
+			    }
+                http.sendRequest(request3);
+                cout<<endl<<"You left the lobby."<<endl;
+            }
+			else{
+				cout<<"No more space in lobby."<<endl;
+			}
+		}
+
 //=====================================================================================================
 //
 //                                              THREAD TEST
 //
 //=====================================================================================================
 
-        if( std::strcmp( argv[1], "thread") == 0 ){
+        else if( std::strcmp( argv[1], "thread") == 0 ){
             cout << "Thread Test" << endl;
             sf::RenderWindow window(sf::VideoMode(  800,600), "Thread");
 			vector<sf::View> views;
@@ -71,55 +157,55 @@ int main(int argc,char* argv[])
 //
 //=====================================================================================================
             else if(strcmp(argv[1],"record") == 0){
-              cout<<"Record Test"<<endl<<endl;
-              sf::RenderWindow window(sf::VideoMode(  800,600), "Record");
-			vector<sf::View> views;
-            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
-                     viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
-                     viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
-                     viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-            view1.zoom(1.4f);
-            view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
-            viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
-            views.push_back(view1), views.push_back(viewPause),
-            views.push_back(viewInfobanner), views.push_back(viewActionSelect);
-            for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
-            Turn testTurn;
-			Client client(window,views,testTurn,false);
-            client.test_register=true;
-            while (window.isOpen()){
-				client.run();
-				sleep(2);
-				window.close();
-			}
+                cout<<"Record Test"<<endl<<endl;
+                sf::RenderWindow window(sf::VideoMode(  800,600), "Record");
+                vector<sf::View> views;
+                sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                        viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                        viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                        viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                view1.zoom(1.4f);
+                view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+                viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+                views.push_back(view1), views.push_back(viewPause),
+                views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+                for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+                Turn testTurn;
+                Client client(window,views,testTurn,false);
+                client.test_register=true;
+                while (window.isOpen()){
+                    client.run();
+                    sleep(2);
+                    window.close();
+                }
           }
           //=====================================================================================================
           //
           //                                              Replay TEST
           //
           //=====================================================================================================
-                      else if(strcmp(argv[1],"play") == 0){
-                        cout<<"Play Test"<<endl<<endl;
-                        sf::RenderWindow window(sf::VideoMode(  800,600), "Play");
-          			vector<sf::View> views;
-                      sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
-                               viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
-                               viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
-                               viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
-                      view1.zoom(1.4f);
-                      view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
-                      viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
-                      views.push_back(view1), views.push_back(viewPause),
-                      views.push_back(viewInfobanner), views.push_back(viewActionSelect);
-                      for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
-                      Turn testTurn;
-          		      Client client(window,views,testTurn,true);
-                      while (window.isOpen()){
-          				client.run();
-          				sleep(2);
-          				window.close();
-          			}
-                    }
+            else if(strcmp(argv[1],"play") == 0){
+                cout<<"Play Test"<<endl<<endl;
+                sf::RenderWindow window(sf::VideoMode(  800,600), "Play");
+                vector<sf::View> views;
+                sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                        viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                        viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                        viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                view1.zoom(1.4f);
+                view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+                viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+                views.push_back(view1), views.push_back(viewPause),
+                views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+                for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+                Turn testTurn;
+                Client client(window,views,testTurn,true);
+                while (window.isOpen()){
+                    client.run();
+                    sleep(2);
+                    window.close();
+                }
+            }
 //=====================================================================================================
 //
 //                                              RENDER TEST

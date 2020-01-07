@@ -21,6 +21,7 @@ target_include_directories(${lib_server_target} INTERFACE
   )
 target_link_libraries(${lib_server_target} PUBLIC
   ${SFML_LIBRARIES}
+  ${MHD_LIBRARY}
   $<TARGET_NAME:shared_static>
   )
 

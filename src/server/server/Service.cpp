@@ -3,10 +3,14 @@
 using namespace server;
 using namespace std;
 
-Service::Service () {
+Service::Service (std::string resourceType) : resourceType(resourceType) {
 }
 
 HttpStatus Service::get (Json::Value& out, int id) const {
+    throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not implemented");
+}
+
+HttpStatus Service::getall (Json::Value& out) const {
     throw ServiceException(HttpStatus::NOT_IMPLEMENTED,"Not implemented");
 }
 

@@ -4,7 +4,7 @@
 using namespace server;
 using namespace std;
 
-PlayerService::PlayerService (Game& game) : Service(), game(game) {
+PlayerService::PlayerService (Game& game) : Service("/player"), game(game) {
     
 }
 
@@ -14,6 +14,17 @@ HttpStatus PlayerService::get (Json::Value& out, int id) const {
         throw ServiceException(HttpStatus::NOT_FOUND,"Invalid player id");
     out["name"] = player->name;
     out["inlobby"] = player->inlobby;
+    return HttpStatus::OK;
+}
+
+HttpStatus PlayerService::getall (Json::Value& out) const {
+    for (int i = 0; i < (int) game.getPlayersList().size(); i++)
+    {
+        out["players"][i]["name"]=game.getPlayersList()[i]->name;
+        out["players"][i]["inlobby"]=game.getPlayersList()[i]->inlobby;
+    }
+    
+    
     return HttpStatus::OK;
 }
 
@@ -38,7 +49,7 @@ HttpStatus PlayerService::put (Json::Value& out,const Json::Value& in) {
 	}
     string name = in["name"].asString();
     bool inlobby = in["inlobby"].asBool();
-	Player new_player(name, free);
+	Player new_player(name, inlobby);
 	std::unique_ptr<Player> ptr_player (new Player(new_player));
 	out["id"] = game.addPlayer(move(ptr_player));
     return HttpStatus::CREATED;
