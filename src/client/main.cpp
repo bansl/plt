@@ -101,10 +101,37 @@ int main(int argc,char* argv[])
                                     << " || in lobby: " << rep2["players"][i]["inlobby"].asString() <<endl;
                             
                         }
+                        cout << "press D to leave the lobby"<<endl;
+                        if (rep2["players"].size()==2) cout << "Lobby is full, press S to start the game"<<endl;
+                        else cout << "Waiting for new players..."<<endl;
                         last_ms+=(milliseconds) 1000;
                 }
+                   
+
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) break;
+                    if ((rep2["players"].size()==2)&&(sf::Keyboard::isKeyPressed(sf::Keyboard::S))){
+                        sf::RenderWindow window(sf::VideoMode(  800,600), "Disgaea");
+                        vector<sf::View> views;
+                        sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                                    viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                                    viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                                    viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                        view1.zoom(1.4f);
+                        view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+                        viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+                        views.push_back(view1), views.push_back(viewPause),
+                        views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+                        for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+                        Turn testTurn;
+                        Client client(window,views,testTurn,false);
+
+                        while (window.isOpen()){
+                            client.run();
+                            sleep(2);
+                            window.close();
+                        }
+                    }
                 
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) break;
 			    }
                 http.sendRequest(request3);
                 cout<<endl<<"You left the lobby."<<endl;
