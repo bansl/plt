@@ -34,7 +34,7 @@ TileSet::TileSet(TileSetType id){
 		margin=0;
 		imagePath.push_back("res/windowsprites.png");
 	}
-	else if (type==HandCursor){
+	else if (type==HandCursorSprite){
 		sizeX=128;
 		sizeY=128;
 		margin=0;

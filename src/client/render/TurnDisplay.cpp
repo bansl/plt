@@ -24,7 +24,7 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
       	std::unique_ptr<TileSet> ptr_window (new TileSet(tilesetWindow));
       	tilesets.push_back(move(ptr_window));
 
-        TileSet actionCursor(HandCursor);
+        TileSet actionCursor(HandCursorSprite);
         std::unique_ptr<TileSet> ptr_actionCursor (new TileSet(actionCursor));
         tilesets.push_back(move(ptr_actionCursor));
 }
@@ -262,15 +262,6 @@ void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::Re
         }
 }
 
-void TurnDisplay::redraw(engine::Engine& engine,sf::RenderWindow& window, state::RenderType rendertype,std::vector<sf::View> views){
-  if (rendertype==actioncursorRender){
-    DrawObject drawActionCursor;
-    if(drawActionCursor.renderActionCursor(engine.getActionCursor(),*tilesets[4])){
-      std::unique_ptr<DrawObject> ptr_drawCursor (new DrawObject(drawActionCursor));
-      drawcursor.push_back(move(ptr_drawCursor));
-    }
-  }
-}
 
 void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::View> views){
 	window.clear();
@@ -421,12 +412,32 @@ std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
 }
 
 void TurnDisplay::initWindowRender (render::WindowType windowtype){
-      if( (windowtype==actionselect) && (drawwindows.size()>1) )drawwindows.pop_back();
+      if ((windowtype==actionselect)&&(drawwindows.size()>1))   while (drawwindows.size()>1) drawwindows.pop_back();
       else if(windowtype==infobanner) while (!drawwindows.empty()) drawwindows.pop_back();
       Window myWindow;
       if(myWindow.renderWindow(windowtype, *tilesets[3], tilesets[3]->getXsize(),turnDisplay)){
         std::unique_ptr<Window> ptr_drawWindow (new Window(myWindow));
         drawwindows.push_back(move(ptr_drawWindow));
       }
+      if (windowtype==actionselect){
+        Window myWindow2;
+        if(myWindow2.renderActionCursor(selectpos,*tilesets[4])){
+          std::unique_ptr<Window> ptr_drawCursorA (new Window(myWindow2));
+          drawwindows.push_back(move(ptr_drawCursorA));
+        }
+      }
+
 
 }
+
+void TurnDisplay::moveCursorUp (){
+    if (selectpos>=0) selectpos--;
+}
+
+void TurnDisplay::moveCursorDown (){
+    if (selectpos<6) selectpos++;
+}
+
+void TurnDisplay::engineUpdated(){}
+
+void TurnDisplay::engineUpdating(){}

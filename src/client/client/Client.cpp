@@ -53,6 +53,9 @@ void Client::engineUpdating (){
 	v1=true;
 	usleep(150000);
 }
+void Client::moveCursorDown(){}
+
+void Client::moveCursorUp(){}
 
 void Client::run (){
 	if(loading){

@@ -25,9 +25,15 @@ void const engine::Observable::notifyUpdated(){
 	}
 }
 
-void const engine::Observable::notifyObserver (engine::Engine& engine, sf::Window& window, state::RenderType rendertype, std::vector<sf::View> view){
-	// cout << "notifyObservers" << endl;
-	for(auto observer : observers){
-		observer->redraw(engine, window, rendertype, view);
+void const engine::Observable::notifySelectCursorMove (engine::Direction direction){
+	if (direction==UP){
+		for(auto observer : observers){
+			observer->moveCursorUp();
+		}
+	}
+	if (direction==DOWN){
+		for(auto observer : observers){
+			observer->moveCursorDown();
+		}
 	}
 }

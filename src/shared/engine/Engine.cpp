@@ -223,6 +223,8 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 				else{
 					posYactioncurs=posYactioncurs-30;
 				}
+				notifySelectCursorMove(UP);
+				turn.notifyObservers(turn, window, windowactionRender, views);
 			}
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 				if(posYactioncurs==470){
@@ -231,11 +233,12 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 				else{
 					posYactioncurs=posYactioncurs+30;
 				}
+				notifySelectCursorMove(DOWN);
+				turn.notifyObservers(turn, window, windowactionRender, views);
 			}
 			Engine & engineUp=*this;
 			nextPosActionCurs.setPos(posXactioncurs, posYactioncurs);
 			actionCursor->cursorMove(nextPosActionCurs);
-			notifyObserver(engineUp,window, actioncursorRender, views);
 		}
 
 	}
