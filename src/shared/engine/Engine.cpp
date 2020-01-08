@@ -148,6 +148,9 @@ Engine::Engine(state::Turn& turn):turn(turn){
 	isTurnFinished=true;
 	isTurnBegin=false;
 	currentPlayerId=0;
+	state::Position PosActionCurs;
+	PosActionCurs.setPos(225, 320);
+	actionCursor->cursorMove(PosActionCurs);
 }
 
 int Engine::getCurrentPlayerID(){
@@ -158,45 +161,85 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 
 	if(newEvent.type==sf::Event::KeyPressed ){
 
-		int posXupdate = 0, posYupdate = 0;
-		size_t posXcurs=turn.getCursor()->getPosition().getX();
-		size_t posYcurs=turn.getCursor()->getPosition().getY();
-		size_t mapsize=turn.getMap().size();
-		std::vector<sf::Keyboard::Key> direction_keys={sf::Keyboard::Up,sf::Keyboard::Left,sf::Keyboard::Down,sf::Keyboard::Right};
-		// direction input
-		if (sf::Keyboard::isKeyPressed(direction_keys[turn.rotation%4])){
-			if(posXcurs!=0) posXupdate = -1;
-			// else posXupdate = mapsize-1 -posXcurs;
-		}
-		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+3)%4])){
-			if(posYcurs!=mapsize-1) posYupdate = 1;
-			// else posYupdate = -posYcurs;
-		}
-		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+2)%4])){
-			if(posXcurs!=mapsize-1) posXupdate = 1;
-			// else posXupdate = -posXcurs;
-		}
-		else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+1)%4])){
-			if(posYcurs!=0) posYupdate = -1;
-			// else posYupdate = mapsize-1 -posYcurs;
+		if(!action_bool){
+			int posXupdate = 0, posYupdate = 0;
+			size_t posXcurs=turn.getCursor()->getPosition().getX();
+			size_t posYcurs=turn.getCursor()->getPosition().getY();
+			size_t mapsize=turn.getMap().size();
+
+			std::vector<sf::Keyboard::Key> direction_keys={sf::Keyboard::Up,sf::Keyboard::Left,sf::Keyboard::Down,sf::Keyboard::Right};
+			// direction input
+			if (sf::Keyboard::isKeyPressed(direction_keys[turn.rotation%4])){
+				if(posXcurs!=0) posXupdate = -1;
+				// else posXupdate = mapsize-1 -posXcurs;
+			}
+			else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+3)%4])){
+				if(posYcurs!=mapsize-1) posYupdate = 1;
+				// else posYupdate = -posYcurs;
+			}
+			else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+2)%4])){
+				if(posXcurs!=mapsize-1) posXupdate = 1;
+				// else posXupdate = -posXcurs;
+			}
+			else if (sf::Keyboard::isKeyPressed(direction_keys[(turn.rotation+1)%4])){
+				if(posYcurs!=0) posYupdate = -1;
+				// else posYupdate = mapsize-1 -posYcurs;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) views[0].move(+40, -40),window.setView(views[0]);
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) views[0].move(-40, -40), window.setView(views[0]);
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) views[0].move(-40, +40), window.setView(views[0]);
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) views[0].move(40, 40), window.setView(views[0]);
+
+			// update moved cursor
+			if (posXupdate != 0 || posYupdate !=0){
+				Position nextPosCurs;
+				nextPosCurs.setPos(posXcurs+posXupdate, posYcurs+posYupdate);
+				turn.getCursor()->cursorMove(nextPosCurs);
+				turn.notifyObservers(turn, window, cursorRender, views);
+				turn.notifyObservers(turn, window, windowinfoRender, views);
+				posXupdate = 0, posYupdate = 0;
+			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) views[0].move(+40, -40),window.setView(views[0]);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) views[0].move(-40, -40), window.setView(views[0]);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) views[0].move(-40, +40), window.setView(views[0]);
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) views[0].move(40, 40), window.setView(views[0]);
-
-		// update moved cursor
-		if (posXupdate != 0 || posYupdate !=0){
-			Position nextPosCurs;
-			nextPosCurs.setPos(posXcurs+posXupdate, posYcurs+posYupdate);
-			turn.getCursor()->cursorMove(nextPosCurs);
-			turn.notifyObservers(turn, window, cursorRender, views);
-			turn.notifyObservers(turn, window, windowinfoRender, views);
-			posXupdate = 0, posYupdate = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){
+			action_bool=!action_bool;
+			if(action_bool){
+				turn.notifyObservers(turn, window, windowactionRender, views);
+			}
+			else{
+				turn.notifyObservers(turn, window, windowinfoRender, views);
+			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) turn.notifyObservers(turn, window, windowactionRender, views);
+		if(action_bool){
+			Position nextPosActionCurs;
+			size_t posXactioncurs=actionCursor->getPosition().getX();
+			size_t posYactioncurs=actionCursor->getPosition().getY();
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+				if(posYactioncurs==320){
+					posYactioncurs=470;
+				}
+				else{
+					posYactioncurs=posYactioncurs-30;
+				}
+				notifySelectCursorMove(UP);
+				turn.notifyObservers(turn, window, windowactionRender, views);
+			}
+			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+				if(posYactioncurs==470){
+					posYactioncurs=320;
+				}
+				else{
+					posYactioncurs=posYactioncurs+30;
+				}
+				notifySelectCursorMove(DOWN);
+				turn.notifyObservers(turn, window, windowactionRender, views);
+			}
+			Engine & engineUp=*this;
+			nextPosActionCurs.setPos(posXactioncurs, posYactioncurs);
+			actionCursor->cursorMove(nextPosActionCurs);
+		}
 
 	}
 }
@@ -449,4 +492,8 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 		cout << root.get("turn"+to_string(i),"").asString() << endl;
 		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
 	}
+}
+
+state::Cursor* Engine::getActionCursor(){
+	return actionCursor;
 }

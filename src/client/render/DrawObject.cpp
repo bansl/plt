@@ -18,6 +18,7 @@ bool DrawObject::renderMapBase (std::vector<std::vector<state::Tile>> map, rende
           imagePath.push_back("../../../res/char2.png");
           imagePath.push_back("../../../res/cursor.png");
           imagePath.push_back("../../../res/windowsprite.png");
+          imagePath.push_back("../../../res/handpointer.png");
 
           tileset.setImagePath(imagePath);
           if (!texture.loadFromFile(tileset.getImagePath()[0])){
@@ -83,6 +84,7 @@ bool DrawObject::renderMapWalls (std::vector<std::vector<state::Tile>> map, rend
     imagePath.push_back("../../../res/char2.png");
     imagePath.push_back("../../../res/cursor.png");
     imagePath.push_back("../../../res/windowsprite.png");
+    imagePath.push_back("../../../res/handpointer.png");
 
     tileset.setImagePath(imagePath);
     if (!texture.loadFromFile(tileset.getImagePath()[0])){
@@ -174,7 +176,7 @@ bool DrawObject::renderCursor(state::Turn& turn, render::TileSet tileset, std::v
           imagePath.push_back("../../../res/char2.png");
           imagePath.push_back("../../../res/cursor.png");
           imagePath.push_back("../../../res/windowsprite.png");
-
+          imagePath.push_back("../../../res/handpointer.png");
           tileset.setImagePath(imagePath);
           if (!texture.loadFromFile(tileset.getImagePath()[0])){
             return false;
@@ -250,7 +252,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
-        
+
         for (int q=0; q<turn.rotation; q++){
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;
@@ -314,7 +316,7 @@ void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYs
           facing=(facing+1)%4;
         }
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
-        if(status!=Dead){ 
+        if(status!=Dead){
                 if(status==Attacking) tv=3*(facing)+2;
                 if(status==UsingObj) tv=3*(facing)+0;
                 if(status==Moving) tv=3*(facing)+1;

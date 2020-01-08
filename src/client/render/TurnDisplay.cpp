@@ -13,16 +13,20 @@ TurnDisplay::TurnDisplay(state::Turn& turn):turnDisplay(turn){
         tilesets.push_back(move(ptr_tilesetMap));
 
         TileSet tilesetPersonnages(CharaSpritesheet);
-	std::unique_ptr<TileSet> ptr_tilesetPersonnages (new TileSet(tilesetPersonnages));
-	tilesets.push_back(move(ptr_tilesetPersonnages));
+      	std::unique_ptr<TileSet> ptr_tilesetPersonnages (new TileSet(tilesetPersonnages));
+      	tilesets.push_back(move(ptr_tilesetPersonnages));
 
         TileSet theCursor(CursorSprite);
-	std::unique_ptr<TileSet> ptr_theCursor (new TileSet(theCursor));
-	tilesets.push_back(move(ptr_theCursor));
+      	std::unique_ptr<TileSet> ptr_theCursor (new TileSet(theCursor));
+      	tilesets.push_back(move(ptr_theCursor));
 
         TileSet tilesetWindow(WindowSprite);
-	std::unique_ptr<TileSet> ptr_window (new TileSet(tilesetWindow));
-	tilesets.push_back(move(ptr_window));
+      	std::unique_ptr<TileSet> ptr_window (new TileSet(tilesetWindow));
+      	tilesets.push_back(move(ptr_window));
+
+        TileSet actionCursor(HandCursorSprite);
+        std::unique_ptr<TileSet> ptr_actionCursor (new TileSet(actionCursor));
+        tilesets.push_back(move(ptr_actionCursor));
 }
 
 void TurnDisplay::initRender(){
@@ -97,7 +101,7 @@ void TurnDisplay::initRender(){
                 for (int k=0; k< (int) turnDisplay.getTeams()[player]->getListCharacter().size(); k++){
                         DrawObject DrawChar;
                         std::vector<std::unique_ptr<render::DrawObject>> charframe;
-                        
+
                                 DrawChar.renderCharacter(turnDisplay,*tilesets[1], turnDisplay.getMap().size(),
                                                                                 turnDisplay.getMap()[0].size(),
                                                                                 tilesets[1]->getXsize(), tilesets[1]->getYsize(),
@@ -114,7 +118,7 @@ void TurnDisplay::initRender(){
                 }
         }
         DrawObject DrawCursor;
-        if(DrawCursor.renderCursor(turnDisplay, *tilesets[2], 
+        if(DrawCursor.renderCursor(turnDisplay, *tilesets[2],
                                         {(int)turnDisplay.getMap().size(), (int) turnDisplay.getMap()[0].size()},
                                         {tilesets[0]->getXsize(), tilesets[0]->getYsize()})){
                 std::unique_ptr<DrawObject> ptr_drawCursor (new DrawObject(DrawCursor));
@@ -123,10 +127,10 @@ void TurnDisplay::initRender(){
 }
 
 void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
-        
+
 
         if(rendertype==fullRender){
-          
+
           while (!drawmaps.empty()){
           drawmaps.pop_back();
           }
@@ -195,13 +199,13 @@ void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
                         drawcursor.pop_back();
                 }
                 DrawObject DrawCursor;
-                if(DrawCursor.renderCursor(turn, *tilesets[2], 
+                if(DrawCursor.renderCursor(turn, *tilesets[2],
                                            {(int)turn.getMap().size(), (int) turn.getMap()[0].size()},
                                            {tilesets[0]->getXsize(), tilesets[0]->getYsize()})){
                         std::unique_ptr<DrawObject> ptr_drawCursor (new DrawObject(DrawCursor));
                         drawcursor.push_back(move(ptr_drawCursor));
                 }
-                                  
+
         }
 
         if((rendertype==fullRender) || (rendertype==charRender)){
@@ -212,7 +216,7 @@ void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
                         for (int k=0; k< (int) turn.getTeams()[player]->getListCharacter().size(); k++){
                                 DrawObject DrawChar;
                                 std::vector<std::unique_ptr<render::DrawObject>> charframe;
-                                
+
                                         DrawChar.renderCharacter(turn,*tilesets[1], turn.getMap().size(),
                                                                                         turn.getMap()[0].size(),
                                                                                         tilesets[1]->getXsize(), tilesets[1]->getYsize(),
@@ -257,6 +261,7 @@ void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::Re
                 sf::sleep(t_anim);
         }
 }
+
 
 void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::View> views){
 	window.clear();
@@ -305,7 +310,7 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::
                 message.setString(drawwindows[0]->getMessage().team);
                 message.setPosition(410,520);
                 window.draw(message);
-                
+
                 message.setString(drawwindows[0]->getMessage().characterjob);
                 message.setPosition(410,540);
                 window.draw(message);
@@ -323,9 +328,42 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::
                 window.draw(message);
         }
         window.setView(views[3]);
-        
+
         for (size_t i = 1; i < drawwindows.size(); i++){
                 window.draw(*drawwindows[i]);
+                if(i==1){
+                  sf::Text message;
+                  sf::Font font;
+                  font.loadFromFile("res/COURG___.TTF");
+                  message.setFont(font);
+                  message.setColor(sf::Color::White);
+                  message.setStyle(sf::Text::Bold);
+                  message.setCharacterSize(15);
+
+                  message.setString("Attack:1");
+                  message.setPosition(250,320);
+                  window.draw(message);
+
+                  message.setString("Move:2");
+                  message.setPosition(250,350);
+                  window.draw(message);
+
+                  message.setString("Skill:5");
+                  message.setPosition(250,440);
+                  window.draw(message);
+
+                  message.setString("Object:3");
+                  message.setPosition(250,380);
+                  window.draw(message);
+
+                  message.setString("Defend:4");
+                  message.setPosition(250,410);
+                  window.draw(message);
+
+                  message.setString("EndTurn:6");
+                  message.setPosition(250,470);
+                  window.draw(message);
+                }
         }
         window.display();
 }
@@ -374,12 +412,32 @@ std::vector<std::vector<int>> TurnDisplay::charPrintOrder(){
 }
 
 void TurnDisplay::initWindowRender (render::WindowType windowtype){
-      if( (windowtype==actionselect) && (drawwindows.size()>1) )drawwindows.pop_back();
+      if ((windowtype==actionselect)&&(drawwindows.size()>1))   while (drawwindows.size()>1) drawwindows.pop_back();
       else if(windowtype==infobanner) while (!drawwindows.empty()) drawwindows.pop_back();
       Window myWindow;
       if(myWindow.renderWindow(windowtype, *tilesets[3], tilesets[3]->getXsize(),turnDisplay)){
         std::unique_ptr<Window> ptr_drawWindow (new Window(myWindow));
         drawwindows.push_back(move(ptr_drawWindow));
       }
+      if (windowtype==actionselect){
+        Window myWindow2;
+        if(myWindow2.renderActionCursor(selectpos,*tilesets[4])){
+          std::unique_ptr<Window> ptr_drawCursorA (new Window(myWindow2));
+          drawwindows.push_back(move(ptr_drawCursorA));
+        }
+      }
+
 
 }
+
+void TurnDisplay::moveCursorUp (){
+    if (selectpos>=0) selectpos--;
+}
+
+void TurnDisplay::moveCursorDown (){
+    if (selectpos<6) selectpos++;
+}
+
+void TurnDisplay::engineUpdated(){}
+
+void TurnDisplay::engineUpdating(){}

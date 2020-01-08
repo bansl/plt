@@ -24,3 +24,16 @@ void const engine::Observable::notifyUpdated(){
 		observer->engineUpdated();
 	}
 }
+
+void const engine::Observable::notifySelectCursorMove (engine::Direction direction){
+	if (direction==UP){
+		for(auto observer : observers){
+			observer->moveCursorUp();
+		}
+	}
+	if (direction==DOWN){
+		for(auto observer : observers){
+			observer->moveCursorDown();
+		}
+	}
+}
