@@ -283,7 +283,8 @@ int main(int argc,char* argv[])
             vector<sf::View> views;
             TurnDisplay layer(testTurn);
             TurnDisplay* ptr_layer=&layer;
-			testEngine.getTurn().registerObserver(ptr_layer);
+			      testEngine.getTurn().registerObserver(ptr_layer);
+            
             sf::RenderWindow window(sf::VideoMode(  800,600), "Engine");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);

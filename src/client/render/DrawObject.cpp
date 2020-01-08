@@ -217,6 +217,41 @@ bool DrawObject::renderCursor(state::Turn& turn, render::TileSet tileset, std::v
         return true;
 }
 
+bool DrawObject::renderActionCursor(state::Cursor * cursor,render::TileSet tileset){
+  if (!texture.loadFromFile(tileset.getImagePath()[0])){
+    std::vector<std::string> imagePath;
+    imagePath.push_back("../../../res/maptile2x129.png");
+    imagePath.push_back("../../../res/char1.png");
+    imagePath.push_back("../../../res/char2.png");
+    imagePath.push_back("../../../res/cursor.png");
+    imagePath.push_back("../../../res/windowsprite.png");
+    imagePath.push_back("../../../res/handpointer.png");
+
+    tileset.setImagePath(imagePath);
+    if (!texture.loadFromFile(tileset.getImagePath()[0])){
+      return false;
+    }
+  }
+  sf::Vertex* quad = &vertexarray[0];
+  vertexarray.setPrimitiveType(sf::Quads);
+  vertexarray.resize(4);
+  int xpos=cursor->getPosition().getX();
+  int ypos=cursor->getPosition().getY();
+
+  quad[0].position = sf::Vector2f(xpos          , ypos      );
+  quad[1].position = sf::Vector2f(xpos + 25     , ypos      );
+  quad[2].position = sf::Vector2f(xpos + 25     , ypos + 20 );
+  quad[3].position = sf::Vector2f(xpos          , ypos + 20 );
+
+  //texture
+  quad[0].texCoords = sf::Vector2f(0           , 0           );
+  quad[1].texCoords = sf::Vector2f(128         , 0           );
+  quad[2].texCoords = sf::Vector2f(128         , 128         );
+  quad[3].texCoords = sf::Vector2f(0           , 128         );
+
+  return true;
+}
+
 bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int mapHeight, int mapWidth, int tileXsize, int tileYsize, int margin, int spriteNb, int charNb, int playerId){
 
         sf::Image image;
@@ -250,7 +285,7 @@ bool DrawObject::renderCharacter(state::Turn& turn, render::TileSet tileset, int
         int tempPosX=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getX();
         int tempPosY=turn.getTeams()[playerId]->getListCharacter()[charNb]->getPosition().getY();
         int temp=0;
-        
+
         for (int q=0; q<turn.rotation; q++){
           temp=tempPosX;
           tempPosX=turn.getMap().size()-tempPosY-1;
@@ -314,7 +349,7 @@ void DrawObject::changeCharAnimSpriteNb (int spriteNb, int tileXsize, int tileYs
           facing=(facing+1)%4;
         }
         StatusList status = turn.getTeams()[playerId]->getListCharacter()[charNb]->getStatus();
-        if(status!=Dead){ 
+        if(status!=Dead){
                 if(status==Attacking) tv=3*(facing)+2;
                 if(status==UsingObj) tv=3*(facing)+0;
                 if(status==Moving) tv=3*(facing)+1;

@@ -34,6 +34,12 @@ TileSet::TileSet(TileSetType id){
 		margin=0;
 		imagePath.push_back("res/windowsprites.png");
 	}
+	else if (type==HandCursor){
+		sizeX=128;
+		sizeY=128;
+		margin=0;
+		imagePath.push_back("res/handpointer.png");
+	}
 }
 
 const vector<std::string> TileSet::getImagePath (){
