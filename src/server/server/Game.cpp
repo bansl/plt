@@ -1,10 +1,11 @@
 #include "../server.h"
 #include <memory>
+#include <cstdlib>
 
 using namespace server;
 using namespace std;
 
-Game::Game():playerNb(0){   
+Game::Game():playerNb(0){
 }
 std::vector<std::unique_ptr<Player>>& Game::getPlayersList(){
 	std::vector<std::unique_ptr<Player>>& ref=players;
@@ -15,7 +16,7 @@ const Player* Game::getPlayer (int id) const {
     for (size_t i = 0; i < players.size(); i++)
     {
         if(players[i]->id==id) return players[i].get();
-    }    
+    }
     return nullptr;
 }
 
@@ -38,5 +39,19 @@ void Game::removePlayer (int id) {
     for (size_t i = 0; i < players.size(); i++)
     {
         if(players[i]->id==id) players.erase(players.begin() + i);
-    }   
+    }
+}
+
+std::string Game::getCommands(int turnNumber){
+	if(turnNumber<(int)commandsList.size())	return commandsList[turnNumber-1];
+	else return "None";
+}
+
+void Game::addCommands(std::string commands){
+	commandsList.push_back(commands);
+}
+
+std::vector<std::string>& Game::getCommandsList(){
+	std::vector<std::string>& addrcommandsList=commandsList;
+	return addrcommandsList;
 }

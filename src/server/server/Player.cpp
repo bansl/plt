@@ -3,5 +3,5 @@
 using namespace server;
 using namespace std;
 
-Player::Player(string name, bool inLobby): name(name), inlobby(inlobby){
+Player::Player(string name, bool free): name(name), inlobby(free){
 }
