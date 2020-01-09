@@ -12,7 +12,6 @@ file(GLOB_RECURSE shared_sources *.cpp)
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources})
 add_dependencies(${lib_shared_target} generate-headers)
-<<<<<<< HEAD
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/../client/
@@ -20,9 +19,6 @@ include_directories(
 
 )
 target_include_directories(${lib_shared_target} INTERFACE
-=======
-target_include_directories(${lib_shared_target} PUBLIC
->>>>>>> 827d39cd5a33d664c29a580ed33af91563d34193
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../client/
   )

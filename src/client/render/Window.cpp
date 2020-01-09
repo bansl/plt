@@ -147,10 +147,10 @@ bool Window::renderActionCursor(int selectpos,render::TileSet tileset){
   int xpos=225;
   cout << "wd"<<endl;
 
-  quad[0].position = sf::Vector2f(xpos          , selectpos*30  +320    );
-  quad[1].position = sf::Vector2f(xpos + 25     , selectpos*30  +320    );
-  quad[2].position = sf::Vector2f(xpos + 25     , selectpos*30  +340    );
-  quad[3].position = sf::Vector2f(xpos          , selectpos*30  +340    );
+  quad[0].position = sf::Vector2f(xpos          , (selectpos-1)*30  +320    );
+  quad[1].position = sf::Vector2f(xpos + 25     , (selectpos-1)*30  +320    );
+  quad[2].position = sf::Vector2f(xpos + 25     , (selectpos-1)*30  +340    );
+  quad[3].position = sf::Vector2f(xpos          , (selectpos-1)*30  +340    );
 
   //texture
   quad[0].texCoords = sf::Vector2f(0           , 0           );

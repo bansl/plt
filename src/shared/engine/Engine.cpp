@@ -12,6 +12,22 @@ using namespace engine;
 using namespace render;
 using namespace std;
 
+int actiontype=1;
+int playeraction=-1;
+
+Character& find_selected_char(state::Turn& turn){
+	Position posCurs=turn.getCursor()->getPosition();
+	for (size_t team = 0; team < turn.getTeams().size(); team++)
+		for (size_t character = 0; character < turn.getTeams()[team]->getListCharacter().size(); character++)
+			if (posCurs.distanceBetween(posCurs,turn.getTeams()[team]->getListCharacter()[character]->getPosition())==0) {
+				Character & refchar=*turn.getTeams()[team]->getListCharacter()[character];
+				return refchar;
+			}
+	Character c;
+	Character& refc=c;
+	return 	refc;
+}
+
 state::Turn& Engine::getTurn (){
 	state::Turn& myturn=turn;
 	return myturn;
@@ -21,6 +37,7 @@ void Engine::addCommand (std::unique_ptr<Command> ptr_command){
 	commands.push_back(move(ptr_command));
 
 }
+
 bool Engine::turnCheckOut(){
 
 	if(isGameFinished){
@@ -148,9 +165,7 @@ Engine::Engine(state::Turn& turn):turn(turn){
 	isTurnFinished=true;
 	isTurnBegin=false;
 	currentPlayerId=0;
-	state::Position PosActionCurs;
-	PosActionCurs.setPos(225, 320);
-	actionCursor->cursorMove(PosActionCurs);
+	
 }
 
 int Engine::getCurrentPlayerID(){
@@ -161,7 +176,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 
 	if(newEvent.type==sf::Event::KeyPressed ){
 
-		if(!action_bool){
+		if(!action_bool){ // Move Cursor on The Map
 			int posXupdate = 0, posYupdate = 0;
 			size_t posXcurs=turn.getCursor()->getPosition().getX();
 			size_t posYcurs=turn.getCursor()->getPosition().getY();
@@ -200,9 +215,14 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 				turn.notifyObservers(turn, window, windowinfoRender, views);
 				posXupdate = 0, posYupdate = 0;
 			}
+			if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && (playeraction==Movecmd) ) {
+				cout<<"destination selected"<<endl;
+				find_selected_char(turn).setCurrentHP(-35);
+				cout<<"char hp: "<< find_selected_char(turn).getCurrentHP()<<endl;
+				}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){ // Enter Action Menu Selection
 			action_bool=!action_bool;
 			if(action_bool){
 				turn.notifyObservers(turn, window, windowactionRender, views);
@@ -212,33 +232,32 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 			}
 		}
 
-		if(action_bool){
-			Position nextPosActionCurs;
-			size_t posXactioncurs=actionCursor->getPosition().getX();
-			size_t posYactioncurs=actionCursor->getPosition().getY();
+		if(action_bool){ // Navigation through the Action Menu Selection
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-				if(posYactioncurs==320){
-					posYactioncurs=470;
-				}
-				else{
-					posYactioncurs=posYactioncurs-30;
-				}
-				notifySelectCursorMove(UP);
-				turn.notifyObservers(turn, window, windowactionRender, views);
+				if(actiontype>1){
+					notifySelectCursorMove(UP);
+					actiontype--;
+					turn.notifyObservers(turn, window, windowactionRender, views);
+				}	
 			}
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-				if(posYactioncurs==470){
-					posYactioncurs=320;
+				if(actiontype<6){
+					notifySelectCursorMove(DOWN);
+					actiontype++;
+					turn.notifyObservers(turn, window, windowactionRender, views);
 				}
-				else{
-					posYactioncurs=posYactioncurs+30;
-				}
-				notifySelectCursorMove(DOWN);
-				turn.notifyObservers(turn, window, windowactionRender, views);
 			}
-			Engine & engineUp=*this;
-			nextPosActionCurs.setPos(posXactioncurs, posYactioncurs);
-			actionCursor->cursorMove(nextPosActionCurs);
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
+				cout << "actionselected: " << actiontype<<endl;
+				if (actiontype-1==Movecmd)
+				{
+					cout << "Move cmd " <<endl;
+					action_bool=!action_bool;
+					turn.notifyObservers(turn, window, windowinfoRender, views);
+					playeraction=Movecmd;
+				}
+				
+			}
 		}
 
 	}
@@ -494,6 +513,3 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	}
 }
 
-state::Cursor* Engine::getActionCursor(){
-	return actionCursor;
-}

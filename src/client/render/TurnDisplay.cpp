@@ -340,27 +340,27 @@ void TurnDisplay::display (sf::RenderWindow& window, int frame, std::vector<sf::
                   message.setStyle(sf::Text::Bold);
                   message.setCharacterSize(15);
 
-                  message.setString("Attack:1");
+                  message.setString("Attack");
                   message.setPosition(250,320);
                   window.draw(message);
 
-                  message.setString("Move:2");
+                  message.setString("Move");
                   message.setPosition(250,350);
                   window.draw(message);
 
-                  message.setString("Skill:5");
-                  message.setPosition(250,440);
-                  window.draw(message);
-
-                  message.setString("Object:3");
+                  message.setString("Object");
                   message.setPosition(250,380);
                   window.draw(message);
 
-                  message.setString("Defend:4");
+                  message.setString("Defend");
                   message.setPosition(250,410);
                   window.draw(message);
 
-                  message.setString("EndTurn:6");
+                  message.setString("Skill");
+                  message.setPosition(250,440);
+                  window.draw(message);
+
+                  message.setString("End Turn");
                   message.setPosition(250,470);
                   window.draw(message);
                 }
@@ -431,7 +431,7 @@ void TurnDisplay::initWindowRender (render::WindowType windowtype){
 }
 
 void TurnDisplay::moveCursorUp (){
-    if (selectpos>=0) selectpos--;
+    if (selectpos>1) selectpos--;
 }
 
 void TurnDisplay::moveCursorDown (){
