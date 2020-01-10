@@ -9,18 +9,17 @@ Le rendu reste sur le thread principal par limitation de la
 librairie SFML.
 Sont partagées entre ces deux modules la liste des commandes et les 
 notification de mise à jour de rendu.
-\\
+\\\\
 La liste de commandes est la seule ressource critique dans le 
 fonctionnement et il est nécessaire de empêcher le thread du 
 moteur de jeu de modifier la liste de commandes tant que le rendu 
 n'est pas effectué. Pour le moment, l'operation de mise à jour dans 
 le thread de moteur de jeu est suspendu lorsque l'on réalise une 
 opération de rendu.
-\\
+\\\\
 On utilise des notifications de rendu pour savoir lorsqu'une 
 opération de rendu est en cours et que l'on ne peut modifier la 
 liste des commandes.
-
 
 
 \section{Enregistrement et chargement des données}
@@ -67,5 +66,99 @@ personnages puisque celle-ci redeviendra la même.
 \centering
 \caption{Aperçu de client.dia}
 \label{fig:img6}
+\end{figure}
+\newpage
+
+\section{Réalisation d'une WebAPI}
+
+\subsection{Description}
+On réalise une API REST afin de synchroniser plusieurs 
+joueurs sur différentes machine dans une même partie.
+\\\\
+On réalise dans ce livrable un service dédié à la gestion 
+des joueurs dans le lobby. A savoir ajouter un joueur au 
+lobby, retirer un joueur du lobby, lister les 
+joueurs dans un lobby.
+\\\\
+Le service player gère les requêtes suivantes:
+
+\begin{itemize}
+         \item[•]  \textbf{Requete GET}    /player/<id>\\
+Retourne pour l'id corresponant le nom du joueur et le 
+booléen inlobby qui est à true quand le joueur n'est pas en 
+partie.
+
+         \item[•]  \textbf{Requete GET}    /player/all\\
+Retourne la liste complète des joueurs dans le lobby avec le
+nom et le booléen inlobby
+
+         \item[•]  \textbf{Requete PUT}    /player\\
+On ajoute un joueur à la liste de joueurs du lobby. Le nom 
+du joueur est placé dans le body de la requete. 
+\\Retourne l'id de ce nouveau joueur dans la liste du 
+serveur si le lobby n'est pas plein, sinon retourne un 
+message d'erreur indiquant que le lobby est plein.
+
+         \item[•]  \textbf{Requete POST}   /player\\
+Analogue à la précédente, la clé-valeur "req":"POST" est 
+ajoutée au début du body de la requete. 
+
+         \item[•]  \textbf{Requete DELETE} /player/<id>\\
+On retire le joueur correspondant à l'id donné de la liste
+de joueurs. 
+
+         \item[•]  \textbf{Requete POST}   /player/<id>\\
+Analogue à la précédente, on ajoute la string "disconnect" 
+au body. On retire le joueur correspondant à l'id 
+donné de la liste de joueurs. 
+\end{itemize}
+
+\subsection{Conception Logicielle}
+
+Le diagramme des classes UML C++ pour le serveur est
+visible en Figure 6.2.
+\\\\
+\textbf{Classe Game:} Elle contient la liste de joueurs du 
+lobby, 
+avec des opérations CRUD sur la liste de joueurs 
+(getPlayer,addPlayer,removePlayer,setPlayer)
+\\\\
+\textbf{Classe Player:} Elle contient les éléments 
+caractériques d'un joueur: son ID, son nom et le booleen 
+inlobby qui indique si le joueur est en partie ou non. 
+\\\\
+\textbf{Classe ServiceManager:} Elle est la classe qui 
+s'occupe de gérer les services. 
+\\La méthode \textbf{registerService}
+permet d'enregistrer un service pour qu'il puisse être 
+utilisé plus tard lors de la gestion d'une requête.
+\\La méthode \textbf{findService} permet 
+de trouver le service associé 
+à la requête reçue par le serveur: un service étant associé 
+à une ressource, il suffit de lire la ressource demandée 
+dans l'url pour trouver le service correspondant.
+\\La méthode \textbf{queryService} qui va orienter la 
+requête vers un type de réponse en fonction 
+de la méthode de la requête et 
+le contenu de son body pour les requêtes POST.
+\\\\
+\textbf{Classe Service:} Elle est la classe mère pour
+les autres services tels que PlayerService et 
+CommandService.
+\\\\
+\textbf{Classe PlayerService:} Elle gère les requêtes 
+présentées plus haut concernant l'ajout, la modification et 
+la supression de joueurs dans la liste de joueurs du lobby. 
+\\\\
+\textbf{Classe ServiceException:} Elle permet de gérer 
+les exceptions et de retourner le message d'erreur.
+\\\\
+\textbf{Classe HttpStatus:} Elle est l'énumération des codes HTTP, utilisé dans les réponses aux requêtes. 
+
+\begin{figure}[H]
+\includegraphics[width=\linewidth]{images/server_dia.png}
+\centering
+\caption{Aperçu de server.dia}
+\label{fig:img7}
 \end{figure}
 \newpage
