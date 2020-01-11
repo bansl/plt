@@ -14,6 +14,7 @@ using namespace std;
 
 int actiontype=1;
 int playeraction=-1;
+Character *playingcharaddr;
 
 Character& find_selected_char(state::Turn& turn){
 	Position posCurs=turn.getCursor()->getPosition();
@@ -217,18 +218,39 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 			}
 			if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && (playeraction==Movecmd) ) {
 				cout<<"destination selected"<<endl;
-				find_selected_char(turn).setCurrentHP(-35);
-				cout<<"char hp: "<< find_selected_char(turn).getCurrentHP()<<endl;
+				Position dest=turn.getCursor()->getPosition();
+				Move movePlayer(*playingcharaddr, dest);
+				if(movePlayer.validate(turn)){
+					unique_ptr<Command> ptr_movePlayer (new Move (movePlayer));
+					addCommand(move(ptr_movePlayer));
+					cout << "->[SUCCESS]move instruction added " << endl;
 				}
+				else cout << "->[FAILED]no move instruction added" << endl;
+				playeraction=-1;
+			}
+			if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && (playeraction==Attackcmd) ) {
+				cout<<"target selected"<<endl;
+				Attack attackPlayer(*playingcharaddr,find_selected_char(turn));
+				if(attackPlayer.validate(turn)){
+					unique_ptr<Command> ptr_attackPlayer (new Attack (attackPlayer));
+					addCommand(move(ptr_attackPlayer));
+					cout << "->[SUCCESS]attack instruction added " << endl;
+				}
+				else cout << "->[FAILED]no attack instruction added" << endl;
+				playeraction=-1;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) playeraction=-1;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){ // Enter Action Menu Selection
-			action_bool=!action_bool;
-			if(action_bool){
+			
+			if(!action_bool && (find_selected_char(turn).getCurrentHP()>0)){
 				turn.notifyObservers(turn, window, windowactionRender, views);
+				action_bool=!action_bool;
 			}
-			else{
+			else if (action_bool){
 				turn.notifyObservers(turn, window, windowinfoRender, views);
+				action_bool=!action_bool;
 			}
 		}
 
@@ -249,12 +271,39 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)){
 				cout << "actionselected: " << actiontype<<endl;
-				if (actiontype-1==Movecmd)
-				{
+				action_bool=!action_bool;
+				turn.notifyObservers(turn, window, windowinfoRender, views);
+				if (actiontype-1==Movecmd){
 					cout << "Move cmd " <<endl;
-					action_bool=!action_bool;
-					turn.notifyObservers(turn, window, windowinfoRender, views);
 					playeraction=Movecmd;
+					playingcharaddr=&find_selected_char(turn);
+				}
+				if (actiontype-1==Attackcmd){
+					cout << "Attack cmd " <<endl;
+					playeraction=Attackcmd;
+					playingcharaddr=&find_selected_char(turn);
+				}
+				if (actiontype-1==Defendcmd){
+					cout << "Defend cmd " <<endl;
+					playeraction=-1;
+					Defend defPlayer(find_selected_char(turn));
+					if(defPlayer.validate(turn)){
+						unique_ptr<Command> ptr_defPlayer (new Defend (defPlayer));
+						addCommand(move(ptr_defPlayer));
+						cout << "->[SUCCESS]defend instruction added " << endl;
+					}
+					else cout << "->[FAILED]no defend instruction added" << endl;
+				}
+				if (actiontype-1==EndTurncmd){
+					cout << "Endturn cmd " <<endl;
+					playeraction=-1;
+					EndTurn endturntest(1);
+					if(endturntest.validate(turn)){
+						unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
+						addCommand(move(ptr_endturntest));
+						cout << "->[SUCCESS]endturn instruction added " << endl;
+					}
+					else cout << "->[FAILED]no endturn instruction added" << endl;
 				}
 				
 			}
