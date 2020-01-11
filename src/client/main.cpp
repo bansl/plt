@@ -348,7 +348,7 @@ int main(int argc,char* argv[])
                     layer.display(window,k,views);
 
 
-                        k=(k+1)%6;
+                        k=(k+1)%4;
                         last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
 
@@ -454,7 +454,7 @@ int main(int argc,char* argv[])
 
                     layer.display(window,k,views);
 
-                    k=(k+1)%6;
+                    k=(k+1)%4;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
@@ -752,7 +752,7 @@ int main(int argc,char* argv[])
 
                     layer.display(window,k,views);
 
-                    k=(k+1)%6;
+                    k=(k+1)%4;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
@@ -883,7 +883,7 @@ int main(int argc,char* argv[])
                   if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
                     layer.display(window,k, views);
-                    k=(k+1)%6;
+                    k=(k+1)%4;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
@@ -1014,7 +1014,7 @@ int main(int argc,char* argv[])
                   if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
                     layer.display(window,k,views);
-                    k=(k+1)%6;
+                    k=(k+1)%4;
                     last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                         view1.move(40, 40), window.setView(view1);
@@ -1145,7 +1145,7 @@ int main(int argc,char* argv[])
                     if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 
                         layer.display(window,k,views);
-                        k=(k+1)%6;
+                        k=(k+1)%4;
                         last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
                         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
                             view1.move(40, 40), window.setView(view1);

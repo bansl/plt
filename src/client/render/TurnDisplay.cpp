@@ -108,7 +108,7 @@ void TurnDisplay::initRender(){
                                                                                 tilesets[1]->getMargin(),0,k,player);
                                 std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
                                 charframe.push_back(move(ptr_drawChar));
-                        for (size_t spriteAnimNumber = 1; spriteAnimNumber < 6; spriteAnimNumber++)
+                        for (size_t spriteAnimNumber = 1; spriteAnimNumber < 4; spriteAnimNumber++)
                         {
                                 DrawChar.changeCharAnimSpriteNb (spriteAnimNumber, tilesets[1]->getXsize(), tilesets[1]->getYsize(), tilesets[1]->getMargin(), turnDisplay, player, k);
                                 std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
@@ -223,7 +223,7 @@ void TurnDisplay::initRender(state::Turn& turn, state::RenderType rendertype){
                                                                                         tilesets[1]->getMargin(),0,k,player);
                                         std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
                                         charframe.push_back(move(ptr_drawChar));
-                                for (size_t spriteAnimNumber = 1; spriteAnimNumber < 6; spriteAnimNumber++)
+                                for (size_t spriteAnimNumber = 1; spriteAnimNumber < 4; spriteAnimNumber++)
                                 {
                                         DrawChar.changeCharAnimSpriteNb (spriteAnimNumber, tilesets[1]->getXsize(), tilesets[1]->getYsize(), tilesets[1]->getMargin(), turn, player, k);
                                         std::unique_ptr<DrawObject> ptr_drawChar (new DrawObject(DrawChar));
@@ -255,7 +255,7 @@ void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::Re
         else if (rendertype==windowactionRender) initWindowRender(actionselect);
         else initRender(turn,rendertype);
         sf::Time t_anim = sf::seconds(0.1f);
-        for (size_t k = 0; k < 6; k++)
+        for (size_t k = 0; k < 3; k++)
         {
                 display(window,k,views);
                 sf::sleep(t_anim);

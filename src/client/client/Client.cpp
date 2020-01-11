@@ -112,7 +112,7 @@ void Client::run (){
 		}
 		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
             layer.display(window,k, views);
-			k=(k+1)%6;
+			k=(k+1)%4;
 			last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 		}
 
