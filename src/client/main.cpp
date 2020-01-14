@@ -231,9 +231,11 @@ int main(int argc,char* argv[])
                             for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
                             Turn testTurn;
                             sf::Http::Response response4 = http.sendRequest(request4);
+                            cout<<"Getting seed"<<endl;
                             if (jsonReader.parse(response4.getBody(), rep4)){
                               testTurn.initTurn(10,rep4["charseed"].asString(),rep4["mapseed"].asString());
                               Client client(window,views,testTurn,false);
+                              cout<<"Starting"<<endl;
 
                               while (window.isOpen()){
                                   client.run(playerID);
