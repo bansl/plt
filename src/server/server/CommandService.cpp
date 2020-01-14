@@ -11,9 +11,7 @@ CommandService::CommandService (Game& game) : Service("/command"), game(game) {
 
 HttpStatus CommandService::get (Json::Value& out, int id) const {
     std::string turnCommands = game.getCommands(id);
-    if (turnCommands!="None")
-        throw ServiceException(HttpStatus::NOT_FOUND,"Invalid commands for turn");
-    out["turn"+to_string(id)] = turnCommands;
+    out["turn"] = turnCommands;
     return HttpStatus::OK;
 }
 
@@ -31,8 +29,8 @@ HttpStatus CommandService::getall (Json::Value& out) const {
 
 HttpStatus CommandService::post (const Json::Value& in, int id) {
     //int turnNumber=(int)game.getCommandsList().size();
-    if (in.isMember("turn"+to_string(id))) {
-        game.addCommands(in["turn"+to_string(id)].asString());
+    if (in.isMember("turn")) {
+        game.addCommands(in["turn"].asString());
     }
     return HttpStatus::NO_CONTENT;
 }

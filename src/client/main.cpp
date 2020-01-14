@@ -38,7 +38,7 @@ int main(int argc,char* argv[])
         if( std::strcmp( argv[1], "hello") == 0 ){
             cout << "Bonjour le monde!" << endl;
         }
-      
+
 //=====================================================================================================
 //
 //                                              NETWORK TEST
@@ -54,13 +54,13 @@ int main(int argc,char* argv[])
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 1000;
 			sf::Http http("http://localhost/", 8080);
-			
+
 			sf::Http::Request request1;
 			request1.setMethod(sf::Http::Request::Post);
 			request1.setUri("/player");
-			string body="{\"req\" : \"POST\", \"name\":\"" + nom + "\", \"inlobby\":true}"; 
+			string body="{\"req\" : \"POST\", \"name\":\"" + nom + "\", \"inlobby\":true}";
 			request1.setBody(body);
-			
+
 			sf::Http::Response response1 = http.sendRequest(request1);
 			Json::Reader jsonReader;
 			Json::Value rep1;
@@ -79,7 +79,7 @@ int main(int argc,char* argv[])
                 request3.setMethod(sf::Http::Request::Post);
                 string uri2="/player/"+ to_string(playerID);
                 request3.setUri(uri2);
-                string body3="disconnect"; 
+                string body3="disconnect";
                 request3.setBody(body3);
 
                 while (true)
@@ -90,23 +90,23 @@ int main(int argc,char* argv[])
                         sf::Http::Response response2 = http.sendRequest(request2);
                         if (jsonReader.parse(response2.getBody(), rep2)){
                             // cout<< "status : "<<response2.getStatus()<<endl;
-                            // cout<<"HTTP version : "<<response2.getMajorHttpVersion()<< "." 
+                            // cout<<"HTTP version : "<<response2.getMajorHttpVersion()<< "."
                             //                          <<response2.getMinorHttpVersion()<<endl;
                             // cout<<"Content-type header :"<<response2.getField("Content-Type")<<endl;
                             // cout<<"body :"<<response2.getBody()<<endl;
-                            
+
                             for (int i = 0; i < (int) rep2["players"].size(); i++)
-                                cout <<  " - Player: " << rep2["players"][i]["name"].asString() 
+                                cout <<  " - Player: " << rep2["players"][i]["name"].asString()
                                     << " || ID: " << rep2["players"][i]["id"].asString()
                                     << " || in lobby: " << rep2["players"][i]["inlobby"].asString() <<endl;
-                            
+
                         }
                         cout << "press D to leave the lobby"<<endl;
                         if (rep2["players"].size()==2) cout << "Lobby is full, press S to start the game"<<endl;
                         else cout << "Waiting for new players..."<<endl;
                         last_ms+=(milliseconds) 1000;
                 }
-                   
+
 
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) break;
                     if ((rep2["players"].size()==2)&&(sf::Keyboard::isKeyPressed(sf::Keyboard::S))){
@@ -131,7 +131,7 @@ int main(int argc,char* argv[])
                             window.close();
                         }
                     }
-                
+
 			    }
                 http.sendRequest(request3);
                 cout<<endl<<"You left the lobby."<<endl;
@@ -140,7 +140,117 @@ int main(int argc,char* argv[])
 				cout<<"No more space in lobby."<<endl;
 			}
 		}
+    //=====================================================================================================
+    //
+    //                                              Online TEST
+    //
+    //=====================================================================================================
 
+            else if(strcmp(argv[1], "online") == 0){
+
+    			string nom;
+    			cout<<"Player Name: ";
+    			cin>>nom;
+
+                milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+                last_ms+=(milliseconds) 1000;
+    			sf::Http http("http://localhost/", 8080);
+
+    			sf::Http::Request request1;
+    			request1.setMethod(sf::Http::Request::Post);
+    			request1.setUri("/player");
+    			string body="{\"req\" : \"POST\", \"name\":\"" + nom + "\", \"inlobby\":true}";
+    			request1.setBody(body);
+
+    			sf::Http::Response response1 = http.sendRequest(request1);
+    			Json::Reader jsonReader;
+    			Json::Value rep1;
+            	if(jsonReader.parse(response1.getBody(),rep1)){
+    				int playerID=rep1["id"].asInt();
+    				cout<<"joined Lobby!"<<endl;
+    				cout<<"Player ID is: "<<playerID<<endl<<endl;
+
+                    sf::Http::Request request2;
+                    request2.setMethod(sf::Http::Request::Get);
+                    request2.setUri("/player/all");
+                    Json::Reader jsonReader2;
+                    Json::Value rep2;
+
+                    sf::Http::Request request3;
+                    request3.setMethod(sf::Http::Request::Post);
+                    string uri2="/player/"+ to_string(playerID);
+                    request3.setUri(uri2);
+                    string body3="disconnect";
+                    request3.setBody(body3);
+
+                    sf::Http::Request request4;
+                    request4.setMethod(sf::Http::Request::Get);
+                    request4.setUri("/initialize");
+                    Json::Reader jsonReader4;
+                    Json::Value rep4;
+
+                    while (true)
+                    {
+                        if (duration_cast< milliseconds >(system_clock::now().time_since_epoch())>last_ms)
+                        {
+                            cout<<endl<< "Players currently in lobby :"<<endl;
+                            sf::Http::Response response2 = http.sendRequest(request2);
+                            if (jsonReader.parse(response2.getBody(), rep2)){
+                                // cout<< "status : "<<response2.getStatus()<<endl;
+                                // cout<<"HTTP version : "<<response2.getMajorHttpVersion()<< "."
+                                //                          <<response2.getMinorHttpVersion()<<endl;
+                                // cout<<"Content-type header :"<<response2.getField("Content-Type")<<endl;
+                                // cout<<"body :"<<response2.getBody()<<endl;
+
+                                for (int i = 0; i < (int) rep2["players"].size(); i++)
+                                    cout <<  " - Player: " << rep2["players"][i]["name"].asString()
+                                        << " || ID: " << rep2["players"][i]["id"].asString()
+                                        << " || in lobby: " << rep2["players"][i]["inlobby"].asString() <<endl;
+
+                            }
+                            cout << "press D to leave the lobby"<<endl;
+                            if (rep2["players"].size()==2) cout << "Lobby is full, press S to start the game"<<endl;
+                            else cout << "Waiting for new players..."<<endl;
+                            last_ms+=(milliseconds) 1000;
+                    }
+
+
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) break;
+                        if ((rep2["players"].size()==2)&&(sf::Keyboard::isKeyPressed(sf::Keyboard::S))){
+                            sf::RenderWindow window(sf::VideoMode(  800,600), "Disgaea");
+                            vector<sf::View> views;
+                            sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600)),
+                                        viewPause(sf::Vector2f(400, 300), sf::Vector2f(800, 600)),
+                                        viewInfobanner (sf::Vector2f(400, 555), sf::Vector2f(800, 600)),
+                                        viewActionSelect (sf::Vector2f(400, 300), sf::Vector2f(800, 600));
+                            view1.zoom(1.4f);
+                            view1.setViewport(sf::FloatRect(0, 0, 1, 1)), viewInfobanner.setViewport(sf::FloatRect(0, 0.42f, 1, 1)),
+                            viewActionSelect.setViewport(sf::FloatRect(0, 0.0f, 1, 1));
+                            views.push_back(view1), views.push_back(viewPause),
+                            views.push_back(viewInfobanner), views.push_back(viewActionSelect);
+                            for (size_t i = 0; i < views.size(); i++) if (i!=1) window.setView(views[i]);
+                            Turn testTurn;
+                            sf::Http::Response response4 = http.sendRequest(request4);
+                            if (jsonReader.parse(response4.getBody(), rep4)){
+                              testTurn.initTurn(10,rep4["charseed"].asString(),rep4["mapseed"].asString());
+                              Client client(window,views,testTurn,false);
+
+                              while (window.isOpen()){
+                                  client.run(playerID);
+                                  sleep(2);
+                                  window.close();
+                              }
+                            }
+                        }
+
+    			    }
+                    http.sendRequest(request3);
+                    cout<<endl<<"You left the lobby."<<endl;
+                }
+    			else{
+    				cout<<"No more space in lobby."<<endl;
+    			}
+    		}
 //=====================================================================================================
 //
 //                                              THREAD TEST

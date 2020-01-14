@@ -166,7 +166,7 @@ Engine::Engine(state::Turn& turn):turn(turn){
 	isTurnFinished=true;
 	isTurnBegin=false;
 	currentPlayerId=0;
-	
+
 }
 
 int Engine::getCurrentPlayerID(){
@@ -260,7 +260,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 					notifySelectCursorMove(UP);
 					actiontype--;
 					turn.notifyObservers(turn, window, windowactionRender, views);
-				}	
+				}
 			}
 			if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 				if(actiontype<6){
@@ -305,7 +305,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 					}
 					else cout << "->[FAILED]no endturn instruction added" << endl;
 				}
-				
+
 			}
 		}
 
@@ -429,6 +429,105 @@ std::string Engine::seedCommands(int turnNumber){
 	return seed;
 }
 
+std::string Engine::seedCommandsPlayer(int turnNumber){
+	int offset=0;
+	std::string seed;
+	int ennemyTeam=1-turnNumber%2;
+	int team=turnNumber%2;
+	for (int i=0;i<turnNumber;i++){
+		offset+=command_history_nb[i];
+	}
+	for(int nbChara=0;nbChara<(int)getTurn().getTeams()[team]->getListCharacter().size();nbChara++){
+		bool hasAdd=false;
+		for(int i=0;i<command_history_nb[turnNumber-1];i++){
+
+			if(command_history[offset-1-i]->commandType==Attackcmd){
+				Command * pC=command_history[offset-1-i].get();
+	      engine::Attack *pA=dynamic_cast<engine::Attack*>(pC);
+				if(getTurn().getTeams()[team]->getListCharacter()[nbChara]->idCharacter==pA->getAttacker().idCharacter){
+					seed.append("a");
+					int charaNumber=-1;
+					for(int j=0;j<(int)getTurn().getTeams()[ennemyTeam]->getListCharacter().size();j++){
+						if(getTurn().getTeams()[ennemyTeam]->getListCharacter()[j]->idCharacter==pA->getDefender().idCharacter){
+							charaNumber=j;
+						}
+					}
+					seed.append(to_string(charaNumber));
+					hasAdd=true;
+					break;
+				}
+			}
+
+			else if(command_history[offset-1-i]->commandType==Movecmd){
+				Command * pC=command_history[offset-1-i].get();
+				engine::Move *pM=dynamic_cast<engine::Move*>(pC);
+				if(getTurn().getTeams()[team]->getListCharacter()[nbChara]->idCharacter==pM->getCharacter().idCharacter){
+					seed.append("m");
+					Position & pos=pM->getDest();
+					seed.append(to_string(pos.getX()));
+					seed.append("x");
+					seed.append(to_string(pos.getY()));
+					seed.append("y");
+					hasAdd=true;
+				}
+			}
+
+			else if(command_history[offset-1-i]->commandType==UseObjectcmd){
+				Command * pC=command_history[offset-1-i].get();
+				engine::UseObject *pO=dynamic_cast<engine::UseObject*>(pC);
+				if(getTurn().getTeams()[team]->getListCharacter()[nbChara]->idCharacter==pO->getCharacter().idCharacter){
+					seed.append("o");
+					int charaNumber=-1;
+					for(int j=0;j<(int)getTurn().getTeams()[team]->getListCharacter().size();j++){
+						if(getTurn().getTeams()[team]->getListCharacter()[j]->idCharacter==pO->getTargetCharacter().idCharacter){
+							charaNumber=j;
+						}
+					}
+					seed.append(to_string(charaNumber));
+					seed.append(to_string(pO->getNumberObject()));
+					hasAdd=true;
+					break;
+				}
+			}
+
+			else if(command_history[offset-1-i]->commandType==Defendcmd){
+				Command * pC=command_history[offset-1-i].get();
+				engine::Defend *pD=dynamic_cast<engine::Defend*>(pC);
+				if(getTurn().getTeams()[team]->getListCharacter()[nbChara]->idCharacter==pD->getCharacter().idCharacter){
+					seed.append("d");
+					hasAdd=true;
+					break;
+				}
+			}
+
+			else if(command_history[offset-1-i]->commandType==UseSkillcmd){
+				Command * pC=command_history[offset-1-i].get();
+				engine::UseSkill *pS=dynamic_cast<engine::UseSkill*>(pC);
+				if(getTurn().getTeams()[team]->getListCharacter()[nbChara]->idCharacter==pS->getCharacter().idCharacter){
+					seed.append("s");
+					int charaNumber=-1;
+					for(int j=0;j<(int)getTurn().getTeams()[ennemyTeam]->getListCharacter().size();j++){
+						if(getTurn().getTeams()[ennemyTeam]->getListCharacter()[j]->idCharacter==pS->getTargetCharacter().idCharacter){
+							charaNumber=j;
+						}
+					}
+					seed.append(to_string(charaNumber));
+					seed.append(to_string(pS->getSkillNumber()));
+					hasAdd=true;
+					break;
+				}
+			}
+		}
+		if(!hasAdd){
+			seed.append("p");
+		}
+	}
+	if(command_history[offset-command_history_nb[turnNumber-1]-2]->commandType==EndTurncmd){
+		seed.append("e");
+	}
+	return seed;
+}
+
 void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& window, std::vector<sf::View> views){
 	if(turnCheckIn()){
 		updateDisplay(window,views);
@@ -508,6 +607,10 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 				}
 				i+=ynumber+1;
 			}
+			else if(type==(char)'p'){
+				i+=1;
+				charaNumber++;
+			}
 
 		}
 
@@ -561,4 +664,3 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
 	}
 }
-

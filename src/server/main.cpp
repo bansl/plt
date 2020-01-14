@@ -7,7 +7,7 @@
 #include <microhttpd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 
 #include "state.h"
 #include "render.h"
@@ -39,22 +39,22 @@ static int post_iterator(void *cls,
         const char *filename,
         const char *content_type,
         const char *transfer_encoding,
-        const char *data, uint64_t off, size_t size) 
+        const char *data, uint64_t off, size_t size)
 {
     return MHD_NO;
 }
 
 static int
-main_handler (void *cls,      
+main_handler (void *cls,
           struct MHD_Connection *connection,
-          const char *url, 
+          const char *url,
           const char *method,
           const char *version,
-          const char *upload_data, size_t *upload_data_size, void **ptr) 
+          const char *upload_data, size_t *upload_data_size, void **ptr)
 {
     Request *request = (Request*)*ptr;
 
-    if (!request) { 
+    if (!request) {
         request = new Request();
         if (!request) {
             return MHD_NO;
@@ -69,8 +69,8 @@ main_handler (void *cls,
             }
         }
         return MHD_YES;
-    }    
-    
+    }
+
     if (strcmp(method, MHD_HTTP_METHOD_POST) == 0
      || strcmp(method, MHD_HTTP_METHOD_PUT) == 0) {
         MHD_post_process(request->pp,upload_data,*upload_data_size);
@@ -78,7 +78,7 @@ main_handler (void *cls,
             request->data = upload_data;
             *upload_data_size = 0;
             return MHD_YES;
-        }    
+        }
     }
 
     HttpStatus status;
@@ -124,7 +124,7 @@ static void request_completed (void *cls, struct MHD_Connection *connection, voi
 int main(int argc,char* argv[]){
 
 	if (argc>1){
-		
+
 		if(strcmp(argv[1], "listen") == 0){
 			try {
 
@@ -136,21 +136,31 @@ int main(int argc,char* argv[]){
 
 				servicesManager.registerService(move(ptr_playerService));
 
+        CommandService commandService(std::ref(game));
+				std::unique_ptr<Service> ptr_commandService (new CommandService(commandService));
+
+				servicesManager.registerService(move(ptr_commandService));
+
+        InitializeService initializeService(std::ref(game));
+        std::unique_ptr<Service> ptr_initializeService (new InitializeService(initializeService));
+
+        servicesManager.registerService(move(ptr_initializeService));
+
 				struct MHD_Daemon *d;
 				if (argc != 2) {
 				    printf("%s PORT\n", argv[0]);
 				    return 1;
 				}
-				
+
 				d = MHD_start_daemon(
                                         MHD_USE_SELECT_INTERNALLY | MHD_USE_DEBUG,
                                         8080,
-                                        NULL, NULL, 
+                                        NULL, NULL,
                                         &main_handler, (void*) &servicesManager,
                                         MHD_OPTION_NOTIFY_COMPLETED, request_completed, NULL,
                                         MHD_OPTION_END
                                     );
-				        
+
 				if (d == NULL)
 					return 1;
 				cout << "Server Launched" << endl;
@@ -161,8 +171,8 @@ int main(int argc,char* argv[]){
 				cerr << "Exception: " << e.what() << endl;
 			}
 		}
-		
+
 	}
-	
+
     return 0;
 }

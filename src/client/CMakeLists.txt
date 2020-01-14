@@ -18,6 +18,7 @@ include_directories(
 target_include_directories(${lib_client_target} INTERFACE
   ${CMAKE_CURRENT_SOUCE_DIR}
   ${SFML_INCLUDE_DIR}
+  ${jsoncpp_include_dir}
   )
 target_link_libraries(${lib_client_target} PUBLIC
   ${SFML_LIBRARIES}
@@ -33,4 +34,3 @@ if(BUILD_CODE_COVERAGE)
 endif()
 
 # vim: set sw=2 sts=2 et:
-

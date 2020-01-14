@@ -17,6 +17,7 @@ include_directories(
 )
 target_include_directories(${lib_server_target} INTERFACE
   ${CMAKE_CURRENT_SOUCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../shared/state
   ${jsoncpp_include_dir}
   )
 target_link_libraries(${lib_server_target} PUBLIC
@@ -34,4 +35,3 @@ if(BUILD_CODE_COVERAGE)
 endif()
 
 # vim: set sw=2 sts=2 et:
-

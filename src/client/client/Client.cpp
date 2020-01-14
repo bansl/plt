@@ -7,8 +7,10 @@
 #include <unistd.h>
 #include <chrono>
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 #include <thread>
 #include<pthread.h>
+#include <json/json.h>
 using namespace state;
 using namespace engine;
 using namespace render;
@@ -107,7 +109,106 @@ void Client::run (){
 								cout << "Register done." << endl;
 								test_register=false;
 							}
-							
+
+			}
+		}
+		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
+            layer.display(window,k, views);
+			k=(k+1)%4;
+			last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+		}
+
+		while (window.pollEvent(event)){
+			if (event.type==sf::Event::KeyPressed){
+							engine.userInteraction(event, window, views);
+			}
+			if (event.type == sf::Event::Closed){
+				window.close();
+				cout << "====WINDOW EXITED====" << endl;
+				break;
+			}
+		}
+	}
+	v2=false;
+	th.join();
+}
+
+
+void Client::run (int playerID){
+	if(loading){
+		engine.loadGame(window,views);
+		loading=false;
+	}
+	sf::Event event;
+	TurnDisplay layer(engine.getTurn());
+	cout << "Render begin." << endl;
+	layer.initRender(engine.getTurn(), fullRender);
+
+	TurnDisplay* ptr_layer=&layer;
+	engine.getTurn().registerObserver(ptr_layer);
+	// Engine* ptr_engine=&engine;
+
+	layer.initWindowRender(infobanner);
+	cout << "Render done." << endl;
+
+	sf::Text message;
+	sf::Font font;
+	font.loadFromFile("res/COURG___.TTF");
+	message.setFont(font);
+	message.setColor(sf::Color::White);
+	message.setStyle(sf::Text::Bold);
+	message.setCharacterSize(25);
+	message.setString("PAUSED\n\n Controls: \n -Press P key to Pause \n -Press Up, Down, Right or Left key \n   to move around the map \n -Press R key to rotate map anti-clockwise \n -Press T key to rotate map clockwise");
+
+	int k=0;
+	milliseconds last_ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	milliseconds last_time_ai_run = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	last_ms+=(milliseconds) 60;
+	bool resume=true;
+	std::thread th(thread_engine, &engine, &window, &views);
+	bool sendupdate=false;
+	sf::Http http("http://localhost/", 8080);
+
+	while(window.isOpen()){
+		 layer.display(window,1, views);
+		 if(!updating){
+			cout << "finished updating"<< endl;
+			if(engine.turnCheckIn() ){
+							engine.notifyUpdating();
+							while (updating);
+							//if(engine.getTurn().getTurn()%2==0) bots->runAI();
+							//else bots->runAI();
+							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID && !sendupdate){
+								sf::Http::Request request;
+								request.setMethod(sf::Http::Request::Post);
+								request.setUri("/command");
+								request.setBody("{\"req\" : \"POST\", \"turn\":"+engine.seedCommandsPlayer(engine.getTurn().getTurn()-1)+"}");
+								http.sendRequest(request);
+								sendupdate=true;
+							}
+							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID){
+								sf::Http::Request request;
+								request.setMethod(sf::Http::Request::Get);
+								request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
+								http.sendRequest(request);
+								Json::Reader jsonReader;
+								Json::Value rep;
+								sf::Http::Response response = http.sendRequest(request);
+								if (jsonReader.parse(response.getBody(), rep)){
+									if(rep["turn"].asString()!="None"){
+										engine.loadCommands(rep["turn"].asString(),engine.getTurn().getTurn(),window,views);
+									}
+								}
+							}
+							engine.notifyUpdating();
+							while (updating);
+							if(test_register && (engine.getTurn().getTurn()==3)) {
+								cout << "Register start." << endl;
+								engine.registerGame();
+								cout << "Register done." << endl;
+								test_register=false;
+							}
+
 			}
 		}
 		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){

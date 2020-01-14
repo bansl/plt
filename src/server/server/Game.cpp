@@ -1,11 +1,16 @@
 #include "../server.h"
 #include <memory>
 #include <cstdlib>
+#include "../../shared/state.h"
 
 using namespace server;
 using namespace std;
 
 Game::Game():playerNb(0){
+	state::Turn testTurn;
+	testTurn.initTurn(10,2,3);
+	std::string mapSeed=testTurn.seedMap();
+	std::string charSeed=testTurn.seedTeams();
 }
 std::vector<std::unique_ptr<Player>>& Game::getPlayersList(){
 	std::vector<std::unique_ptr<Player>>& ref=players;
@@ -54,4 +59,12 @@ void Game::addCommands(std::string commands){
 std::vector<std::string>& Game::getCommandsList(){
 	std::vector<std::string>& addrcommandsList=commandsList;
 	return addrcommandsList;
+}
+
+std::string Game::getMapSeed(){
+	return mapSeed;
+}
+
+std::string Game::getCharSeed(){
+	return mapSeed;
 }
