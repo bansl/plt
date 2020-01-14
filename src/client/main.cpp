@@ -239,7 +239,7 @@ int main(int argc,char* argv[])
                                 cout<<"Content-type header :"<<response4.getField("Content-Type")<<endl;
                                 cout<<"body :"<<response4.getBody()<<endl;
                               testTurn.initTurn(10,rep4["charseed"].asString(),rep4["mapseed"].asString());
-                              Client client(window,views,testTurn,false);
+                              Client client(window,views,testTurn,true);
                               cout<<"Starting"<<endl;
 
                               while (window.isOpen()){
