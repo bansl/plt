@@ -12,8 +12,10 @@ InitializeService::InitializeService (Game& game) : Service("/initialize"), game
 HttpStatus InitializeService::get (Json::Value& out, int id) const {
     std::string mapseed = game.getMapSeed();
     std::string charseed = game.getCharSeed();
+    cout << "Seed map Gen"<< mapseed;
+    cout << "Seed char Gen"<< charseed;
     out["mapseed"] = mapseed;
-    out["charssed"]=charseed;
+    out["charseed"]= charseed;
     return HttpStatus::OK;
 }
 

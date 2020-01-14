@@ -185,7 +185,7 @@ int main(int argc,char* argv[])
 
                     sf::Http::Request request4;
                     request4.setMethod(sf::Http::Request::Get);
-                    request4.setUri("/initialize");
+                    request4.setUri("/initialize/0");
                     Json::Reader jsonReader4;
                     Json::Value rep4;
 
@@ -233,6 +233,11 @@ int main(int argc,char* argv[])
                             sf::Http::Response response4 = http.sendRequest(request4);
                             cout<<"Getting seed"<<endl;
                             if (jsonReader.parse(response4.getBody(), rep4)){
+                                cout<< "status : "<<response4.getStatus()<<endl;
+                                cout<<"HTTP version : "<<response4.getMajorHttpVersion()<< "."
+                                                         <<response4.getMinorHttpVersion()<<endl;
+                                cout<<"Content-type header :"<<response4.getField("Content-Type")<<endl;
+                                cout<<"body :"<<response4.getBody()<<endl;
                               testTurn.initTurn(10,rep4["charseed"].asString(),rep4["mapseed"].asString());
                               Client client(window,views,testTurn,false);
                               cout<<"Starting"<<endl;

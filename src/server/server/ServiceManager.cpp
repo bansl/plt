@@ -28,7 +28,7 @@ Service* ServicesManager::findService (const string& url) const {
 
 HttpStatus ServicesManager::queryService (string& out, const string& in, const string& url, const string& method) { 
     Service* service = findService(url);
-    
+    cout << "my url"<<url << endl;
     if (!service) throw ServiceException(HttpStatus::NOT_FOUND,"Service "+url+" not found");
     
     const string& resourceType(service->resourceType);
@@ -88,6 +88,8 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
 	
     else if (method=="DELETE" || (method == "POST" && in[0]=='d')) {
         cerr << "DELETE Request" << endl;
+        string inst = url.substr(resourceType.size()+1);
+        int id=stoi(inst);
         return service->remove(id);
     }
     throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid "+method+" Method");

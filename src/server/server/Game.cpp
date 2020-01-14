@@ -9,8 +9,8 @@ using namespace std;
 Game::Game():playerNb(0){
 	state::Turn testTurn;
 	testTurn.initTurn(10,2,3);
-	std::string mapSeed=testTurn.seedMap();
-	std::string charSeed=testTurn.seedTeams();
+	mapSeed=testTurn.seedMap();
+	charSeed=testTurn.seedTeams();
 }
 std::vector<std::unique_ptr<Player>>& Game::getPlayersList(){
 	std::vector<std::unique_ptr<Player>>& ref=players;
@@ -66,5 +66,5 @@ std::string Game::getMapSeed(){
 }
 
 std::string Game::getCharSeed(){
-	return mapSeed;
+	return charSeed;
 }
