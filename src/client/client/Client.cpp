@@ -135,10 +135,7 @@ void Client::run (){
 
 
 void Client::run (int playerID){
-	if(loading){
-		engine.loadGame(window,views);
-		loading=false;
-	}
+
 	sf::Event event;
 	TurnDisplay layer(engine.getTurn());
 	cout << "Render begin." << endl;
@@ -176,7 +173,10 @@ void Client::run (int playerID){
 			if(engine.turnCheckIn() ){
 							engine.notifyUpdating();
 							while (updating);
-							if(engine.getTurn().getTurn()%2==playerID%2) bots->runAI();
+							if(engine.getTurn().getTurn()%2==playerID%2){
+								bots->runAI();
+								sendupdate=false;
+							}
 							//else bots->runAI();
 							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2 && !sendupdate){
 								sf::Http::Request request;
