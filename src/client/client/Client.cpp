@@ -176,9 +176,9 @@ void Client::run (int playerID){
 			if(engine.turnCheckIn() ){
 							engine.notifyUpdating();
 							while (updating);
-							//if(engine.getTurn().getTurn()%2==0) bots->runAI();
+							if(engine.getTurn().getTurn()%2==playerID%2) bots->runAI();
 							//else bots->runAI();
-							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID && !sendupdate){
+							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2 && !sendupdate){
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Post);
 								request.setUri("/command");
@@ -186,7 +186,7 @@ void Client::run (int playerID){
 								http.sendRequest(request);
 								sendupdate=true;
 							}
-							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID){
+							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2){
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Get);
 								request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
@@ -202,12 +202,6 @@ void Client::run (int playerID){
 							}
 							engine.notifyUpdating();
 							while (updating);
-							if(test_register && (engine.getTurn().getTurn()==3)) {
-								cout << "Register start." << endl;
-								engine.registerGame();
-								cout << "Register done." << endl;
-								test_register=false;
-							}
 
 			}
 		}
