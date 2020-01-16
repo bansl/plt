@@ -164,7 +164,7 @@ void Client::run (int playerID){
 	bool resume=true;
 	std::thread th(thread_engine, &engine, &window, &views);
 	bool sendupdate=true;
-	sf::Http http("http://localhost/", 8080);
+	sf::Http http("http://localhost/", 8080); //192.168.56.103
 
 	while(window.isOpen()){
 		 layer.display(window,1, views);
@@ -189,7 +189,7 @@ void Client::run (int playerID){
 								sendupdate=true;
 							}
 							if(engine.getCurrentPlayerID()!=playerID%2){
-								while(true){
+								while(window.isOpen()){
 									sf::Http::Request request;
 									request.setMethod(sf::Http::Request::Get);
 									request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
@@ -202,7 +202,23 @@ void Client::run (int playerID){
 											engine.loadCommands(rep["turn"].asString(),engine.getTurn().getTurn(),window,views);
 										}
 									}
-									uspleep(1000);
+
+									while (window.pollEvent(event)){
+										if (event.type==sf::Event::KeyPressed){
+														engine.userInteraction(event, window, views);
+										}
+										if (event.type == sf::Event::Closed){
+											window.close();
+											cout << "====WINDOW EXITED====" << endl;
+											break;
+										}
+									}
+									if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
+										layer.display(window,k, views);
+										k=(k+1)%4;
+										last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+									}
+									usleep(1000);
 								}
 							}
 							engine.notifyUpdating();
