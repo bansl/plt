@@ -215,17 +215,17 @@ void Client::run (int playerID){
 							//else bots->runAI();
 							if((engine.getTurn().getTurn()%2!=playerID%2) && (sendupdate==false)){
 								cout<<"Starting posting last turn commands"<<endl;
-								sf::Http::Request request;
-								request.setMethod(sf::Http::Request::Put);
-								request.setUri("/command/");
+								sf::Http::Request requestcmd;
+								requestcmd.setMethod(sf::Http::Request::Post);
+								requestcmd.setUri("/command");
 								cout<<"body begin"<<endl;
 								string dataTurn=engine.seedCommandsPlayer(engine.getTurn().getTurn()-1);
 								cout<<"data Turn"<<endl;
-								request.setBody("{\"turn\": \""+dataTurn+"\"}");
-								cout<<"body end"<<endl;
+								requestcmd.setBody("{\"req\" : \"POST\", \"turn\": \""+dataTurn+"\"}");
+								cout<<"{\"req\" : \"POST\", \"turn\": \""+dataTurn+"\"}"<<endl;
 								Json::Reader jsonReader;
 								Json::Value rep;
-								sf::Http::Response response = http.sendRequest(request);
+								sf::Http::Response response = http.sendRequest(requestcmd);
 								cout<<"Last turn commands posted"<<endl;
 								if (jsonReader.parse(response.getBody(), rep)){
 									if(rep["Done"].asString()=="Yes"){
