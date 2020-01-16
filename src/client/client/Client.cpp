@@ -107,7 +107,7 @@ void Client::run (bool human){
 								else
 								{
 									while(window.isOpen()){
-										if(engine.getTurn().getIsSkipped()) break;
+										if(engine.isPlayerPlaying) break;
 										if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 											layer.display(window,k, views);
 											k=(k+1)%4;

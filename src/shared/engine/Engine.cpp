@@ -335,7 +335,6 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 						// unique_ptr<Command> ptr_endturnQueue (new EndTurn (endturntest));
 						// queuePlayer.push(move(ptr_endturnQueue));
 						isPlayerPlaying=true;
-						updateDisplay(window,views);
 						// revertTurn(window,views);
 						// for(int i=0;i<(int)queuePlayer.size();i++){
 						// 	unique_ptr<Command> ptr_commandtemp;
