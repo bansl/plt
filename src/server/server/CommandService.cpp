@@ -29,8 +29,8 @@ HttpStatus CommandService::getall (Json::Value& out) const {
 
 HttpStatus CommandService::put (Json::Value& out, const Json::Value& in) {
     //int turnNumber=(int)game.getCommandsList().size();
-    cout<<"hhh";
     if (in.isMember("turn")) {
+            cout<<"adding command to command list"<<endl;
         game.addCommands(in["turn"].asString());
         const std::string yes="Yes";
         out["Done"]=yes;
