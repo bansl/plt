@@ -681,7 +681,7 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 		}
 
 	// }
-	updateDisplay(window,views);
+	//updateDisplay(window,views);
 }
 
 void Engine::registerGame(){
@@ -729,6 +729,7 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 		cout << root.get("turn"+to_string(i),"").asString() << endl;
 		if(turnCheckIn()){
 			loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
+			updateDisplay(window,views);
 		}
 	}
 }
