@@ -48,7 +48,7 @@ void Game::removePlayer (int id) {
 }
 
 std::string Game::getCommands(int turnNumber){
-	if(turnNumber<(int)commandsList.size())	return commandsList[turnNumber-1];
+	if(turnNumber<=(int)commandsList.size())	return commandsList[turnNumber-1];
 	else return "None";
 }
 
