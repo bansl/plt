@@ -76,10 +76,10 @@ bool Window::renderWindow (render::WindowType windowType, render::TileSet tilese
                     break;
                 }
             }
-            
+
         }
 
-        
+
         return true;
     }
     else if (windowType==actionselect)
@@ -98,7 +98,7 @@ bool Window::renderWindow (render::WindowType windowType, render::TileSet tilese
 	    }
         vertexarray.setPrimitiveType(sf::Quads);
         vertexarray.resize(8);
-        
+
         for (size_t i = 0; i < 2; i++){
             sf::Vertex* quad = &vertexarray[4*i];
 
@@ -120,7 +120,7 @@ bool Window::renderWindow (render::WindowType windowType, render::TileSet tilese
     {
         /* code */
     }
-    return false;    
+    return false;
 }
 
 bool Window::renderActionCursor(int selectpos,render::TileSet tileset){
@@ -143,9 +143,9 @@ bool Window::renderActionCursor(int selectpos,render::TileSet tileset){
   vertexarray.setPrimitiveType(sf::Quads);
   vertexarray.resize(4);
   sf::Vertex* quad = &vertexarray[0];
-  
+
   int xpos=225;
-  cout << "wd"<<endl;
+  // cout << "wd"<<endl;
 
   quad[0].position = sf::Vector2f(xpos          , (selectpos-1)*30  +320    );
   quad[1].position = sf::Vector2f(xpos + 25     , (selectpos-1)*30  +320    );

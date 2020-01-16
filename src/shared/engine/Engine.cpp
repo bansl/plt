@@ -86,31 +86,33 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 	if(updateisTurnFinished){
 
 		for(size_t i=0; i<commands.size();i++){
+			if(!isPlayerPlaying){
+				commands[i]->action(turn);
+				if (commands[i]->commandType==Movecmd){
+					engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+					state::StatusList tempStatus=pM->getCharacter().getStatus();
+					pM->getCharacter().setStatus(Moving);
+					// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+					// for(size_t j=0;j<pM->getPathToDest().size();j++){
+					// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
+					// 	turn.notifyObservers(turn, window,fullRender);
+				 	// }
+					// commands[i]->action(turn);
+					turn.notifyObservers(turn, window,fullRender, views);
+					pM->getCharacter().setStatus(tempStatus);
+					position_history.push_back(pM->getPathToDest()[0]);
+				}
 
-			commands[i]->action(turn);
-			if (commands[i]->commandType==Movecmd){
-				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
-				state::StatusList tempStatus=pM->getCharacter().getStatus();
-				pM->getCharacter().setStatus(Moving);
-				// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
-				// for(size_t j=0;j<pM->getPathToDest().size();j++){
-				// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
-				// 	turn.notifyObservers(turn, window,fullRender);
-			 	// }
-				// commands[i]->action(turn);
-				turn.notifyObservers(turn, window,fullRender, views);
-				pM->getCharacter().setStatus(tempStatus);
-				position_history.push_back(pM->getPathToDest()[0]);
+				else if (commands[i]->commandType==Attackcmd){
+					engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
+					defending_history.push_back(pA->getDefender().getStatus()==Defending);
+				}
+				else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender,views);
+				commands[i]->finish(turn);
+				turn.notifyObservers(turn, window,charRender, views);
 			}
-
-			else if (commands[i]->commandType==Attackcmd){
-				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
-				defending_history.push_back(pA->getDefender().getStatus()==Defending);
-			}
-			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender,views);
-			commands[i]->finish(turn);
-			turn.notifyObservers(turn, window,charRender, views);
 		}
+		isPlayerPlaying=false;
 		command_history_nb.push_back(0);
 		while (!commands.empty()){
 				command_history.push_back(move(commands.back()));
@@ -221,9 +223,13 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 				Position dest=turn.getCursor()->getPosition();
 				Move movePlayer(*playingcharaddr, dest);
 				if(movePlayer.validate(turn)){
+					movePlayer.action(turn);
+					turn.notifyObservers(turn, window,fullRender, views);
 					unique_ptr<Command> ptr_movePlayer (new Move (movePlayer));
 					addCommand(move(ptr_movePlayer));
 					cout << "->[SUCCESS]move instruction added " << endl;
+					// unique_ptr<Command> ptr_movePlayerQueue (new Move (movePlayer));
+					// queuePlayer.push(move(ptr_movePlayerQueue));
 				}
 				else cout << "->[FAILED]no move instruction added" << endl;
 				playeraction=-1;
@@ -232,9 +238,13 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 				cout<<"target selected"<<endl;
 				Attack attackPlayer(*playingcharaddr,find_selected_char(turn));
 				if(attackPlayer.validate(turn)){
+					attackPlayer.action(turn);
+					turn.notifyObservers(turn, window,charRender, views);
 					unique_ptr<Command> ptr_attackPlayer (new Attack (attackPlayer));
 					addCommand(move(ptr_attackPlayer));
 					cout << "->[SUCCESS]attack instruction added " << endl;
+					// unique_ptr<Command> ptr_attackPlayerQueue (new Attack (attackPlayer));
+					// queuePlayer.push(move(ptr_attackPlayerQueue));
 				}
 				else cout << "->[FAILED]no attack instruction added" << endl;
 				playeraction=-1;
@@ -288,9 +298,13 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 					playeraction=-1;
 					Defend defPlayer(find_selected_char(turn));
 					if(defPlayer.validate(turn)){
+						defPlayer.action(turn);
 						unique_ptr<Command> ptr_defPlayer (new Defend (defPlayer));
+						turn.notifyObservers(turn, window,fullRender, views);
 						addCommand(move(ptr_defPlayer));
 						cout << "->[SUCCESS]defend instruction added " << endl;
+						// unique_ptr<Command> ptr_defPlayerQueue (new Defend (defPlayer));
+						// queuePlayer.push(move(ptr_defPlayerQueue));
 					}
 					else cout << "->[FAILED]no defend instruction added" << endl;
 				}
@@ -299,9 +313,42 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 					playeraction=-1;
 					EndTurn endturntest(1);
 					if(endturntest.validate(turn)){
+						endturntest.action(turn);
 						unique_ptr<Command> ptr_endturntest (new EndTurn (endturntest));
 						addCommand(move(ptr_endturntest));
+						turn.notifyObservers(turn, window,fullRender, views);
 						cout << "->[SUCCESS]endturn instruction added " << endl;
+						// unique_ptr<Command> ptr_endturnQueue (new EndTurn (endturntest));
+						// queuePlayer.push(move(ptr_endturnQueue));
+						isPlayerPlaying=true;
+						updateDisplay(window,views);
+						// revertTurn(window,views);
+						// for(int i=0;i<(int)queuePlayer.size();i++){
+						// 	unique_ptr<Command> ptr_commandtemp;
+					  //   if (queuePlayer.front()->Commandtype==Attackcmd){
+					  //     ptr_commandtemp.reset(new Attack(queuePlayer.front()));
+					  //   }
+					  //   else if (queuePlayer.front()->Commandtype==Movecmd){
+					  //     ptr_commandtemp.reset(new Move(queuePlayer.front()));
+					  //   }
+					  //   else if (queuePlayer.front()->Commandtype==Defendcmd){
+					  //     ptr_commandtemp.reset(new Defend(queuePlayer.front()));
+					  //   }
+					  //   else if (queuePlayer.front()->Commandtype==UseObjectcmd){
+					  //     ptr_commandtemp.reset(new UseObject(queuePlayer.front()));
+					  //   }
+					  //   else if (queuePlayer.front()->Commandtype==UseSkillcmd){
+					  //     ptr_commandtemp.reset(new UseSkill(queuePlayer.front()));
+					  //   }
+						// 	else if (queuePlayer.front()->Commandtype==EndTurncmd){
+					  //     ptr_commandtemp.reset(new EndTurn(queuePlayer.front()));
+					  //   }
+					  //   ptr_commandtemp->validate(turn);
+					  //   addCommand(move(ptr_commandtemp));
+						// 	queuePlayer.pop();
+						// }
+						// updateDisplay(window,views);
+
 					}
 					else cout << "->[FAILED]no endturn instruction added" << endl;
 				}
