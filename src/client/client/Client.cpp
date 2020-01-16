@@ -187,7 +187,7 @@ void Client::run (int playerID){
 	bool resume=true;
 	std::thread th(thread_engine, &engine, &window, &views);
 	bool sendupdate=true;
-	sf::Http http("http://localhost/", 8080); //localhost
+	sf::Http http("http://192.168.56.103/", 8080); //192.168.56.103
 
 	while(window.isOpen()){
 		 layer.display(window,1, views);
@@ -245,7 +245,7 @@ void Client::run (int playerID){
 										k=(k+1)%4;
 										last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
 									}
-									usleep(1000);
+									usleep(1000000);
 								}
 							}
 							engine.notifyUpdating();
