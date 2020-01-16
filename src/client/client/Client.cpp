@@ -114,6 +114,14 @@ void Client::run (bool human){
 										}
 
 										while (window.pollEvent(event)){
+											if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)){
+												engine.getTurn().rotation=(engine.getTurn().rotation+1)%4;
+												layer.initRender(engine.getTurn(),fullRender);
+											}
+											if (sf::Keyboard::isKeyPressed(sf::Keyboard::T)){
+												engine.getTurn().rotation=(engine.getTurn().rotation+3)%4;
+												layer.initRender(engine.getTurn(),fullRender);
+											}
 											if (event.type==sf::Event::KeyPressed){
 												engine.userInteraction(event, window, views);
 											}
