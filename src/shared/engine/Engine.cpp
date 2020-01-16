@@ -489,6 +489,7 @@ std::string Engine::seedCommands(int turnNumber){
 }
 
 std::string Engine::seedCommandsPlayer(int turnNumber){
+	//cout<<"Start seeding"<<endl;
 	int offset=0;
 	std::string seed;
 	int ennemyTeam=1-turnNumber%2;
@@ -497,6 +498,7 @@ std::string Engine::seedCommandsPlayer(int turnNumber){
 		offset+=command_history_nb[i];
 	}
 	for(int nbChara=0;nbChara<(int)getTurn().getTeams()[team]->getListCharacter().size();nbChara++){
+		//cout<<"Start Character Number : "<<nbChara<<" /"<<(int)getTurn().getTeams()[team]->getListCharacter().size()-1<<endl;
 		bool hasAdd=false;
 		for(int i=0;i<command_history_nb[turnNumber-1];i++){
 
@@ -576,14 +578,18 @@ std::string Engine::seedCommandsPlayer(int turnNumber){
 					break;
 				}
 			}
+
 		}
 		if(!hasAdd){
 			seed.append("p");
+			//cout<<"Add P!"<<endl;
 		}
+		//cout<<"Ending Character Number : "<<nbChara<<" /"<<(int)getTurn().getTeams()[team]->getListCharacter().size()-1<<endl;
 	}
-	if(command_history[offset-command_history_nb[turnNumber-1]-2]->commandType==EndTurncmd){
+	//if(command_history[offset-command_history_nb[turnNumber]-1]->commandType==EndTurncmd){
 		seed.append("e");
-	}
+	//}
+	//cout<<"End seeding"<<endl;
 	return seed;
 }
 
