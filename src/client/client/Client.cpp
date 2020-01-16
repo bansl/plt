@@ -234,7 +234,7 @@ void Client::run (int playerID){
 									}
 								}
 							}
-							if(engine.getCurrentPlayerID()!=playerID%2){
+							if(engine.getTurn().getTurn()%2!=playerID%2){
 								while(window.isOpen()){
 									sf::Http::Request request;
 									request.setMethod(sf::Http::Request::Get);
@@ -244,13 +244,14 @@ void Client::run (int playerID){
 									Json::Value rep;
 									sf::Http::Response response = http.sendRequest(request);
 									if (jsonReader.parse(response.getBody(), rep)){
-										cout<< "status : "<<response.getStatus()<<endl;
-										cout<<"HTTP version : "<<response.getMajorHttpVersion()<< "."
-										                         <<response.getMinorHttpVersion()<<endl;
-										cout<<"Content-type header :"<<response.getField("Content-Type")<<endl;
-										cout<<"body :"<<response.getBody()<<endl;
+										// cout<< "status : "<<response.getStatus()<<endl;
+										// cout<<"HTTP version : "<<response.getMajorHttpVersion()<< "."
+										//                          <<response.getMinorHttpVersion()<<endl;
+										// cout<<"Content-type header :"<<response.getField("Content-Type")<<endl;
+										// cout<<"body :"<<response.getBody()<<endl;
 										if(rep["turn"].asString()!="None"){
 											engine.loadCommands(rep["turn"].asString(),engine.getTurn().getTurn(),window,views);
+											break;
 										}
 									}
 
