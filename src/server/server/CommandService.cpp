@@ -27,7 +27,7 @@ HttpStatus CommandService::getall (Json::Value& out) const {
 }
 
 
-HttpStatus CommandService::post (const Json::Value& in, int id) {
+HttpStatus CommandService::put (const Json::Value& out, const Json::Value& in) {
     //int turnNumber=(int)game.getCommandsList().size();
     if (in.isMember("turn")) {
         game.addCommands(in["turn"].asString());
