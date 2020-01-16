@@ -53,7 +53,7 @@ int main(int argc,char* argv[])
 
             milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
             last_ms+=(milliseconds) 1000;
-			sf::Http http("http://localhost/", 8080);
+			sf::Http http("http://192.168.56.103/", 8080);
 
 			sf::Http::Request request1;
 			request1.setMethod(sf::Http::Request::Post);
@@ -154,7 +154,7 @@ int main(int argc,char* argv[])
 
                 milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
                 last_ms+=(milliseconds) 1000;
-    			sf::Http http("http://localhost/", 8080);
+    			sf::Http http("http://192.168.56.103/", 8080);
 
     			sf::Http::Request request1;
     			request1.setMethod(sf::Http::Request::Post);

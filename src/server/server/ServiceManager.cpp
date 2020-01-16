@@ -66,8 +66,7 @@ HttpStatus ServicesManager::queryService (string& out, const string& in, const s
             throw ServiceException(HttpStatus::BAD_REQUEST,"Invalid Data: "+jsonReader.getFormattedErrorMessages());
 			cerr << "POST Request " << resourceType << " body:" << in << endl;
 		}
-        cerr << "PUT Request" << resourceType << " body: {\"name\":" << jsonIn["name"].asString()<<" ,\"inlobby\":"<<jsonIn["inlobby"]<<"}" << endl;
-        
+        cerr << "POST Request " << resourceType << " body:" << in << endl;
         Json::Value jsonOut;
         HttpStatus status = service->put(jsonOut,jsonIn);
         out = jsonOut.toStyledString();
