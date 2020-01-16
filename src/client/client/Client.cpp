@@ -189,17 +189,20 @@ void Client::run (int playerID){
 								sendupdate=true;
 							}
 							if(engine.getCurrentPlayerID()!=playerID%2){
-								sf::Http::Request request;
-								request.setMethod(sf::Http::Request::Get);
-								request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
-								http.sendRequest(request);
-								Json::Reader jsonReader;
-								Json::Value rep;
-								sf::Http::Response response = http.sendRequest(request);
-								if (jsonReader.parse(response.getBody(), rep)){
-									if(rep["turn"].asString()!="None"){
-										engine.loadCommands(rep["turn"].asString(),engine.getTurn().getTurn(),window,views);
+								while(true){
+									sf::Http::Request request;
+									request.setMethod(sf::Http::Request::Get);
+									request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
+									http.sendRequest(request);
+									Json::Reader jsonReader;
+									Json::Value rep;
+									sf::Http::Response response = http.sendRequest(request);
+									if (jsonReader.parse(response.getBody(), rep)){
+										if(rep["turn"].asString()!="None"){
+											engine.loadCommands(rep["turn"].asString(),engine.getTurn().getTurn(),window,views);
+										}
 									}
+									uspleep(1000);
 								}
 							}
 							engine.notifyUpdating();
