@@ -98,31 +98,33 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 	if(updateisTurnFinished){
 
 		for(size_t i=0; i<commands.size();i++){
-			if(!isPlayerPlaying){
-				commands[i]->action(turn);
-				if (commands[i]->commandType==Movecmd){
-					engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
-					state::StatusList tempStatus=pM->getCharacter().getStatus();
-					pM->getCharacter().setStatus(Moving);
-					// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
-					// for(size_t j=0;j<pM->getPathToDest().size();j++){
-					// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
-					// 	turn.notifyObservers(turn, window,fullRender);
-				 	// }
-					// commands[i]->action(turn);
-					turn.notifyObservers(turn, window,fullRender, views);
-					pM->getCharacter().setStatus(tempStatus);
-					position_history.push_back(pM->getPathToDest()[0]);
-				}
 
-				else if (commands[i]->commandType==Attackcmd){
-					engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
-					defending_history.push_back(pA->getDefender().getStatus()==Defending);
+				if(!isPlayerPlaying){
+					commands[i]->action(turn);
+					if (commands[i]->commandType==Movecmd){
+						engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+						state::StatusList tempStatus=pM->getCharacter().getStatus();
+						pM->getCharacter().setStatus(Moving);
+						// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+						// for(size_t j=0;j<pM->getPathToDest().size();j++){
+						// 	pM->getCharacter().getPosition().setPos(pM->getPathToDest()[j].getX(),pM->getPathToDest()[j].getY());
+						// 	turn.notifyObservers(turn, window,fullRender);
+					 	// }
+						// commands[i]->action(turn);
+						turn.notifyObservers(turn, window,fullRender, views);
+						pM->getCharacter().setStatus(tempStatus);
+						position_history.push_back(pM->getPathToDest()[0]);
+					}
+
+					else if (commands[i]->commandType==Attackcmd){
+						engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
+						defending_history.push_back(pA->getDefender().getStatus()==Defending);
+					}
 				}
 				else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender,views);
 				commands[i]->finish(turn);
 				turn.notifyObservers(turn, window,charRender, views);
-			}
+
 		}
 		isPlayerPlaying=false;
 		command_history_nb.push_back(0);
