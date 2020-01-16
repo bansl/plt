@@ -594,8 +594,8 @@ std::string Engine::seedCommandsPlayer(int turnNumber){
 }
 
 void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& window, std::vector<sf::View> views){
-	if(turnCheckIn()){
-		updateDisplay(window,views);
+	// if(turnCheckIn()){
+		// updateDisplay(window,views);
 		int i=0, charaNumber=0;
 		int teamNumber=turnNumber%2;
 		while(i<(int)seed.size()){
@@ -679,7 +679,7 @@ void Engine::loadCommands(std::string seed, int turnNumber,sf::RenderWindow& win
 
 		}
 
-	}
+	// }
 	updateDisplay(window,views);
 }
 
@@ -726,6 +726,8 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 	for(int i=1;i<=(int)root.size()-2;i++){
 		cout << "actions no. "<< i <<endl;
 		cout << root.get("turn"+to_string(i),"").asString() << endl;
-		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
+		if(turnCheckIn()){
+			loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
+		}
 	}
 }
