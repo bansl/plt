@@ -29,6 +29,18 @@ Character& find_selected_char(state::Turn& turn){
 	return 	refc;
 }
 
+Character& find_selected_char(state::Turn& turn, int team){
+	Position posCurs=turn.getCursor()->getPosition();
+	for (size_t character = 0; character < turn.getTeams()[team]->getListCharacter().size(); character++)
+		if (posCurs.distanceBetween(posCurs,turn.getTeams()[team]->getListCharacter()[character]->getPosition())==0) {
+			Character & refchar=*turn.getTeams()[team]->getListCharacter()[character];
+			return refchar;
+		}
+	Character c;
+	Character& refc=c;
+	return 	refc;
+}
+
 state::Turn& Engine::getTurn (){
 	state::Turn& myturn=turn;
 	return myturn;
@@ -254,7 +266,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){ // Enter Action Menu Selection
 
-			if(!action_bool && (find_selected_char(turn).getCurrentHP()>0)){
+			if(!action_bool && (find_selected_char(turn,currentPlayerId).getCurrentHP()>0)){
 				turn.notifyObservers(turn, window, windowactionRender, views);
 				action_bool=!action_bool;
 			}

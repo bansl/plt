@@ -33,7 +33,7 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 			v1=false;
 		}
 	}
-
+	
 }
 
 Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn, bool isloading):views(views), engine(turn), window(window){
@@ -59,7 +59,7 @@ void Client::moveCursorDown(){}
 
 void Client::moveCursorUp(){}
 
-void Client::run (){
+void Client::run (bool human){
 	if(loading){
 		engine.loadGame(window,views);
 		loading=false;
@@ -100,9 +100,33 @@ void Client::run (){
 							engine.notifyUpdating();
 							while (updating);
 							if(engine.getTurn().getTurn()%2==0) bots->runAI();
-							else bots->runAI();
+							else {
+								if (!human)	bots->runAI();
+								else
+								{
+									while(window.isOpen()){
+										if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
+											layer.display(window,k, views);
+											k=(k+1)%4;
+											last_ms=duration_cast< milliseconds >(system_clock::now().time_since_epoch()) + (milliseconds) 60;
+										}
+
+										while (window.pollEvent(event)){
+											if (event.type==sf::Event::KeyPressed){
+												engine.userInteraction(event, window, views);
+											}
+											if (event.type == sf::Event::Closed){
+												window.close();
+												cout << "====WINDOW EXITED====" << endl;
+												break;
+											}
+										}
+									}	
+								}
+								
+							}
 							engine.notifyUpdating();
-							while (updating);
+							while (updating){};
 							if(test_register && (engine.getTurn().getTurn()==3)) {
 								cout << "Register start." << endl;
 								engine.registerGame();
@@ -132,7 +156,6 @@ void Client::run (){
 	v2=false;
 	th.join();
 }
-
 
 void Client::run (int playerID){
 
@@ -183,7 +206,11 @@ void Client::run (int playerID){
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Post);
 								request.setUri("/command");
-								request.setBody("{\"turn\": \""+engine.seedCommandsPlayer(engine.getTurn().getTurn()-1)+"\"}");
+								cout<<"body begin"<<endl;
+								string dataTurn=engine.seedCommandsPlayer(engine.getTurn().getTurn()-1);
+								cout<<"data Turn"<<endl;
+								request.setBody("{\"turn\": \""+dataTurn+"\"}");
+								cout<<"body end"<<endl;
 								http.sendRequest(request);
 								cout<<"Last turn commands posted"<<endl;
 								sendupdate=true;
