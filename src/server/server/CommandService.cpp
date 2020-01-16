@@ -38,7 +38,7 @@ HttpStatus CommandService::put (Json::Value& out, const Json::Value& in) {
       const std::string no="No";
       out["Done"]=no;
     }
-    return HttpStatus::OK;
+    return HttpStatus::NO_CONTENT;
 }
 
 
