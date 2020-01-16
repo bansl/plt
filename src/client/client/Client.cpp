@@ -163,7 +163,7 @@ void Client::run (int playerID){
 	last_ms+=(milliseconds) 60;
 	bool resume=true;
 	std::thread th(thread_engine, &engine, &window, &views);
-	bool sendupdate=false;
+	bool sendupdate=true;
 	sf::Http http("http://localhost/", 8080);
 
 	while(window.isOpen()){
@@ -178,7 +178,7 @@ void Client::run (int playerID){
 								sendupdate=false;
 							}
 							//else bots->runAI();
-							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2 && !sendupdate){
+							if((engine.getTurn().getTurn()%2!=playerID%2) && (sendupdate==false)){
 								cout<<"Starting posting last turn commands"<<endl;
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Post);
