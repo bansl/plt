@@ -8,7 +8,7 @@ using namespace std;
 
 Game::Game():playerNb(0){
 	state::Turn testTurn;
-	testTurn.initTurn(10,2,3);
+	testTurn.initTurn(10,2,2);
 	mapSeed=testTurn.seedMap();
 	charSeed=testTurn.seedTeams();
 }
