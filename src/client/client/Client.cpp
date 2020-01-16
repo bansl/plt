@@ -72,6 +72,8 @@ void Client::run (bool human){
 	TurnDisplay* ptr_layer=&layer;
 	engine.getTurn().registerObserver(ptr_layer);
 	// Engine* ptr_engine=&engine;
+	usleep(100);
+    engine.registerObserver(ptr_layer);
 
 	layer.initWindowRender(infobanner);
 	cout << "Render done." << endl;
@@ -167,6 +169,8 @@ void Client::run (int playerID){
 	TurnDisplay* ptr_layer=&layer;
 	engine.getTurn().registerObserver(ptr_layer);
 	// Engine* ptr_engine=&engine;
+	usleep(100);
+    engine.registerObserver(ptr_layer);
 
 	layer.initWindowRender(infobanner);
 	cout << "Render done." << endl;
@@ -187,7 +191,7 @@ void Client::run (int playerID){
 	bool resume=true;
 	std::thread th(thread_engine, &engine, &window, &views);
 	bool sendupdate=true;
-	sf::Http http("http://192.168.56.103/", 8080); //192.168.56.103
+	sf::Http http("http://localhost/", 8080); //localhost
 
 	while(window.isOpen()){
 		 layer.display(window,1, views);
