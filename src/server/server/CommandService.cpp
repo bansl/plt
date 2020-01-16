@@ -27,12 +27,18 @@ HttpStatus CommandService::getall (Json::Value& out) const {
 }
 
 
-HttpStatus CommandService::put (const Json::Value& out, const Json::Value& in) {
+HttpStatus CommandService::put (Json::Value& out, const Json::Value& in) {
     //int turnNumber=(int)game.getCommandsList().size();
     if (in.isMember("turn")) {
         game.addCommands(in["turn"].asString());
+        const std::string yes="Yes";
+        out["Done"]=yes;
     }
-    return HttpStatus::NO_CONTENT;
+    else{
+      const std::string no="No";
+      out["Done"]=no;
+    }
+    return HttpStatus::OK;
 }
 
 

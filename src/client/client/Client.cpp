@@ -33,7 +33,7 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 			v1=false;
 		}
 	}
-	
+
 }
 
 Client::Client (sf::RenderWindow& window, std::vector<sf::View> views, state::Turn& turn, bool isloading):views(views), engine(turn), window(window){
@@ -131,9 +131,9 @@ void Client::run (bool human){
 												break;
 											}
 										}
-									}	
+									}
 								}
-								
+
 							}
 							engine.notifyUpdating();
 							while (updating){};
@@ -223,9 +223,15 @@ void Client::run (int playerID){
 								cout<<"data Turn"<<endl;
 								request.setBody("{\"turn\": \""+dataTurn+"\"}");
 								cout<<"body end"<<endl;
-								http.sendRequest(request);
+								Json::Reader jsonReader;
+								Json::Value rep;
+								sf::Http::Response response = http.sendRequest(request);
 								cout<<"Last turn commands posted"<<endl;
-								sendupdate=true;
+								if (jsonReader.parse(response.getBody(), rep)){
+									if(rep["Done"].asString()=="Yes"){
+										sendupdate=true;
+									}
+								}
 							}
 							if(engine.getCurrentPlayerID()!=playerID%2){
 								while(window.isOpen()){
