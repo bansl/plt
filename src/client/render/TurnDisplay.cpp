@@ -251,7 +251,7 @@ std::vector<std::vector<std::unique_ptr<render::DrawObject>>>& TurnDisplay::getD
 }
 
 void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::RenderType rendertype,std::vector<sf::View> views){
-	if (rendertype==windowinfoRender) initWindowRender(infobanner);
+        if (rendertype==windowinfoRender) initWindowRender(infobanner);
         else if (rendertype==windowactionRender) initWindowRender(actionselect);
         else initRender(turn,rendertype);
         sf::Time t_anim = sf::seconds(0.1f);
@@ -260,6 +260,7 @@ void TurnDisplay::redraw (state::Turn& turn, sf::RenderWindow& window, state::Re
                 display(window,k,views);
                 sf::sleep(t_anim);
         }
+        notifyNextAction();
 }
 
 

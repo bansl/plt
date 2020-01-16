@@ -3,6 +3,7 @@
 #include <state.h>
 #include <iostream>
 #include <cstdlib>
+#include <unistd.h>
 #include <cmath>
 #include <fstream>
 #include "json/json.h"
@@ -51,7 +52,9 @@ bool Engine::turnCheckOut(){
 }
 
 void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> views){
-
+	cout<<"resuming_update:"<< std::boolalpha<<resuming_update<<endl;
+	cout<<"action_ite:"<<action_ite<<endl;
+	cout<<"next_action:"<< std::boolalpha<<next_action<<endl<<endl;
 	if(isTurnBegin){
 		isTurnBegin=false;
 		turn.notifyObservers(turn, window,charRender, views);
@@ -60,36 +63,40 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 		return;
 	}
 
-	isGameFinished=true;
-	bool updateisTurnFinished=true;
+	bool updateisTurnFinished;
 	StatusList status;
-	for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
-	{
-		status=turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus();
-		if(turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getCurrentHP()<=0){
-			turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Dead);
-		}
-		if (status== Available){
-			updateisTurnFinished=false;
-		}
-		if (status != Dead){
-			isGameFinished=false;
-		}
-
-	}
-
-	if(turn.getIsSkipped()){
+	if(!resuming_update){
+		isGameFinished=true;
 		updateisTurnFinished=true;
-		turn.skipTurn();
+		action_ite=0;
+		for (size_t i = 0; i < turn.getTeams()[currentPlayerId]->getListCharacter().size(); i++)
+		{
+			status=turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getStatus();
+			if(turn.getTeams()[currentPlayerId]->getListCharacter()[i]->getCurrentHP()<=0){
+				turn.getTeams()[currentPlayerId]->getListCharacter()[i]->setStatus(Dead);
+			}
+			if (status== Available){
+				updateisTurnFinished=false;
+			}
+			if (status != Dead){
+				isGameFinished=false;
+			}
+
+		}
+
+		if(turn.getIsSkipped()){
+			updateisTurnFinished=true;
+			turn.skipTurn();
+		}
 	}
+	if(updateisTurnFinished||resuming_update){
 
-	if(updateisTurnFinished){
-
-		for(size_t i=0; i<commands.size();i++){
-
-			commands[i]->action(turn);
-			if (commands[i]->commandType==Movecmd){
-				engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
+		if(next_action){
+			next_action=false;
+			cout<<"action"<<endl;
+			commands[action_ite]->action(turn);
+			if (commands[action_ite]->commandType==Movecmd){
+				engine::Move *pM=dynamic_cast<engine::Move*>(commands[action_ite].get());
 				state::StatusList tempStatus=pM->getCharacter().getStatus();
 				pM->getCharacter().setStatus(Moving);
 				// engine::Move *pM=dynamic_cast<engine::Move*>(commands[i].get());
@@ -98,53 +105,76 @@ void Engine::updateDisplay (sf::RenderWindow& window, std::vector<sf::View> view
 				// 	turn.notifyObservers(turn, window,fullRender);
 			 	// }
 				// commands[i]->action(turn);
+				
 				turn.notifyObservers(turn, window,fullRender, views);
 				pM->getCharacter().setStatus(tempStatus);
 				position_history.push_back(pM->getPathToDest()[0]);
+				
 			}
 
-			else if (commands[i]->commandType==Attackcmd){
-				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[i].get());
+			else if (commands[action_ite]->commandType==Attackcmd){
+				engine::Attack *pA=dynamic_cast<engine::Attack*>(commands[action_ite].get());
 				defending_history.push_back(pA->getDefender().getStatus()==Defending);
+				
+				turn.notifyObservers(turn, window,fullRender, views);
+				
 			}
-			else if (commands[i]->commandType!=EndTurncmd) turn.notifyObservers(turn, window,charRender,views);
-			commands[i]->finish(turn);
+			else if (commands[action_ite]->commandType!=EndTurncmd) {
+				
+				turn.notifyObservers(turn, window,charRender,views);
+				
+			}
+			else next_action=true;
+			while(!next_action){
+				usleep(1000);
+				break;
+			}
+			commands[action_ite]->finish(turn);
+			next_action=false;
 			turn.notifyObservers(turn, window,charRender, views);
+			resuming_update=true;
+			action_ite++;	
 		}
-		command_history_nb.push_back(0);
-		while (!commands.empty()){
-				command_history.push_back(move(commands.back()));
-				command_history_nb.back()++;
-				commands.pop_back();
-		}
-		if(showStatus){
-			vector<string> teamlabel= {"Blue","Red"};
-			cout << "###########################" << endl << "# CURRENT STATUS" << endl;
-			std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
-			std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
-			for (size_t k = 0; k < getTurn().getTeams().size(); k++)
-			{
-				for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
-				{
-					int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
-					int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
-					int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
-					int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
-					JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
-					RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
-					cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
-				}
 
+		if ((action_ite==(int) commands.size()) && next_action)
+		{	
+			cout<<"Update FINISHEDD"<<endl;
+			resuming_update=false,next_action=false;
+			command_history_nb.push_back(0);
+			while (!commands.empty()){
+					command_history.push_back(move(commands.back()));
+					command_history_nb.back()++;
+					commands.pop_back();
 			}
-			cout << "###########################" << endl;
-		}
-		if(turnCheckOut())
-		{
-			isTurnFinished=true;
-			notifyUpdated();
-		}
+			if(showStatus){
+				vector<string> teamlabel= {"Blue","Red"};
+				cout << "###########################" << endl << "# CURRENT STATUS" << endl;
+				std::vector<string> jobs = {"Pugilist", "Swordman", "Archer", "Magician"};
+				std::vector<string> races = {"Monster", "Beastman", "Demon", "Human"};
+				for (size_t k = 0; k < getTurn().getTeams().size(); k++)
+				{
+					for (size_t i = 0; i < getTurn().getTeams()[k]->getListCharacter().size(); i++)
+					{
+						int character_hp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentHP();
+						int character_hp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxHP();
+						int character_mp_indic=getTurn().getTeams()[k]->getListCharacter()[i]->getCurrentMP();
+						int character_mp_indic_max=getTurn().getTeams()[k]->getListCharacter()[i]->getMaxMP();
+						JobType character_job=getTurn().getTeams()[k]->getListCharacter()[i]->getJob().getJob();
+						RaceType character_race=getTurn().getTeams()[k]->getListCharacter()[i]->getRace().getRace();
+						cout << "# Character " << teamlabel[k] << " " << i << ": " << "HP:" << character_hp_indic << "/" << character_hp_indic_max << " " << "MP:" << character_mp_indic << "/" << character_mp_indic_max << " | Job: "<< jobs[character_job-1] << " | Race: " << races[character_race-1]<<endl;
+					}
 
+				}
+				cout << "###########################" << endl;
+			}
+			if(turnCheckOut())
+			{
+				isTurnFinished=true;
+			}
+		}
+		
 	}
+	notifyUpdated();
 }
 
 bool Engine::turnCheckIn(){
@@ -663,4 +693,9 @@ void Engine::loadGame(sf::RenderWindow& window, std::vector<sf::View> views){
 		cout << root.get("turn"+to_string(i),"").asString() << endl;
 		loadCommands(root.get("turn"+to_string(i),"").asString(),i,window,views);
 	}
+}
+
+void Engine::nextAction(){
+	next_action=true;
+	cout<<"next_action=true"<<endl;
 }

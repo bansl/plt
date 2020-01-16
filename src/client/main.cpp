@@ -154,8 +154,8 @@ int main(int argc,char* argv[])
 
                 milliseconds last_ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
                 last_ms+=(milliseconds) 1000;
-    			sf::Http http("http://localhost/", 8080);
-
+    			// sf::Http http("http://localhost/", 8080);//
+                sf::Http http("http://192.168.56.103/", 8080);
     			sf::Http::Request request1;
     			request1.setMethod(sf::Http::Request::Post);
     			request1.setUri("/player");
@@ -505,7 +505,9 @@ int main(int argc,char* argv[])
             vector<sf::View> views;
             TurnDisplay layer(testTurn);
             TurnDisplay* ptr_layer=&layer;
-			      testEngine.getTurn().registerObserver(ptr_layer);
+            testEngine.getTurn().registerObserver(ptr_layer);
+            Engine* ptr_engine=&testEngine;
+			layer.registerObserver(ptr_engine);
                   usleep(100);
                   testEngine.registerObserver(ptr_layer);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Engine");
@@ -808,7 +810,9 @@ int main(int argc,char* argv[])
             TurnDisplay layer(testTurn);
 
             TurnDisplay* ptr_layer=&layer;
-			      testEngine.getTurn().registerObserver(ptr_layer);
+			testEngine.getTurn().registerObserver(ptr_layer);
+            Engine* ptr_engine=&testEngine;
+			layer.registerObserver(ptr_engine);
 
             sf::RenderWindow window(sf::VideoMode(  800,600), "Random AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
@@ -944,6 +948,8 @@ int main(int argc,char* argv[])
 
             TurnDisplay* ptr_layer=&layer;
 			testEngine.getTurn().registerObserver(ptr_layer);
+            Engine* ptr_engine=&testEngine;
+			layer.registerObserver(ptr_engine);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Heuristic AI");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
@@ -1074,7 +1080,9 @@ int main(int argc,char* argv[])
             vector<sf::View> views;
             TurnDisplay layer(testTurn);
             TurnDisplay* ptr_layer=&layer;
-			      testEngine.getTurn().registerObserver(ptr_layer);
+			testEngine.getTurn().registerObserver(ptr_layer);
+            Engine* ptr_engine=&testEngine;
+			layer.registerObserver(ptr_engine);
             sf::RenderWindow window(sf::VideoMode(  800,600), "Rollback");
             sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
             view1.zoom(1.4f);
@@ -1205,7 +1213,9 @@ int main(int argc,char* argv[])
                 TurnDisplay layer(testTurn);
 
                 TurnDisplay* ptr_layer=&layer;
-                        testEngine.getTurn().registerObserver(ptr_layer);
+                testEngine.getTurn().registerObserver(ptr_layer);
+                Engine* ptr_engine=&testEngine;
+			    layer.registerObserver(ptr_engine);
                 sf::RenderWindow window(sf::VideoMode(  800,600), "Deep AI");
                 sf::View view1(sf::Vector2f(0, 300), sf::Vector2f(800, 600));
                 view1.zoom(1.4f);

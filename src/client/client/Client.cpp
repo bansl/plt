@@ -29,6 +29,7 @@ void thread_engine(void* ptr,void* ptrwind, void* ptrviews){
 	while(v2){
 		usleep(1000);
 		if(v1){
+			cout<<"=====>thread updatedisp"<<endl;
 			ptr_engine->updateDisplay(*ptrwindow,*ptr_views);
 			v1=false;
 		}
@@ -103,6 +104,11 @@ void Client::run (){
 							else bots->runAI();
 							engine.notifyUpdating();
 							while (updating);
+							while (engine.resuming_update)
+							{	
+								engine.notifyUpdating();
+								while (updating);
+							}
 							if(test_register && (engine.getTurn().getTurn()==3)) {
 								cout << "Register start." << endl;
 								engine.registerGame();
@@ -111,6 +117,7 @@ void Client::run (){
 							}
 
 			}
+
 		}
 		if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
             layer.display(window,k, views);
@@ -164,8 +171,8 @@ void Client::run (int playerID){
 	bool resume=true;
 	std::thread th(thread_engine, &engine, &window, &views);
 	bool sendupdate=false;
-	sf::Http http("http://localhost/", 8080);
-
+	// sf::Http http("http://localhost/", 8080);
+	sf::Http http("http://192.168.56.103/", 8080);
 	while(window.isOpen()){
 		 layer.display(window,1, views);
 		 if(!updating){
