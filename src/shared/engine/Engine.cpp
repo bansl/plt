@@ -243,7 +243,7 @@ void Engine::userInteraction(sf::Event newEvent, sf::RenderWindow& window, std::
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)){ // Enter Action Menu Selection
-			
+
 			if(!action_bool && (find_selected_char(turn).getCurrentHP()>0)){
 				turn.notifyObservers(turn, window, windowactionRender, views);
 				action_bool=!action_bool;
@@ -628,7 +628,7 @@ void Engine::registerGame(){
 
 
 	for (int i=1;i<turn.getTurn();i++){
-		text=text+", \"turn"+to_string(i)+"\": \""+seedCommands(i)+"\"";
+		text=text+", \"turn"+to_string(i)+"\": \""+seedCommandsPlayer(i)+"\"";
 	}
 	text=text+" }";
 	// Parse JSON and print errors if needed

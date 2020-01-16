@@ -179,14 +179,16 @@ void Client::run (int playerID){
 							}
 							//else bots->runAI();
 							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2 && !sendupdate){
+								cout<<"Starting posting last turn commands"<<endl;
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Post);
 								request.setUri("/command");
-								request.setBody("{\"req\" : \"POST\", \"turn\":"+engine.seedCommandsPlayer(engine.getTurn().getTurn()-1)+"}");
+								request.setBody("{\"turn\": \""+engine.seedCommandsPlayer(engine.getTurn().getTurn()-1)+"\"}");
 								http.sendRequest(request);
+								cout<<"Last turn commands posted"<<endl;
 								sendupdate=true;
 							}
-							if(engine.getTurn().getTurn()!=1 && engine.getCurrentPlayerID()!=playerID%2){
+							if(engine.getCurrentPlayerID()!=playerID%2){
 								sf::Http::Request request;
 								request.setMethod(sf::Http::Request::Get);
 								request.setUri("/command/"+ to_string(engine.getTurn().getTurn()));
