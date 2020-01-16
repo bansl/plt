@@ -107,6 +107,7 @@ void Client::run (bool human){
 								else
 								{
 									while(window.isOpen()){
+										if(engine.getTurn().getIsSkipped()) break;
 										if((duration_cast<milliseconds>(system_clock::now().time_since_epoch()))>=(last_ms)&&resume){
 											layer.display(window,k, views);
 											k=(k+1)%4;
@@ -222,7 +223,7 @@ void Client::run (int playerID){
 								string dataTurn=engine.seedCommandsPlayer(engine.getTurn().getTurn()-1);
 								cout<<"data Turn"<<endl;
 								requestcmd.setBody("{\"req\" : \"POST\", \"turn\": \""+dataTurn+"\"}");
-								cout<<"{\"req\" : \"POST\", \"turn\": \""+dataTurn+"\"}"<<endl;
+								// cout<<"{\"req\" : \"POST\", \"turn\": \""+dataTurn+"\"}"<<endl;
 								Json::Reader jsonReader;
 								Json::Value rep;
 								sf::Http::Response response = http.sendRequest(requestcmd);
