@@ -113,6 +113,43 @@ au body. On retire le joueur correspondant à l'id
 donné de la liste de joueurs. 
 \end{itemize}
 
+
+On réalise dans ce livrable un 
+service dédié à la gestion 
+des commandes. A savoir des 
+commandes à la partie, lister les 
+commandes de la partie.
+\\\\
+Le service commandes gère les 
+requêtes suivantes:
+
+\begin{itemize}
+         \item[•]  \textbf{Requete GET}    /command/<id>\\
+Retourne la liste des commandes 
+pour le tour pour le numéro id.
+
+         \item[•]  \textbf{Requete GET}    /command/all\\
+Retourne la liste des listes de commandes.
+
+         \item[•]  \textbf{Requete POST}    /command\\
+On ajoute une liste de commandes à 
+la liste des listes de commandes 
+de la partie. 
+\\Retourne "Done":"Yes" si la commande à bien 
+été réussie.
+\end{itemize}
+
+On réalise aussi un service dédié 
+à la gestion de la génération 
+aléatoire au niveau serveur.
+Ainsi, le serveur envoie aux 
+clients les seeds de la carte et 
+des personnages pour que les deux 
+joueurs est le même état.
+\\Seul la requête GET est 
+implémentée pour obtenir les sedds 
+des objets générés aléatoirement.
+
 \subsection{Conception Logicielle}
 
 Le diagramme des classes UML C++ pour le serveur est
@@ -150,6 +187,17 @@ CommandService.
 présentées plus haut concernant l'ajout, la modification et 
 la supression de joueurs dans la liste de joueurs du lobby. 
 \\\\
+\textbf{Classe CommandsService:} Elle gère les requêtes 
+présentées plus haut concernant 
+l'ajout et l'obtention des 
+commandes de la partie. 
+\\\\
+\textbf{Classe InitializeService:} 
+Elle gère la requête d'obtention 
+des seeds correspondant aux 
+éléments générés aléatoirement de 
+la partie. 
+\\\\
 \textbf{Classe ServiceException:} Elle permet de gérer 
 les exceptions et de retourner le message d'erreur.
 \\\\
@@ -159,6 +207,6 @@ les exceptions et de retourner le message d'erreur.
 \includegraphics[width=\linewidth]{images/server_dia.png}
 \centering
 \caption{Aperçu de server.dia}
-\label{fig:img7}
+\label{fig:img6}
 \end{figure}
 \newpage
